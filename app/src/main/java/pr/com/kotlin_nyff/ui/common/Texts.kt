@@ -12,11 +12,11 @@ import pr.com.kotlin_nyff.data.model.BranchOnlineState
 import pr.com.kotlin_nyff.data.model.CustomerOrder
 import pr.com.kotlin_nyff.data.model.LocalizedText
 import pr.com.kotlin_nyff.data.model.OnlinePayment
-import pr.com.kotlin_nyff.data.model.OrderStatus
 import pr.com.kotlin_nyff.data.model.OrderType
 import pr.com.kotlin_nyff.data.remote.AppError
 import pr.com.kotlin_nyff.domain.Format
 import pr.com.kotlin_nyff.domain.OrderHeadline
+import pr.com.kotlin_nyff.domain.OrderProgress
 
 /** Backend xato kodi → matn (API.md 3). `code` bo'lmasa (NestJS'ning o'z xatosi) — umumiy matn. */
 @StringRes
@@ -46,8 +46,11 @@ fun errorRes(error: Throwable?): Int = when (error) {
 fun headlineRes(headline: OrderHeadline): Int = when (headline) {
     OrderHeadline.WAITING -> R.string.step_placed
     OrderHeadline.COOKING -> R.string.step_cooking
-    OrderHeadline.READY_DELIVERY -> R.string.step_ready_delivery
+    OrderHeadline.READY_DELIVERY -> R.string.ready_wait_courier
     OrderHeadline.READY_PICKUP -> R.string.step_ready_pickup
+    OrderHeadline.ON_THE_WAY -> R.string.step_on_the_way
+    OrderHeadline.DELIVERED -> R.string.step_delivered
+    OrderHeadline.RETURNED -> R.string.returned
     OrderHeadline.CANCELLED -> R.string.cancelled
     OrderHeadline.CANCELLED_TIMEOUT -> R.string.cancel_timeout
     OrderHeadline.CANCELLED_TIMEOUT_PICKUP -> R.string.cancel_timeout_pickup
@@ -56,13 +59,16 @@ fun headlineRes(headline: OrderHeadline): Int = when (headline) {
     OrderHeadline.CANCELLED_NO_BRANCH -> R.string.no_branch_open
 }
 
-/** Ro'yxatdagi qisqa holat belgisi. */
+/** Ro'yxatdagi qisqa holat belgisi (dostavkada kuryer bosqichi bilan). */
 @StringRes
-fun statusRes(status: OrderStatus): Int = when (status) {
-    OrderStatus.PREPARING -> R.string.status_preparing
-    OrderStatus.READY -> R.string.status_ready
-    OrderStatus.CANCELLED -> R.string.status_cancelled
-    else -> R.string.status_pending
+fun statusRes(order: CustomerOrder): Int = when (OrderProgress.headline(order)) {
+    OrderHeadline.WAITING -> R.string.status_pending
+    OrderHeadline.COOKING -> R.string.status_preparing
+    OrderHeadline.READY_DELIVERY, OrderHeadline.READY_PICKUP -> R.string.status_ready
+    OrderHeadline.ON_THE_WAY -> R.string.status_on_the_way
+    OrderHeadline.DELIVERED -> R.string.status_delivered
+    OrderHeadline.RETURNED -> R.string.status_returned
+    else -> R.string.status_cancelled
 }
 
 /** Mijoz tanlagan to'lov: "Click orqali to'langan" / "Naqd — kuryerga" / "Naqd — filialda". */

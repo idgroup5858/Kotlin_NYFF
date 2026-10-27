@@ -34,6 +34,8 @@ import androidx.compose.material.icons.outlined.Celebration
 import androidx.compose.material.icons.outlined.CloudOff
 import androidx.compose.material.icons.outlined.DeliveryDining
 import androidx.compose.material.icons.outlined.ErrorOutline
+import androidx.compose.material.icons.outlined.Home
+import androidx.compose.material.icons.outlined.Inventory2
 import androidx.compose.material.icons.outlined.Restaurant
 import androidx.compose.material.icons.outlined.Schedule
 import androidx.compose.material.icons.outlined.SwapHoriz
@@ -70,6 +72,7 @@ import pr.com.kotlin_nyff.domain.Format
 import pr.com.kotlin_nyff.domain.OrderHeadline
 import pr.com.kotlin_nyff.domain.OrderProgress
 import pr.com.kotlin_nyff.domain.ServerClock
+import pr.com.kotlin_nyff.domain.TrackingStep
 import pr.com.kotlin_nyff.ui.common.DarkButton
 import pr.com.kotlin_nyff.ui.common.Notice
 import pr.com.kotlin_nyff.ui.common.NyffCard
@@ -150,6 +153,7 @@ fun TrackingScreen(
                 if (order.status == OrderStatus.CANCELLED) {
                     CancelledCard(order, state.branch(order.branchId), inset)
                 } else {
+                    if (order.returnedAt != null) ReturnedCard(state.branch(order.branchId), inset)
                     Steps(order, inset)
                 }
                 Details(saved, inset)
@@ -215,24 +219,33 @@ private fun Header(order: CustomerOrder, branch: Branch?, onBack: () -> Unit) {
 
 private data class Step(val icon: ImageVector, val title: Int, val hint: Int, val at: String?)
 
+/** Bosqich ko'rinishi. Dostavka tayyor, kuryer hali yo'lga chiqmagan — 2-bosqich "Tayyor · kuryer olib ketadi". */
+private fun stepOf(kind: TrackingStep, order: CustomerOrder): Step = when (kind) {
+    TrackingStep.PLACED -> Step(Icons.Outlined.Schedule, R.string.step_placed, R.string.step_placed_hint, order.createdAt)
+    TrackingStep.COOKING ->
+        if (order.type == OrderType.DELIVERY && order.status == OrderStatus.READY) {
+            Step(Icons.Outlined.Inventory2, R.string.step_ready, R.string.step_ready_hint, order.readyAt)
+        } else {
+            Step(Icons.Outlined.Restaurant, R.string.step_cooking, R.string.step_cooking_hint, order.preparingAt)
+        }
+    TrackingStep.READY_PICKUP ->
+        Step(Icons.Outlined.Celebration, R.string.step_ready_pickup, R.string.step_ready_pickup_hint, order.readyAt)
+    TrackingStep.ON_THE_WAY ->
+        Step(Icons.Outlined.DeliveryDining, R.string.step_on_the_way, R.string.step_on_the_way_hint, order.departedAt)
+    TrackingStep.DELIVERED ->
+        Step(Icons.Outlined.Home, R.string.step_delivered, R.string.step_delivered_hint, order.deliveredAt)
+}
+
 @Composable
 private fun Steps(order: CustomerOrder, modifier: Modifier) {
     val colors = NyffTheme.colors
-    val delivery = order.type == OrderType.DELIVERY
-    val reached = OrderProgress.step(order.status)
-    val steps = listOf(
-        Step(Icons.Outlined.Schedule, R.string.step_placed, R.string.step_placed_hint, order.createdAt),
-        Step(Icons.Outlined.Restaurant, R.string.step_cooking, R.string.step_cooking_hint, order.preparingAt),
-        if (delivery) {
-            Step(Icons.Outlined.DeliveryDining, R.string.step_ready_delivery, R.string.step_ready_delivery_hint, order.readyAt)
-        } else {
-            Step(Icons.Outlined.Celebration, R.string.step_ready_pickup, R.string.step_ready_pickup_hint, order.readyAt)
-        },
-    )
+    val reached = OrderProgress.step(order)
+    val completed = OrderProgress.completed(order)
+    val steps = OrderProgress.steps(order.type).map { stepOf(it, order) }
     NyffCard(modifier) {
         Column(Modifier.padding(16.dp)) {
             steps.forEachIndexed { index, step ->
-                val done = index < reached || (index == 2 && reached == 2)
+                val done = index < reached || (completed && index == reached)
                 val current = index == reached && !done
                 Row(Modifier.height(IntrinsicSize.Min)) {
                     Column(horizontalAlignment = Alignment.CenterHorizontally) {
@@ -327,7 +340,6 @@ private fun AcceptCountdown(order: CustomerOrder) {
 
 @Composable
 private fun CancelledCard(order: CustomerOrder, branch: Branch?, modifier: Modifier) {
-    val context = LocalContext.current
     val headline = OrderProgress.headline(order)
     Notice(
         stringResource(headlineRes(headline)),
@@ -336,15 +348,33 @@ private fun CancelledCard(order: CustomerOrder, branch: Branch?, modifier: Modif
         Icons.Outlined.ErrorOutline,
         supporting = if (headline == OrderHeadline.CANCELLED) stringResource(R.string.cancelled_hint) else null,
     )
+    if (headline == OrderHeadline.CANCELLED) CallBranchButton(branch, modifier)
+}
+
+/** Kuryer yetkaza olmadi — buyurtma filialga qaytdi, filial mijoz bilan bog'lanadi (mijoz o'zi ham qo'ng'iroq qila oladi). */
+@Composable
+private fun ReturnedCard(branch: Branch?, modifier: Modifier) {
+    Notice(
+        stringResource(R.string.returned),
+        Tone.WARNING,
+        modifier,
+        Icons.Outlined.ErrorOutline,
+        supporting = stringResource(R.string.returned_hint),
+    )
+    CallBranchButton(branch, modifier)
+}
+
+@Composable
+private fun CallBranchButton(branch: Branch?, modifier: Modifier) {
+    val context = LocalContext.current
     val phone = branch?.phone?.filter { it.isDigit() || it == '+' }.orEmpty()
-    if (headline == OrderHeadline.CANCELLED && phone.isNotEmpty()) {
-        Box(modifier, contentAlignment = Alignment.CenterStart) {
-            PillButton(
-                stringResource(R.string.call_branch),
-                { context.startActivity(Intent(Intent.ACTION_DIAL, "tel:$phone".toUri())) },
-                icon = Icons.Outlined.Call,
-            )
-        }
+    if (phone.isEmpty()) return
+    Box(modifier, contentAlignment = Alignment.CenterStart) {
+        PillButton(
+            stringResource(R.string.call_branch),
+            { context.startActivity(Intent(Intent.ACTION_DIAL, "tel:$phone".toUri())) },
+            icon = Icons.Outlined.Call,
+        )
     }
 }
 
@@ -375,7 +405,7 @@ private fun Details(saved: SavedOrder, modifier: Modifier) {
                         color = colors.textMuted,
                     )
                     Spacer(Modifier.width(12.dp))
-                    Text(feeText(saved.deliveryFee), style = MaterialTheme.typography.bodyMedium, color = colors.textMuted, textAlign = TextAlign.End)
+                    Text(feeText(order.deliveryFee ?: saved.deliveryFee), style = MaterialTheme.typography.bodyMedium, color = colors.textMuted, textAlign = TextAlign.End)
                 }
             }
             HorizontalDivider(Modifier.padding(vertical = 6.dp), color = colors.line)

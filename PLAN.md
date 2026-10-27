@@ -1,9 +1,10 @@
 # NYFF Android — reja va ishlar ro'yxati
 
-> **Holat (2026-10-27):** 0–5 bosqichlar tayyor (pastda). Unit testlar: 34 ta (`gradlew testDebugUnitTest`), lint — 0 xato.
+> **Holat (2026-10-27):** 0–5 va 7 bosqichlar tayyor (pastda). Unit testlar: 35 ta (`gradlew testDebugUnitTest`), lint — 0 xato.
 > Emulyatorda (AVD `nyff_api36`, API 36.1, Google Play) lokal backend bilan uchidan-uchiga tekshirilgan: menyu, xarita +
 > GPS → Chilonzor hududi, dostavka buyurtmasi → 5 daqiqadan keyin Yunusobodga o'tkazildi (raqam socket orqali jonli
 > yangilandi) → kassir qabul qildi → "Tayyor"; olib ketish buyurtmasi → kassir bekor qildi; tarix, ruscha, tungi mavzu.
+> Kuryer bilan (7): #019 dostavka — "Tayyor · Kuryer olib ketadi" → "Kuryer yo'lda" → "Yetkazildi", socket orqali jonli.
 > **Keyingi qadam:** haqiqiy API manzili (foydalanuvchi beradi) → `local.properties` dagi `nyff.apiUrl`; keyin FCM push,
 > Click (backend PLAN 10 bilan birga).
 > Yangi ish faqat foydalanuvchi aniq **"boshla"** deganidan keyin boshlanadi. Har bosqich tugaganda shu fayldagi
@@ -38,6 +39,8 @@ demosidan (`ReactJS_NYFF/src/pages/mobile/*`, `src/i18n/*` → `mobile`, `errors
 | Kotlin | AGP 9.3 ichidagi Kotlin 2.2.10. Kotlin 2.4 stdlib talab qiladigan kutubxonalar olinmaydi (masalan `maps-compose` 8.4+ → 8.3.0) |
 | Server vaqti | Qabul muddati sanog'i (`routedAt` + 5 daqiqa) telefon soati bo'yicha emas — HTTP javoblaridagi `Date` sarlavhasidan (`domain/ServerClock.kt`); emulyatorda soat 2 daqiqa farq qilgani topilgan |
 | Xarita va Play xizmatlari | Manifestda `org.apache.http.legacy` (`required="false"`) — busiz Google Play Maps moduli ba'zi qurilmalarda yiqiladi (emulyatorda tasdiqlangan) |
+| Kuryer holati (2026-10-27) | Mijozga faqat holat: dostavka 4 bosqich — qabul → tayyorlanmoqda → "Tayyor · Kuryer olib ketadi" → "Kuryer yo'lda" (`departedAt`) → "Yetkazildi" (`deliveredAt`); "Yetkazib bo'lmadi" (`returnedAt`) — alohida karta va filialga qo'ng'iroq. Kuryer kimligi, navbati va kelish vaqti ko'rsatilmaydi. Buyurtma `status` i `ready` da qoladi — bosqich `domain/OrderProgress.kt` da. Yetkazish narxi — serverdagi `deliveryFee`, bo'lmasa saqlangani. Yetkazilmagan dostavka 12 soat "joriy" sanaladi |
+| Server manzilini vaqtincha almashtirish | `./gradlew assembleDebug -Pnyff.apiUrl=http://...` — `local.properties` ga tegmasdan (masalan sinov uchun boshqa port) |
 
 ## 3. Bosqichlar
 
@@ -48,3 +51,4 @@ demosidan (`ReactJS_NYFF/src/pages/mobile/*`, `src/i18n/*` → `mobile`, `errors
 - [x] **4. Kuzatish va tarix** — 3 bosqich, qabul muddati sanog'i, filialga o'tkazish, bekor qilinish sababi, filialga qo'ng'iroq; "Buyurtmalarim"
 - [x] **5. Testlar** — unit (savat, formatlash, telefon, filial tanlash, holat matnlari, API o'qish / xatolar — MockWebServer); emulyatorda backend bilan
 - [ ] **6. Keyinroq** — haqiqiy API manzili (https), FCM push (ilova yopiq bo'lsa), Click to'lovi, hudud narxi summaga (backend PLAN 10), iOS
+- [x] **7. Kuryer holatlari** — `CustomerOrder` ga `deliveryFee`, `departedAt`, `deliveredAt`, `returnedAt`; 4 bosqichli dostavka, "Yetkazildi" / "Qaytdi" holatlari va matnlari (3 til), testlar. Kuryer ilovasi — `Kotlin_NYFF_Courier`

@@ -13,7 +13,9 @@ val localProperties = Properties().apply {
     val file = rootProject.file("local.properties")
     if (file.exists()) file.inputStream().use(::load)
 }
-val apiUrl: String = localProperties.getProperty("nyff.apiUrl", "http://10.0.2.2:3000").trim().trimEnd('/')
+// `-Pnyff.apiUrl=...` — vaqtincha boshqa serverga (local.properties ni o'zgartirmasdan)
+val apiUrl: String = (providers.gradleProperty("nyff.apiUrl").orNull ?: localProperties.getProperty("nyff.apiUrl", "http://10.0.2.2:3000"))
+    .trim().trimEnd('/')
 val mapsApiKey: String = localProperties.getProperty("MAPS_API_KEY", "").trim()
 
 android {

@@ -53,8 +53,10 @@ import androidx.compose.ui.unit.sp
 import androidx.core.view.WindowCompat
 import coil3.compose.AsyncImage
 import pr.com.kotlin_nyff.R
-import pr.com.kotlin_nyff.data.model.OrderStatus
+import pr.com.kotlin_nyff.data.model.CustomerOrder
+import pr.com.kotlin_nyff.domain.OrderHeadline
 import pr.com.kotlin_nyff.domain.OrderMode
+import pr.com.kotlin_nyff.domain.OrderProgress
 import pr.com.kotlin_nyff.ui.theme.Coal
 import pr.com.kotlin_nyff.ui.theme.NyffShapes
 import pr.com.kotlin_nyff.ui.theme.NyffTheme
@@ -363,18 +365,19 @@ fun BrandBadge(modifier: Modifier = Modifier, size: Dp = 38.dp) {
     }
 }
 
-/** Ro'yxatdagi holat belgisi. */
+/** Ro'yxatdagi holat belgisi (dostavkada — kuryer bosqichi bilan). */
 @Composable
-fun StatusChip(status: OrderStatus, modifier: Modifier = Modifier) {
+fun StatusChip(order: CustomerOrder, modifier: Modifier = Modifier) {
     val colors = NyffTheme.colors
-    val (background, content) = when (status) {
-        OrderStatus.PREPARING -> colors.accent.copy(alpha = 0.22f) to colors.text
-        OrderStatus.READY -> colors.successSoft to colors.success
-        OrderStatus.CANCELLED -> colors.dangerSoft to colors.danger
-        else -> colors.warningSoft to colors.warning
+    val (background, content) = when (OrderProgress.headline(order)) {
+        OrderHeadline.WAITING -> colors.warningSoft to colors.warning
+        OrderHeadline.COOKING, OrderHeadline.ON_THE_WAY -> colors.accent.copy(alpha = 0.22f) to colors.text
+        OrderHeadline.READY_DELIVERY, OrderHeadline.READY_PICKUP, OrderHeadline.DELIVERED -> colors.successSoft to colors.success
+        OrderHeadline.RETURNED -> colors.warningSoft to colors.warning
+        else -> colors.dangerSoft to colors.danger
     }
     Text(
-        stringResource(statusRes(status)),
+        stringResource(statusRes(order)),
         modifier = modifier
             .clip(RoundedCornerShape(6.dp))
             .background(background)

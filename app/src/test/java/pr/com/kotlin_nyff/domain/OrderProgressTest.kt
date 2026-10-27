@@ -11,7 +11,7 @@ import pr.com.kotlin_nyff.data.model.OrderStatus
 import pr.com.kotlin_nyff.data.model.OrderType
 import java.time.Instant
 
-/** API.md 5.6 jadvali: holat + tur + sabab → matn. */
+/** API.md 5.6 jadvali: holat + tur + sabab + kuryer bosqichi → matn va bosqich. */
 class OrderProgressTest {
 
     private fun order(
@@ -20,9 +20,14 @@ class OrderProgressTest {
         reason: CancelReason? = null,
         routedAt: String? = "2026-10-27T05:00:00.000Z",
         readyAt: String? = null,
+        createdAt: String = "2026-10-27T04:59:00.000Z",
+        departedAt: String? = null,
+        deliveredAt: String? = null,
+        returnedAt: String? = null,
     ) = CustomerOrder(
         id = "ord_1", branchId = "br_chilonzor", number = 17, type = type, total = 32_000, status = status,
-        createdAt = "2026-10-27T04:59:00.000Z", cancelReason = reason, routedAt = routedAt, readyAt = readyAt,
+        createdAt = createdAt, cancelReason = reason, routedAt = routedAt, readyAt = readyAt,
+        departedAt = departedAt, deliveredAt = deliveredAt, returnedAt = returnedAt,
     )
 
     @Test
@@ -31,6 +36,14 @@ class OrderProgressTest {
         assertEquals(OrderHeadline.COOKING, OrderProgress.headline(order(OrderStatus.PREPARING)))
         assertEquals(OrderHeadline.READY_DELIVERY, OrderProgress.headline(order(OrderStatus.READY)))
         assertEquals(OrderHeadline.READY_PICKUP, OrderProgress.headline(order(OrderStatus.READY, OrderType.TAKEAWAY)))
+    }
+
+    @Test
+    fun `kuryer bosqichlari — status ready da qoladi`() {
+        val t = "2026-10-27T05:20:00.000Z"
+        assertEquals(OrderHeadline.ON_THE_WAY, OrderProgress.headline(order(OrderStatus.READY, departedAt = t)))
+        assertEquals(OrderHeadline.DELIVERED, OrderProgress.headline(order(OrderStatus.READY, departedAt = t, deliveredAt = t)))
+        assertEquals(OrderHeadline.RETURNED, OrderProgress.headline(order(OrderStatus.READY, departedAt = t, returnedAt = t)))
     }
 
     @Test
@@ -49,10 +62,21 @@ class OrderProgressTest {
     }
 
     @Test
-    fun `bosqichlar`() {
-        assertEquals(0, OrderProgress.step(OrderStatus.PENDING))
-        assertEquals(1, OrderProgress.step(OrderStatus.PREPARING))
-        assertEquals(2, OrderProgress.step(OrderStatus.READY))
+    fun `bosqichlar — dostavkada 4 ta, olib ketishda 3 ta`() {
+        val t = "2026-10-27T05:20:00.000Z"
+        assertEquals(4, OrderProgress.steps(OrderType.DELIVERY).size)
+        assertEquals(3, OrderProgress.steps(OrderType.TAKEAWAY).size)
+        assertEquals(0, OrderProgress.step(order(OrderStatus.PENDING)))
+        assertEquals(1, OrderProgress.step(order(OrderStatus.PREPARING)))
+        // dostavka tayyor, kuryer yo'lga chiqmagan — hali 2-bosqichda ("Tayyor · kuryer olib ketadi")
+        assertEquals(1, OrderProgress.step(order(OrderStatus.READY)))
+        assertEquals(2, OrderProgress.step(order(OrderStatus.READY, departedAt = t)))
+        assertEquals(3, OrderProgress.step(order(OrderStatus.READY, departedAt = t, deliveredAt = t)))
+        assertEquals(2, OrderProgress.step(order(OrderStatus.READY, OrderType.TAKEAWAY)))
+
+        assertFalse(OrderProgress.completed(order(OrderStatus.READY, departedAt = t)))
+        assertTrue(OrderProgress.completed(order(OrderStatus.READY, departedAt = t, deliveredAt = t)))
+        assertTrue(OrderProgress.completed(order(OrderStatus.READY, OrderType.TAKEAWAY)))
     }
 
     @Test
@@ -64,13 +88,22 @@ class OrderProgressTest {
     }
 
     @Test
-    fun `bosh sahifa banneri — ishdagi yoki 1 soat ichida tayyor bo'lgan`() {
+    fun `bosh sahifa banneri — ishdagi, yetkazilmagan dostavka yoki 1 soat ichida tugagan`() {
         val now = Instant.parse("2026-10-27T06:00:00Z")
         assertTrue(OrderProgress.isCurrent(order(OrderStatus.PENDING), now))
-        assertTrue(OrderProgress.isCurrent(order(OrderStatus.READY, readyAt = "2026-10-27T05:30:00Z"), now))
-        assertFalse(OrderProgress.isCurrent(order(OrderStatus.READY, readyAt = "2026-10-27T04:30:00Z"), now))
+        // olib ketish — tayyor bo'lganidan 1 soat
+        assertTrue(OrderProgress.isCurrent(order(OrderStatus.READY, OrderType.TAKEAWAY, readyAt = "2026-10-27T05:30:00Z"), now))
+        assertFalse(OrderProgress.isCurrent(order(OrderStatus.READY, OrderType.TAKEAWAY, readyAt = "2026-10-27T04:30:00Z"), now))
+        // dostavka yetkazilguncha (kuryer kutilmoqda / yo'lda / qaytdi), lekin 12 soatdan eski emas
+        assertTrue(OrderProgress.isCurrent(order(OrderStatus.READY, readyAt = "2026-10-27T04:30:00Z"), now))
+        assertFalse(OrderProgress.isCurrent(order(OrderStatus.READY, createdAt = "2026-10-26T10:00:00Z"), now))
+        // yetkazilgandan 1 soat
+        assertTrue(OrderProgress.isCurrent(order(OrderStatus.READY, deliveredAt = "2026-10-27T05:30:00Z"), now))
+        assertFalse(OrderProgress.isCurrent(order(OrderStatus.READY, deliveredAt = "2026-10-27T04:30:00Z"), now))
         assertFalse(OrderProgress.isCurrent(order(OrderStatus.CANCELLED), now))
+
         assertFalse(OrderProgress.isLive(order(OrderStatus.CANCELLED)))
-        assertTrue(OrderProgress.isLive(order(OrderStatus.READY)))
+        assertFalse(OrderProgress.isLive(order(OrderStatus.READY, deliveredAt = "2026-10-27T05:30:00Z")))
+        assertTrue(OrderProgress.isLive(order(OrderStatus.READY, departedAt = "2026-10-27T05:30:00Z")))
     }
 }

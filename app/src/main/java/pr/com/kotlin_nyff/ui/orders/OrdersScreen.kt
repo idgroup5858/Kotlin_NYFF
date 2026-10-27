@@ -123,7 +123,7 @@ private fun OrderRow(saved: SavedOrder, branchName: String?, onClick: () -> Unit
                     color = colors.text,
                 )
                 Spacer(Modifier.width(10.dp))
-                StatusChip(order.status)
+                StatusChip(order)
                 Spacer(Modifier.weight(1f))
                 Text(money(order.total), style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.ExtraBold), color = colors.text)
             }

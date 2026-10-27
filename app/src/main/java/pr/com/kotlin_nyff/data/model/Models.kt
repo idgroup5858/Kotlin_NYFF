@@ -167,6 +167,13 @@ data class CustomerOrder(
     val routedAt: String? = null,
     val transferCount: Int = 0,
     val fromBranchId: String? = null,
+    /** Buyurtma berilgandagi hudud narxi (dostavka; summaga kirmaydi); `null` — narxni kuryer aytadi. */
+    val deliveryFee: Long? = null,
+    /** Kuryer bosqichlari (dostavka): `status` `ready` da qoladi. */
+    val departedAt: String? = null,
+    val deliveredAt: String? = null,
+    /** Kuryer yetkaza olmadi — buyurtma filialga qaytdi, filial mijoz bilan bog'lanadi. */
+    val returnedAt: String? = null,
 )
 
 // ---------------------------------------------------------------- so'rovlar

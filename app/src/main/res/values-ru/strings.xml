@@ -81,8 +81,15 @@
     <string name="step_placed_hint">Филиал подтверждает заказ</string>
     <string name="step_cooking">Готовится</string>
     <string name="step_cooking_hint">Повара уже работают</string>
-    <string name="step_ready_delivery">Передан курьеру</string>
-    <string name="step_ready_delivery_hint">Скоро будет у вас</string>
+    <string name="step_ready">Готово</string>
+    <string name="step_ready_hint">Курьер заберёт заказ</string>
+    <string name="ready_wait_courier">Готово — курьер заберёт</string>
+    <string name="step_on_the_way">Курьер в пути</string>
+    <string name="step_on_the_way_hint">Скоро будет у вас</string>
+    <string name="step_delivered">Доставлен</string>
+    <string name="step_delivered_hint">Приятного аппетита!</string>
+    <string name="returned">Курьер не смог доставить</string>
+    <string name="returned_hint">Филиал свяжется с вами</string>
     <string name="step_ready_pickup">Готово!</string>
     <string name="step_ready_pickup_hint">Можно забрать в филиале</string>
     <string name="cancelled">Заказ отменён</string>
@@ -109,6 +116,9 @@
     <string name="status_preparing">Готовится</string>
     <string name="status_ready">Готово</string>
     <string name="status_cancelled">Отменён</string>
+    <string name="status_on_the_way">В пути</string>
+    <string name="status_delivered">Доставлен</string>
+    <string name="status_returned">Возвращён</string>
 
     <!-- ошибки (backend `code`) -->
     <string name="error_not_found">Не найдено</string>

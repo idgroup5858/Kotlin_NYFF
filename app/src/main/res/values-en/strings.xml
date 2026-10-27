@@ -81,8 +81,15 @@
     <string name="step_placed_hint">The branch is confirming your order</string>
     <string name="step_cooking">Being prepared</string>
     <string name="step_cooking_hint">The cooks are on it</string>
-    <string name="step_ready_delivery">Handed to the courier</string>
-    <string name="step_ready_delivery_hint">It will be with you soon</string>
+    <string name="step_ready">Ready</string>
+    <string name="step_ready_hint">A courier will pick it up</string>
+    <string name="ready_wait_courier">Ready — a courier will pick it up</string>
+    <string name="step_on_the_way">Courier on the way</string>
+    <string name="step_on_the_way_hint">It will be with you soon</string>
+    <string name="step_delivered">Delivered</string>
+    <string name="step_delivered_hint">Enjoy your meal!</string>
+    <string name="returned">The courier couldn\'t deliver</string>
+    <string name="returned_hint">The branch will contact you</string>
     <string name="step_ready_pickup">Ready!</string>
     <string name="step_ready_pickup_hint">You can pick it up at the branch</string>
     <string name="cancelled">Order cancelled</string>
@@ -109,6 +116,9 @@
     <string name="status_preparing">Preparing</string>
     <string name="status_ready">Ready</string>
     <string name="status_cancelled">Cancelled</string>
+    <string name="status_on_the_way">On the way</string>
+    <string name="status_delivered">Delivered</string>
+    <string name="status_returned">Returned</string>
 
     <!-- errors (backend `code`) -->
     <string name="error_not_found">Not found</string>

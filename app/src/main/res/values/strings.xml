@@ -83,8 +83,15 @@
     <string name="step_placed_hint">Filial buyurtmani tasdiqlaydi</string>
     <string name="step_cooking">Tayyorlanmoqda</string>
     <string name="step_cooking_hint">Oshpazlar ishga kirishdi</string>
-    <string name="step_ready_delivery">Kuryerga topshirildi</string>
-    <string name="step_ready_delivery_hint">Tez orada yetib boradi</string>
+    <string name="step_ready">Tayyor</string>
+    <string name="step_ready_hint">Kuryer olib ketadi</string>
+    <string name="ready_wait_courier">Tayyor — kuryer olib ketadi</string>
+    <string name="step_on_the_way">Kuryer yo\'lda</string>
+    <string name="step_on_the_way_hint">Tez orada yetib boradi</string>
+    <string name="step_delivered">Yetkazildi</string>
+    <string name="step_delivered_hint">Yoqimli ishtaha!</string>
+    <string name="returned">Kuryer yetkaza olmadi</string>
+    <string name="returned_hint">Filial siz bilan bog\'lanadi</string>
     <string name="step_ready_pickup">Tayyor!</string>
     <string name="step_ready_pickup_hint">Filialdan olib ketishingiz mumkin</string>
     <string name="cancelled">Buyurtma bekor qilindi</string>
@@ -111,6 +118,9 @@
     <string name="status_preparing">Tayyorlanmoqda</string>
     <string name="status_ready">Tayyor</string>
     <string name="status_cancelled">Bekor qilindi</string>
+    <string name="status_on_the_way">Yo\'lda</string>
+    <string name="status_delivered">Yetkazildi</string>
+    <string name="status_returned">Qaytdi</string>
 
     <!-- xatolar (backend `code`) -->
     <string name="error_not_found">Topilmadi</string>
