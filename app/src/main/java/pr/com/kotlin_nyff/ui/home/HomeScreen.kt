@@ -1,6 +1,8 @@
 package pr.com.kotlin_nyff.ui.home
 
+import android.os.SystemClock
 import androidx.compose.foundation.background
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -50,12 +52,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.font.FontWeight
@@ -76,9 +80,10 @@ import pr.com.kotlin_nyff.ui.common.BranchSheet
 import pr.com.kotlin_nyff.ui.common.ErrorBlock
 import pr.com.kotlin_nyff.ui.common.FoodImage
 import pr.com.kotlin_nyff.ui.common.Notice
+import pr.com.kotlin_nyff.ui.common.LanguageButton
 import pr.com.kotlin_nyff.ui.common.NyffCard
-import pr.com.kotlin_nyff.ui.common.OrderModeSwitch
 import pr.com.kotlin_nyff.ui.common.PillButton
+import pr.com.kotlin_nyff.ui.common.PlaceSheet
 import pr.com.kotlin_nyff.ui.common.RoundIconButton
 import pr.com.kotlin_nyff.ui.common.SystemBarIcons
 import pr.com.kotlin_nyff.ui.common.Tone
@@ -92,7 +97,10 @@ import pr.com.kotlin_nyff.ui.common.text
 import pr.com.kotlin_nyff.ui.theme.NyffShapes
 import pr.com.kotlin_nyff.ui.theme.NyffTheme
 
-/** Bosh sahifa (web `MobileHome`): qora sarlavha, buyurtma turi, filial / manzil, kategoriyalar, taomlar, savat paneli. */
+/**
+ * Bosh sahifa (web `MobileHome`): qora sarlavha, joy (manzil / filial — bosilsa yetkazib berish yoki olib ketish
+ * tanlanadi), kategoriyalar, taomlar, savat paneli. "NY" belgisiga 10 marta bosilsa — kuryer kirishi ([onCourierEntry]).
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(
@@ -100,10 +108,12 @@ fun HomeScreen(
     onOpenCheckout: () -> Unit,
     onOpenOrders: () -> Unit,
     onOpenOrder: (String) -> Unit,
+    onCourierEntry: () -> Unit,
     vm: HomeViewModel = hiltViewModel(),
 ) {
     val state by vm.state.collectAsStateWithLifecycle()
     val colors = NyffTheme.colors
+    var placeSheet by rememberSaveable { mutableStateOf(false) }
     var branchSheet by rememberSaveable { mutableStateOf(false) }
     var openedProduct by remember { mutableStateOf<MenuProduct?>(null) }
 
@@ -132,9 +142,9 @@ fun HomeScreen(
                 fullWidth("header") {
                     HomeHeader(
                         state = state,
-                        onMode = vm::setMode,
-                        onPlace = { if (state.mode == OrderMode.DELIVERY) onOpenLocation() else branchSheet = true },
+                        onPlace = { placeSheet = true },
                         onOrders = onOpenOrders,
+                        onCourierEntry = onCourierEntry,
                     )
                 }
                 state.currentOrder?.let { current ->
@@ -169,6 +179,23 @@ fun HomeScreen(
         }
     }
 
+    // shu usulni qayta tanlash — joyni o'zgartirish; boshqasiga o'tish — joy hali yo'q bo'lsa tanlash oynasi
+    if (placeSheet) {
+        PlaceSheet(
+            mode = state.mode,
+            onDelivery = {
+                placeSheet = false
+                if (state.mode == OrderMode.DELIVERY || state.deliveryPoint == null) onOpenLocation()
+                vm.setMode(OrderMode.DELIVERY)
+            },
+            onPickup = {
+                placeSheet = false
+                if (state.mode == OrderMode.TAKEAWAY || state.takeawayBranch == null) branchSheet = true
+                vm.setMode(OrderMode.TAKEAWAY)
+            },
+            onDismiss = { placeSheet = false },
+        )
+    }
     if (branchSheet) {
         BranchSheet(
             branches = state.branches.orEmpty(),
@@ -247,9 +274,9 @@ private fun LazyGridScope.menuContent(
 @Composable
 private fun HomeHeader(
     state: HomeUiState,
-    onMode: (OrderMode) -> Unit,
     onPlace: () -> Unit,
     onOrders: () -> Unit,
+    onCourierEntry: () -> Unit,
 ) {
     val colors = NyffTheme.colors
     Column(
@@ -258,11 +285,17 @@ private fun HomeHeader(
             .clip(NyffShapes.header)
             .background(colors.header)
             .statusBarsPadding()
-            .padding(start = 16.dp, end = 16.dp, top = 12.dp, bottom = 20.dp),
-        verticalArrangement = Arrangement.spacedBy(16.dp),
+            .padding(start = 16.dp, end = 16.dp, top = 12.dp, bottom = 18.dp),
+        verticalArrangement = Arrangement.spacedBy(14.dp),
     ) {
         Row(verticalAlignment = Alignment.CenterVertically) {
-            BrandBadge()
+            val entry by rememberUpdatedState(onCourierEntry)
+            val taps = remember { CourierEntryTaps() }
+            BrandBadge(
+                Modifier.pointerInput(taps) {
+                    detectTapGestures { if (taps.tap(SystemClock.uptimeMillis())) entry() }
+                },
+            )
             Spacer(Modifier.width(10.dp))
             val delivery = state.mode == OrderMode.DELIVERY
             Box(Modifier.weight(1f)) {
@@ -285,7 +318,6 @@ private fun HomeHeader(
             Text(stringResource(R.string.greeting), style = MaterialTheme.typography.bodyMedium, color = colors.onHeaderMuted)
             Text(stringResource(R.string.home_title), style = MaterialTheme.typography.headlineSmall, color = colors.onHeader)
         }
-        OrderModeSwitch(state.mode, onMode, onDark = true)
     }
 }
 
@@ -320,45 +352,6 @@ private fun HeaderChip(icon: ImageVector, text: String, onClick: () -> Unit, mod
 private fun HeaderIconButton(icon: ImageVector, description: String, onClick: () -> Unit) {
     val colors = NyffTheme.colors
     RoundIconButton(icon, description, onClick, colors.headerChip, colors.onHeader, size = 38.dp, iconSize = 20.dp)
-}
-
-/** Til: UZ / RU / EN — tanlansa ilova shu tilda qayta ochiladi (holat saqlanadi). */
-@Composable
-private fun LanguageButton() {
-    val colors = NyffTheme.colors
-    var open by remember { mutableStateOf(false) }
-    val current = AppLanguage.current()
-    Box {
-        Row(
-            Modifier
-                .height(38.dp)
-                .clip(CircleShape)
-                .background(colors.headerChip)
-                .clickable(role = Role.Button) { open = true }
-                .padding(horizontal = 10.dp),
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
-            Icon(Icons.Outlined.Translate, contentDescription = stringResource(R.string.language), tint = colors.onHeader, modifier = Modifier.size(16.dp))
-            Spacer(Modifier.width(4.dp))
-            Text(current.tag.uppercase(), style = MaterialTheme.typography.labelMedium, color = colors.onHeader)
-        }
-        DropdownMenu(expanded = open, onDismissRequest = { open = false }) {
-            AppLanguage.entries.forEach { language ->
-                DropdownMenuItem(
-                    text = {
-                        Text(
-                            language.label,
-                            fontWeight = if (language == current) FontWeight.ExtraBold else FontWeight.Normal,
-                        )
-                    },
-                    onClick = {
-                        open = false
-                        if (language != current) AppLanguage.apply(language)
-                    },
-                )
-            }
-        }
-    }
 }
 
 @Composable
@@ -455,17 +448,17 @@ private fun CategoryRow(state: HomeUiState, onCategory: (String) -> Unit) {
             val active = category.id == state.selectedCategoryId
             Row(
                 Modifier
-                    .height(42.dp)
+                    .height(34.dp)
                     .clip(CircleShape)
                     .background(if (active) colors.accent else colors.surface)
                     .clickable(role = Role.Tab) { onCategory(category.id) }
-                    .padding(start = if (category.icon.isNotBlank()) 6.dp else 14.dp, end = 14.dp),
+                    .padding(start = if (category.icon.isNotBlank()) 6.dp else 12.dp, end = 12.dp),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 val icon = imageUrl(category.icon)
                 if (icon != null) {
-                    AsyncImage(model = icon, contentDescription = null, modifier = Modifier.size(28.dp))
-                    Spacer(Modifier.width(6.dp))
+                    AsyncImage(model = icon, contentDescription = null, modifier = Modifier.size(22.dp))
+                    Spacer(Modifier.width(5.dp))
                 }
                 Text(
                     category.name.text(),

@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Kuryer qismi ("NY" belgisiga 10 marta bosib ochiladi). Русский. Тексты ошибок — по кодам backend (NestJS_NYFF/API.md 3). -->
+<resources>
+    <!-- общее -->
+    <string name="courier_cancel">Отмена</string>
+    <string name="courier_logout">Выйти</string>
+    <string name="courier_menu">Меню</string>
+
+    <!-- вход (логин и пароль выдаёт админ в разделе «Сотрудники») -->
+    <string name="courier_courier">Курьер</string>
+    <string name="courier_login_hint">Войдите с логином и паролем от администратора</string>
+    <string name="courier_login_field">Логин</string>
+    <string name="courier_password_field">Пароль</string>
+    <string name="courier_login">Войти</string>
+    <string name="courier_back">Назад</string>
+
+    <!-- главный экран -->
+    <string name="courier_on_duty">На смене</string>
+    <string name="courier_off_duty">Не на смене</string>
+    <string name="courier_off_duty_banner">Чтобы брать новые заказы, включите «На смене»</string>
+    <string name="courier_tab_new">Новые</string>
+    <string name="courier_tab_mine">Мои</string>
+    <string name="courier_tab_today">Сегодня</string>
+    <string name="courier_status_preparing">Готовится</string>
+    <string name="courier_status_ready">Готов</string>
+    <string name="courier_offline">Нет связи с сервером — список не обновляется</string>
+
+    <!-- Новые -->
+    <string name="courier_choose_branch">С какого филиала берёте?</string>
+    <string name="courier_choose_branch_hint">Выберите филиал — появятся его заказы</string>
+    <string name="courier_branch_locked">У вас заказы филиала %1$s — из другого филиала возьмёте после их доставки</string>
+    <plurals name="courier_items_count">
+        <item quantity="one">%d блюдо</item>
+        <item quantity="few">%d блюда</item>
+        <item quantity="many">%d блюд</item>
+        <item quantity="other">%d блюда</item>
+    </plurals>
+    <string name="courier_no_available">Пока новых заказов нет</string>
+    <string name="courier_take">Беру</string>
+    <string name="courier_blocked_other_branch">У вас заказы другого филиала</string>
+    <string name="courier_blocked_busy">Сначала доставьте заказы в пути</string>
+    <string name="courier_distance_km">~%1$s км</string>
+    <string name="courier_extra_km">К вашему маршруту +%1$s км</string>
+    <string name="courier_pay_cash_amount">Наличные · %1$s</string>
+    <string name="courier_pay_click">Click — оплачен</string>
+    <string name="courier_fee_line">Доставка: %1$s</string>
+    <string name="courier_fee_unknown">Стоимость доставки называете сами</string>
+
+    <!-- Мои -->
+    <string name="courier_no_mine">У вас нет заказов — возьмите из «Новых»</string>
+    <string name="courier_at_branch">Заберёте в филиале</string>
+    <string name="courier_pay_kassa">Оплатите в кассу (наличные): %1$s</string>
+    <string name="courier_pay_kassa_none">Оплачивать в кассу наличными не нужно</string>
+    <string name="courier_depart">Выехал</string>
+    <string name="courier_wait_ready">Выезжайте, когда все заказы будут готовы</string>
+    <string name="courier_release">Вернуть</string>
+    <string name="courier_call">Позвонить</string>
+    <string name="courier_call_branch">Позвонить в филиал</string>
+    <string name="courier_google">Google</string>
+    <string name="courier_yandex">Yandex</string>
+    <string name="courier_whole_route">Весь маршрут:</string>
+    <string name="courier_next_stop">Следующий</string>
+    <string name="courier_delivered">Доставлен</string>
+    <string name="courier_not_delivered">Не удалось доставить</string>
+    <string name="courier_collect">Получить: %1$s</string>
+    <string name="courier_collect_and_fee">Получить: %1$s + доставка</string>
+    <string name="courier_note">Комментарий: %1$s</string>
+    <string name="courier_route_hint">Порядок предлагает система — клиенты ждут меньше всего</string>
+
+    <!-- Не удалось доставить -->
+    <string name="courier_return_title">Не удалось доставить</string>
+    <string name="courier_return_hint">Верните заказ в филиал и свяжитесь с филиалом / админом</string>
+    <string name="courier_reason_no_answer">Клиент не отвечает</string>
+    <string name="courier_reason_wrong_address">Адрес не найден</string>
+    <string name="courier_reason_refused">Клиент отказался</string>
+    <string name="courier_reason_other">Другая причина</string>
+    <string name="courier_return_note">Комментарий (необязательно)</string>
+    <string name="courier_return_send">Отправить</string>
+
+    <!-- Сегодня -->
+    <string name="courier_today_delivered">Доставлено</string>
+    <string name="courier_today_returned">Возвращено</string>
+    <string name="courier_today_cash">Наличные (блюда)</string>
+    <string name="courier_today_fees">Стоимость доставки</string>
+    <string name="courier_no_done">Сегодня доставок ещё не было</string>
+    <string name="courier_done_delivered">Доставлен · %1$s</string>
+    <string name="courier_done_returned">Возвращён · %1$s</string>
+
+    <!-- уведомления -->
+    <string name="courier_notif_channel">Новые заказы</string>
+    <string name="courier_notif_title">Новый заказ %1$s</string>
+
+    <!-- ошибки (backend `code`) -->
+    <string name="courier_error_not_found">Не найдено</string>
+    <string name="courier_error_wrong_login">Неверный логин или пароль</string>
+    <string name="courier_error_user_inactive">Сотрудник заблокирован</string>
+    <string name="courier_error_too_many_attempts">Слишком много неверных попыток — попробуйте чуть позже</string>
+    <string name="courier_error_invalid_input">Данные заполнены неверно</string>
+    <string name="courier_error_unauthorized">Сессия завершилась — войдите снова</string>
+    <string name="courier_error_forbidden">Это действие вам недоступно</string>
+    <string name="courier_error_invalid_status">Статус уже изменился — список обновлён</string>
+    <string name="courier_error_empty_order">У вас нет заказов</string>
+    <string name="courier_error_off_duty">Сначала включите «На смене»</string>
+    <string name="courier_error_already_taken">Этот заказ уже взял другой курьер</string>
+    <string name="courier_error_other_branch">У вас заказы другого филиала</string>
+    <string name="courier_error_courier_busy">Сначала доставьте заказы в пути</string>
+    <string name="courier_error_not_ready">Не все заказы ещё готовы</string>
+    <string name="courier_error_network">Нет связи с сервером — проверьте интернет</string>
+    <string name="courier_error_unknown">Произошла непредвиденная ошибка</string>
+</resources>

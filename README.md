@@ -4,6 +4,10 @@ Mijoz ilovasi: filial yoki dostavka manzili (Google Maps) → menyu → savat �
 (Socket.IO). Backend — [NestJS_NYFF](../NestJS_NYFF) (`API.md` 5-bo'lim), web ilova — [ReactJS_NYFF](../ReactJS_NYFF).
 Reja va qarorlar — [PLAN.md](PLAN.md).
 
+**Kuryer qismi** shu ilova ichida: bosh sahifadagi "NY" belgisiga ketma-ket 10 marta bosilsa — kuryer kirish oynasi
+(login va parolni admin web ilovada beradi: Xodimlar → rol "Kuryer"; demo: `bobur` / 222222). Kuryer kirgan bo'lsa
+ilova har safar kuryer ekranida ochiladi; "Chiqish" — mijoz qismiga (API.md 12-bo'lim).
+
 Stek: Kotlin 2.2, Jetpack Compose (Material 3), Hilt, Navigation Compose, Retrofit 3 + OkHttp + kotlinx.serialization,
 Socket.IO, Room, DataStore, Coil 3, Google Maps (maps-compose), Play Services Location. minSdk 28, targetSdk 37.
 
@@ -46,5 +50,10 @@ app/src/main/java/pr/com/kotlin_nyff/
                CatalogRepository, OrderRepository, DraftStore (savat va tanlov)
   di/          Hilt moduli
   domain/      toza funksiyalar: savat, menyu filiali, formatlash, telefon, buyurtma holati
-  ui/          theme, common (komponentlar, matnlar), home, location, checkout, tracking, orders, NyffNavHost
+  ui/          theme, common (komponentlar, matnlar), home, location, checkout, tracking, orders, NyffNavHost,
+               AppRoot (mijoz yoki kuryer qismi)
+  courier/     kuryer qismi: data (modellar, Retrofit, token, Socket.IO, sessiya), di, domain (pul, xarita
+               havolalari), ui (kirish, "Yangi" / "Meniki" / "Bugun", xarita, bildirishnoma)
 ```
+
+Matnlar: mijoz — `res/values*/strings.xml`, kuryer — `res/values*/strings_courier.xml` (`courier_` prefiksi).

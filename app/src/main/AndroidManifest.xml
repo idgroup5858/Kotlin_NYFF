@@ -3,9 +3,22 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <!-- Yetkazib berish joyini xaritada joriy joylashuvdan ochish uchun -->
+    <!-- Yetkazib berish joyini xaritada joriy joylashuvdan ochish; kuryer qismida — yo'l xaritasidagi o'z joyi -->
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <!-- Kuryer qismi: yangi buyurtma haqida xabar (Android 13+ da kuryer kirganda so'raladi) -->
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+
+    <!-- Kuryer qismi: Google Maps / Yandex ilovasida yo'l ochish va mijozga qo'ng'iroq -->
+    <queries>
+        <intent>
+            <action android:name="android.intent.action.VIEW" />
+            <data android:scheme="https" />
+        </intent>
+        <intent>
+            <action android:name="android.intent.action.DIAL" />
+        </intent>
+    </queries>
 
     <!--
         usesCleartextTraffic — backend manzili http:// bo'lsa true (build.gradle.kts, local.properties dagi nyff.apiUrl).
@@ -34,6 +47,7 @@
         <activity
             android:name=".MainActivity"
             android:exported="true"
+            android:launchMode="singleTask"
             android:theme="@style/Theme.Kotlin_NYFF"
             android:windowSoftInputMode="adjustResize">
             <intent-filter>

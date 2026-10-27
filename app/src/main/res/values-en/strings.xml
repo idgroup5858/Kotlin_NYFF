@@ -14,6 +14,9 @@
     <string name="home_title">What are we eating today?</string>
     <string name="delivery">Delivery</string>
     <string name="pickup">Pickup</string>
+    <string name="place_title">How will you get your order?</string>
+    <string name="place_delivery_hint">A courier brings it to your address</string>
+    <string name="place_pickup_hint">You pick it up at the branch</string>
     <string name="add">Add</string>
     <string name="cart">Cart</string>
     <string name="items_count">%1$d item(s)</string>

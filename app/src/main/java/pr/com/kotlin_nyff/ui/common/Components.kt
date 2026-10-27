@@ -1,6 +1,7 @@
 package pr.com.kotlin_nyff.ui.common
 
 import androidx.activity.compose.LocalActivity
+import androidx.annotation.StringRes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -80,19 +81,23 @@ fun FoodImage(path: String, modifier: Modifier = Modifier, shape: Shape = Rectan
     }
 }
 
-/** Oq yumaloq kartochka: yorug' mavzuda yengil soya, tungida chegara (web `surface` + `shadow-card`). */
+/**
+ * Oq yumaloq kartochka: yorug' mavzuda yengil soya, tungida chegara (web `surface` + `shadow-card`); [highlight] —
+ * to'q sariq chegara (kuryerning keyingi manzili).
+ */
 @Composable
 fun NyffCard(
     modifier: Modifier = Modifier,
     onClick: (() -> Unit)? = null,
     shape: Shape = NyffShapes.card,
+    highlight: Boolean = false,
     content: @Composable ColumnScope.() -> Unit,
 ) {
     val colors = NyffTheme.colors
-    val outline = if (colors.isDark) {
-        Modifier.border(1.dp, colors.line, shape)
-    } else {
-        Modifier.shadow(6.dp, shape, ambientColor = Coal.copy(alpha = 0.10f), spotColor = Coal.copy(alpha = 0.22f))
+    val outline = when {
+        highlight -> Modifier.border(2.dp, colors.select, shape)
+        colors.isDark -> Modifier.border(1.dp, colors.line, shape)
+        else -> Modifier.shadow(6.dp, shape, ambientColor = Coal.copy(alpha = 0.10f), spotColor = Coal.copy(alpha = 0.22f))
     }
     Column(
         modifier
@@ -144,7 +149,7 @@ fun QtyStepper(qty: Int, onChange: (Int) -> Unit, modifier: Modifier = Modifier)
     }
 }
 
-/** Yetkazib berish / olib ketish tanlovi (bosh sahifa — qora fonda, rasmiylashtirish — och fonda). */
+/** Yetkazib berish / olib ketish tanlovi (rasmiylashtirishda — och fonda; `onDark` — qora sarlavha ustida). */
 @Composable
 fun OrderModeSwitch(mode: OrderMode, onChange: (OrderMode) -> Unit, onDark: Boolean, modifier: Modifier = Modifier) {
     val colors = NyffTheme.colors
@@ -171,14 +176,14 @@ fun OrderModeSwitch(mode: OrderMode, onChange: (OrderMode) -> Unit, onDark: Bool
             Row(
                 Modifier
                     .weight(1f)
-                    .height(40.dp)
+                    .height(34.dp)
                     .clip(CircleShape)
                     .background(if (active) colors.accent else Color.Transparent)
                     .selectable(selected = active, role = Role.RadioButton, onClick = { onChange(value) }),
                 horizontalArrangement = Arrangement.Center,
                 verticalAlignment = Alignment.CenterVertically,
             ) {
-                Icon(icon, contentDescription = null, tint = tint, modifier = Modifier.size(18.dp))
+                Icon(icon, contentDescription = null, tint = tint, modifier = Modifier.size(16.dp))
                 Spacer(Modifier.width(6.dp))
                 Text(stringResource(label), style = MaterialTheme.typography.labelMedium, color = tint)
             }
@@ -241,9 +246,14 @@ fun Notice(
     }
 }
 
-/** Yuklab bo'lmadi + "Qayta urinish". */
+/** Yuklab bo'lmadi + "Qayta urinish"; [message] — xato matni (kuryer qismi o'z xato kodlari bilan beradi). */
 @Composable
-fun ErrorBlock(error: Throwable?, onRetry: () -> Unit, modifier: Modifier = Modifier) {
+fun ErrorBlock(
+    error: Throwable?,
+    onRetry: () -> Unit,
+    modifier: Modifier = Modifier,
+    @StringRes message: Int = errorRes(error),
+) {
     val colors = NyffTheme.colors
     Column(
         modifier
@@ -255,7 +265,7 @@ fun ErrorBlock(error: Throwable?, onRetry: () -> Unit, modifier: Modifier = Modi
         Icon(Icons.Outlined.CloudOff, contentDescription = null, tint = colors.textFaint, modifier = Modifier.size(40.dp))
         Text(stringResource(R.string.load_failed), style = MaterialTheme.typography.titleMedium, color = colors.text)
         Text(
-            stringResource(errorRes(error)),
+            stringResource(message),
             style = MaterialTheme.typography.bodyMedium,
             color = colors.textMuted,
             textAlign = TextAlign.Center,
@@ -265,25 +275,55 @@ fun ErrorBlock(error: Throwable?, onRetry: () -> Unit, modifier: Modifier = Modi
     }
 }
 
-/** Kichik sariq tugma ("Qayta urinish", "Xaritada belgilash"). */
+/**
+ * Kichik sariq (yoki [background]) tugma ("Qayta urinish", "Xaritada belgilash", kuryerning "Olaman"); [loading] —
+ * ikonka o'rnida aylanuvchi belgi, bosilmaydi.
+ */
 @Composable
-fun PillButton(text: String, onClick: () -> Unit, modifier: Modifier = Modifier, icon: ImageVector? = null) {
-    val colors = NyffTheme.colors
+fun PillButton(
+    text: String,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+    icon: ImageVector? = null,
+    background: Color = NyffTheme.colors.accent,
+    content: Color = NyffTheme.colors.onAccent,
+    enabled: Boolean = true,
+    loading: Boolean = false,
+) {
     Row(
         modifier
             .height(40.dp)
             .clip(CircleShape)
-            .background(colors.accent)
-            .clickable(role = Role.Button, onClick = onClick)
-            .padding(horizontal = 16.dp),
+            .background(if (enabled) background else background.copy(alpha = 0.45f))
+            .clickable(enabled = enabled && !loading, role = Role.Button, onClick = onClick)
+            .padding(horizontal = 14.dp),
         verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.Center,
     ) {
-        if (icon != null) {
-            Icon(icon, contentDescription = null, tint = colors.onAccent, modifier = Modifier.size(18.dp))
+        if (loading) {
+            CircularProgressIndicator(Modifier.size(16.dp), color = content, strokeWidth = 2.dp)
+            Spacer(Modifier.width(8.dp))
+        } else if (icon != null) {
+            Icon(icon, contentDescription = null, tint = content, modifier = Modifier.size(18.dp))
             Spacer(Modifier.width(6.dp))
         }
-        Text(text, style = MaterialTheme.typography.labelMedium, color = colors.onAccent)
+        Text(text, style = MaterialTheme.typography.labelMedium, color = content, maxLines = 1, overflow = TextOverflow.Ellipsis)
     }
+}
+
+/** Kichik rangli belgi (kuryer: "Tayyor", "Tayyorlanmoqda"). */
+@Composable
+fun Chip(text: String, background: Color, content: Color, modifier: Modifier = Modifier) {
+    Text(
+        text,
+        modifier = modifier
+            .clip(RoundedCornerShape(6.dp))
+            .background(background)
+            .padding(horizontal = 8.dp, vertical = 3.dp),
+        style = MaterialTheme.typography.labelMedium,
+        color = content,
+        maxLines = 1,
+    )
 }
 
 /** Pastdagi katta sariq tugma: matn, o'ngda summa va strelka (yoki yuklanish belgisi). */

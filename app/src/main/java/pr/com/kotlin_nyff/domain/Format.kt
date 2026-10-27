@@ -3,6 +3,7 @@ package pr.com.kotlin_nyff.domain
 import java.time.Instant
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
+import kotlin.math.roundToLong
 
 /** Uzilmaydigan bo'shliq: "16 866 / 000 so'm" bo'lib ikki qatorga bo'linmasin (web `lib/format.ts` dagidek). */
 const val NBSP = ' '
@@ -21,6 +22,12 @@ object Format {
 
     /** Buyurtma raqami: 7 → "#007" — TV, kassa va chekda bir xil. */
     fun orderNumber(number: Int): String = "#" + number.toString().padStart(3, '0')
+
+    /** Masofa (kuryer): 3.456 → "3,5" (web'dagidek vergul bilan, bir xona). */
+    fun km(value: Double): String {
+        val tenths = (value * 10).roundToLong()
+        return "${tenths / 10},${tenths % 10}"
+    }
 
     private val time = DateTimeFormatter.ofPattern("HH:mm")
     private val dateTime = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm")

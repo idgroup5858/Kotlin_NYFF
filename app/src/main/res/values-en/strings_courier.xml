@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Kuryer qismi ("NY" belgisiga 10 marta bosib ochiladi). English. Error texts follow backend codes (NestJS_NYFF/API.md 3). -->
+<resources>
+    <!-- common -->
+    <string name="courier_cancel">Cancel</string>
+    <string name="courier_logout">Sign out</string>
+    <string name="courier_menu">Menu</string>
+
+    <!-- sign in (the admin issues the login and password under «Staff») -->
+    <string name="courier_courier">Courier</string>
+    <string name="courier_login_hint">Sign in with the login and password from the admin</string>
+    <string name="courier_login_field">Login</string>
+    <string name="courier_password_field">Password</string>
+    <string name="courier_login">Sign in</string>
+    <string name="courier_back">Back</string>
+
+    <!-- main screen -->
+    <string name="courier_on_duty">On duty</string>
+    <string name="courier_off_duty">Off duty</string>
+    <string name="courier_off_duty_banner">Turn on «On duty» to take new orders</string>
+    <string name="courier_tab_new">New</string>
+    <string name="courier_tab_mine">Mine</string>
+    <string name="courier_tab_today">Today</string>
+    <string name="courier_status_preparing">Preparing</string>
+    <string name="courier_status_ready">Ready</string>
+    <string name="courier_offline">No connection to the server — the list is not updating</string>
+
+    <!-- New -->
+    <string name="courier_choose_branch">Which branch are you picking up from?</string>
+    <string name="courier_choose_branch_hint">Choose a branch to see its orders</string>
+    <string name="courier_branch_locked">You\'re carrying %1$s orders — other branches open up once they\'re delivered</string>
+    <plurals name="courier_items_count">
+        <item quantity="one">%d item</item>
+        <item quantity="other">%d items</item>
+    </plurals>
+    <string name="courier_no_available">No new orders yet</string>
+    <string name="courier_take">Take</string>
+    <string name="courier_blocked_other_branch">You hold orders from another branch</string>
+    <string name="courier_blocked_busy">Deliver the orders on the way first</string>
+    <string name="courier_distance_km">~%1$s km</string>
+    <string name="courier_extra_km">+%1$s km to your route</string>
+    <string name="courier_pay_cash_amount">Cash · %1$s</string>
+    <string name="courier_pay_click">Click — paid</string>
+    <string name="courier_fee_line">Delivery: %1$s</string>
+    <string name="courier_fee_unknown">You quote the delivery fee</string>
+
+    <!-- Mine -->
+    <string name="courier_no_mine">You hold no orders — take some from «New»</string>
+    <string name="courier_at_branch">Pick up at the branch</string>
+    <string name="courier_pay_kassa">Pay at the cash desk (cash): %1$s</string>
+    <string name="courier_pay_kassa_none">Nothing to pay at the cash desk</string>
+    <string name="courier_depart">On my way</string>
+    <string name="courier_wait_ready">Leave once all orders are ready</string>
+    <string name="courier_release">Give back</string>
+    <string name="courier_call">Call</string>
+    <string name="courier_call_branch">Call the branch</string>
+    <string name="courier_google">Google</string>
+    <string name="courier_yandex">Yandex</string>
+    <string name="courier_whole_route">Whole route:</string>
+    <string name="courier_next_stop">Next</string>
+    <string name="courier_delivered">Delivered</string>
+    <string name="courier_not_delivered">Couldn\'t deliver</string>
+    <string name="courier_collect">Collect: %1$s</string>
+    <string name="courier_collect_and_fee">Collect: %1$s + delivery</string>
+    <string name="courier_note">Note: %1$s</string>
+    <string name="courier_route_hint">The system suggests the order — customers wait the least</string>
+
+    <!-- Couldn't deliver -->
+    <string name="courier_return_title">Couldn\'t deliver</string>
+    <string name="courier_return_hint">Bring the order back to the branch and talk to the branch / admin</string>
+    <string name="courier_reason_no_answer">Customer didn\'t answer</string>
+    <string name="courier_reason_wrong_address">Address not found</string>
+    <string name="courier_reason_refused">Customer refused</string>
+    <string name="courier_reason_other">Other reason</string>
+    <string name="courier_return_note">Note (optional)</string>
+    <string name="courier_return_send">Send</string>
+
+    <!-- Today -->
+    <string name="courier_today_delivered">Delivered</string>
+    <string name="courier_today_returned">Returned</string>
+    <string name="courier_today_cash">Cash (food)</string>
+    <string name="courier_today_fees">Delivery fees</string>
+    <string name="courier_no_done">No deliveries yet today</string>
+    <string name="courier_done_delivered">Delivered · %1$s</string>
+    <string name="courier_done_returned">Returned · %1$s</string>
+
+    <!-- notifications -->
+    <string name="courier_notif_channel">New orders</string>
+    <string name="courier_notif_title">New order %1$s</string>
+
+    <!-- errors (backend `code`) -->
+    <string name="courier_error_not_found">Not found</string>
+    <string name="courier_error_wrong_login">Wrong login or password</string>
+    <string name="courier_error_user_inactive">This employee is blocked</string>
+    <string name="courier_error_too_many_attempts">Too many wrong attempts — please try again a bit later</string>
+    <string name="courier_error_invalid_input">Some fields are filled in incorrectly</string>
+    <string name="courier_error_unauthorized">Your session has ended — please sign in again</string>
+    <string name="courier_error_forbidden">This action is not available to you</string>
+    <string name="courier_error_invalid_status">The status has already changed — the list was refreshed</string>
+    <string name="courier_error_empty_order">You hold no orders</string>
+    <string name="courier_error_off_duty">Turn on «On duty» first</string>
+    <string name="courier_error_already_taken">Another courier has already taken this order</string>
+    <string name="courier_error_other_branch">You hold orders from another branch</string>
+    <string name="courier_error_courier_busy">Deliver the orders on the way first</string>
+    <string name="courier_error_not_ready">Not all orders are ready yet</string>
+    <string name="courier_error_network">No connection to the server — check the internet</string>
+    <string name="courier_error_unknown">An unexpected error occurred</string>
+</resources>

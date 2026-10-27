@@ -29,9 +29,12 @@ data object OrdersRoute
 @Serializable
 data class TrackingRoute(val orderId: String)
 
-/** Ekranlar: bosh sahifa → (xarita) → rasmiylashtirish → buyurtma holati; "Buyurtmalarim" — bosh sahifadan. */
+/**
+ * Mijoz qismi ekranlari: bosh sahifa → (xarita) → rasmiylashtirish → buyurtma holati; "Buyurtmalarim" — bosh sahifadan.
+ * [onCourierEntry] — "NY" belgisiga 10 marta bosilganda (kuryer qismi — [AppRoot] da).
+ */
 @Composable
-fun NyffNavHost() {
+fun NyffNavHost(onCourierEntry: () -> Unit) {
     val nav = rememberNavController()
     NavHost(navController = nav, startDestination = HomeRoute) {
         composable<HomeRoute> { entry ->
@@ -40,6 +43,7 @@ fun NyffNavHost() {
                 onOpenCheckout = { nav.go(entry, CheckoutRoute) },
                 onOpenOrders = { nav.go(entry, OrdersRoute) },
                 onOpenOrder = { nav.go(entry, TrackingRoute(it)) },
+                onCourierEntry = onCourierEntry,
             )
         }
         composable<LocationRoute> { entry ->

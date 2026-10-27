@@ -14,6 +14,9 @@
     <string name="home_title">Что будем есть сегодня?</string>
     <string name="delivery">Доставка</string>
     <string name="pickup">Самовывоз</string>
+    <string name="place_title">Как получите заказ?</string>
+    <string name="place_delivery_hint">Курьер привезёт по вашему адресу</string>
+    <string name="place_pickup_hint">Заберёте сами в филиале</string>
     <string name="add">Добавить</string>
     <string name="cart">Корзина</string>
     <string name="items_count">%1$d шт.</string>

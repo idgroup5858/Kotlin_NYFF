@@ -1,6 +1,7 @@
 package pr.com.kotlin_nyff.ui.common
 
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
@@ -28,6 +29,7 @@ fun NyffTextField(
     prefix: String? = null,
     error: String? = null,
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
+    keyboardActions: KeyboardActions = KeyboardActions.Default,
     visualTransformation: VisualTransformation = VisualTransformation.None,
 ) {
     val colors = NyffTheme.colors
@@ -42,6 +44,7 @@ fun NyffTextField(
         isError = error != null,
         supportingText = error?.let { { Text(it) } },
         keyboardOptions = keyboardOptions,
+        keyboardActions = keyboardActions,
         visualTransformation = visualTransformation,
         textStyle = MaterialTheme.typography.bodyLarge,
         shape = NyffShapes.control,

@@ -1,6 +1,9 @@
 # NYFF Android — reja va ishlar ro'yxati
 
-> **Holat (2026-10-27):** 0–5 va 7 bosqichlar tayyor (pastda). Unit testlar: 35 ta (`gradlew testDebugUnitTest`), lint — 0 xato.
+> **Holat (2026-10-27):** 0–5, 7 va 8 bosqichlar tayyor (pastda). Unit testlar: 51 ta (`gradlew testDebugUnitTest`), lint — 0 xato.
+> 8: kuryer ilovasi shu ilovaga birlashtirildi ("NY" belgisiga 10 marta → login / parol) — emulyatorda test bazasi bilan
+> tekshirilgan: noto'g'ri parol xatosi, kirish, ilova qayta ochilganda kuryer ekrani, "Chiqish" → mijoz qismi; bosh
+> sahifada "Dostavka / Olib ketish" o'rniga joy tanlash oynasi, tablar ixchamroq.
 > Emulyatorda (AVD `nyff_api36`, API 36.1, Google Play) lokal backend bilan uchidan-uchiga tekshirilgan: menyu, xarita +
 > GPS → Chilonzor hududi, dostavka buyurtmasi → 5 daqiqadan keyin Yunusobodga o'tkazildi (raqam socket orqali jonli
 > yangilandi) → kassir qabul qildi → "Tayyor"; olib ketish buyurtmasi → kassir bekor qildi; tarix, ruscha, tungi mavzu.
@@ -13,7 +16,8 @@
 ## 1. Maqsad
 
 New York Fast Food mijoz ilovasi (Android): filial / dostavka manzili → menyu → savat → buyurtma → holatni jonli
-kuzatish. Backend — `C:\BACKEND APPS\NestJS_NYFF` (`API.md` 5-bo'lim — mobil oqim). Ilova hech narsani o'zi
+kuzatish. Ichida yashirin **kuryer qismi** (`courier/` paketi, API.md 12) — "NY" belgisiga 10 marta bosib ochiladi.
+Backend — `C:\BACKEND APPS\NestJS_NYFF` (`API.md` 5-bo'lim — mobil oqim). Ilova hech narsani o'zi
 hisoblamaydi: filialni tanlash, narx, hudud narxi, ochiq / yopiq — serverda. Ko'rinish va matnlar — web ilovaning mobil
 demosidan (`ReactJS_NYFF/src/pages/mobile/*`, `src/i18n/*` → `mobile`, `errors`).
 
@@ -41,6 +45,9 @@ demosidan (`ReactJS_NYFF/src/pages/mobile/*`, `src/i18n/*` → `mobile`, `errors
 | Xarita va Play xizmatlari | Manifestda `org.apache.http.legacy` (`required="false"`) — busiz Google Play Maps moduli ba'zi qurilmalarda yiqiladi (emulyatorda tasdiqlangan) |
 | Kuryer holati (2026-10-27) | Mijozga faqat holat: dostavka 4 bosqich — qabul → tayyorlanmoqda → "Tayyor · Kuryer olib ketadi" → "Kuryer yo'lda" (`departedAt`) → "Yetkazildi" (`deliveredAt`); "Yetkazib bo'lmadi" (`returnedAt`) — alohida karta va filialga qo'ng'iroq. Kuryer kimligi, navbati va kelish vaqti ko'rsatilmaydi. Buyurtma `status` i `ready` da qoladi — bosqich `domain/OrderProgress.kt` da. Yetkazish narxi — serverdagi `deliveryFee`, bo'lmasa saqlangani. Yetkazilmagan dostavka 12 soat "joriy" sanaladi |
 | Server manzilini vaqtincha almashtirish | `./gradlew assembleDebug -Pnyff.apiUrl=http://...` — `local.properties` ga tegmasdan (masalan sinov uchun boshqa port) |
+| Kuryer qismi (2026-10-27) | Alohida `Kotlin_NYFF_Courier` ilovasi shu ilovaga ko'chirildi (eski loyiha hozircha papkada turadi, yangilanmaydi). Kirish: bosh sahifadagi "NY" belgisiga ketma-ket 10 marta (oraliq ≤ 1,5 s) — belgi, ripple, xabar yo'q → login va parol (admin "Xodimlar" da ochadi, ismlar ro'yxati yo'q). Sessiya alohida DataStore'da (`nyff_courier`) — kuryer kirgan bo'lsa ilova har safar kuryer ekranida ochiladi; "Chiqish" — mijoz qismiga. Kuryer so'rovlari alohida Retrofit (token qo'shiladi) — mijoz so'rovlariga token ketmaydi. Matnlar — `strings_courier.xml` (`courier_` prefiksi). Qolgan qarorlar (filial tanlash, tartib, pul, ixcham karta) — `Kotlin_NYFF_Courier/PLAN.md` 2-bo'lim |
+| Buyurtma turi (2026-10-27) | Bosh sahifada "Dostavka / Olib ketish" tanlovi yo'q: sarlavhadagi manzil / filial tugmasi → "Buyurtmani qanday olasiz?" oynasi (o'sha usulni qayta tanlash — joyni o'zgartirish, boshqasiga o'tish — joy yo'q bo'lsa tanlash oynasi). Tanlov rasmiylashtirishda ham bor. Foydalanuvchi: "hozircha tanlov holatida, keyin maslahatlashib o'zgartiramiz" |
+| Ixcham tablar | Kategoriyalar va "Dostavka / Olib ketish" — 34dp; kuryer sarlavhasidagi tablar — 32dp |
 
 ## 3. Bosqichlar
 
@@ -51,4 +58,5 @@ demosidan (`ReactJS_NYFF/src/pages/mobile/*`, `src/i18n/*` → `mobile`, `errors
 - [x] **4. Kuzatish va tarix** — 3 bosqich, qabul muddati sanog'i, filialga o'tkazish, bekor qilinish sababi, filialga qo'ng'iroq; "Buyurtmalarim"
 - [x] **5. Testlar** — unit (savat, formatlash, telefon, filial tanlash, holat matnlari, API o'qish / xatolar — MockWebServer); emulyatorda backend bilan
 - [ ] **6. Keyinroq** — haqiqiy API manzili (https), FCM push (ilova yopiq bo'lsa), Click to'lovi, hudud narxi summaga (backend PLAN 10), iOS
-- [x] **7. Kuryer holatlari** — `CustomerOrder` ga `deliveryFee`, `departedAt`, `deliveredAt`, `returnedAt`; 4 bosqichli dostavka, "Yetkazildi" / "Qaytdi" holatlari va matnlari (3 til), testlar. Kuryer ilovasi — `Kotlin_NYFF_Courier`
+- [x] **7. Kuryer holatlari** — `CustomerOrder` ga `deliveryFee`, `departedAt`, `deliveredAt`, `returnedAt`; 4 bosqichli dostavka, "Yetkazildi" / "Qaytdi" holatlari va matnlari (3 til), testlar
+- [x] **8. Kuryer qismi shu ilovada** — `courier/` paketi (kirish — login / parol, "Yangi" / "Meniki" / "Bugun", xarita, bildirishnoma), "NY" ga 10 marta (`CourierEntryTaps`), `AppRoot` (mijoz yoki kuryer), umumiy komponentlar (`NyffCard` highlight, `PillButton` rang / yuklanish, `Chip`, `LanguageButton`); bosh sahifada joy tanlash oynasi (`PlaceSheet`), ixcham tablar; testlar (kuryer API, pul, havolalar, filial tanlash, 10 marta bosish)
