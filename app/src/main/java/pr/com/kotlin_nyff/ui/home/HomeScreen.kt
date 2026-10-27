@@ -2,7 +2,18 @@ package pr.com.kotlin_nyff.ui.home
 
 import android.os.SystemClock
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.gestures.detectTapGestures
+import androidx.compose.foundation.layout.defaultMinSize
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.withStyle
+import androidx.compose.ui.unit.sp
+import pr.com.kotlin_nyff.domain.NBSP
+import pr.com.kotlin_nyff.ui.theme.Coal
+import pr.com.kotlin_nyff.ui.theme.Gold
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -501,49 +512,73 @@ private fun ProductCard(
     modifier: Modifier = Modifier,
 ) {
     val colors = NyffTheme.colors
-    NyffCard(modifier.fillMaxWidth(), onClick = onOpen) {
+    val shape = RoundedCornerShape(16.dp)
+    val soum = stringResource(R.string.soum)
+    // web "GoMeal" kartasi: oq, soyasiz (tungida — chegara), 16 yumaloq, ichida 8 bo'shliq
+    Column(
+        modifier
+            .fillMaxWidth()
+            .then(if (colors.isDark) Modifier.border(1.dp, colors.line, shape) else Modifier)
+            .clip(shape)
+            .background(colors.surface)
+            .clickable(onClick = onOpen)
+            .padding(8.dp),
+    ) {
         Box {
+            // rasm butunligicha (shaffof PNG) karta fonida
             FoodImage(
                 product.image,
                 Modifier
                     .fillMaxWidth()
                     .aspectRatio(4f / 3f),
+                shape = RoundedCornerShape(12.dp),
+                background = colors.surface,
+                contentScale = ContentScale.Fit,
             )
             if (count != null) {
-                Text(
-                    count.toString(),
-                    modifier = Modifier
+                Box(
+                    Modifier
                         .align(Alignment.TopEnd)
-                        .padding(8.dp)
-                        .clip(RoundedCornerShape(50))
-                        .background(colors.accent)
-                        .padding(horizontal = 8.dp, vertical = 2.dp),
-                    style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.SemiBold),
-                    color = colors.onAccent,
-                )
+                        .defaultMinSize(minWidth = 28.dp, minHeight = 28.dp)
+                        .clip(CircleShape)
+                        .background(Gold)
+                        .padding(horizontal = 6.dp),
+                    contentAlignment = Alignment.Center,
+                ) {
+                    Text(count.toString(), style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.Bold), color = Color.White)
+                }
             }
         }
-        // ixcham: nom (1–2 qator, bo'sh qator ajratilmaydi) va darhol ostida narx + "qo'shish"
-        Column(
-            Modifier.padding(start = 10.dp, end = 8.dp, top = 8.dp, bottom = 8.dp),
-            verticalArrangement = Arrangement.spacedBy(4.dp),
-        ) {
+        Column(Modifier.padding(8.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
             Text(
                 product.name.text(),
-                style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.Medium),
+                style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Medium, lineHeight = 18.sp),
                 color = colors.text,
                 maxLines = 2,
                 overflow = TextOverflow.Ellipsis,
             )
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Text(
-                    money(product.price ?: 0),
+                    buildAnnotatedString {
+                        append(Format.number(product.price ?: 0))
+                        append(NBSP)
+                        withStyle(SpanStyle(color = Gold)) { append(soum) }
+                    },
                     modifier = Modifier.weight(1f),
-                    style = MaterialTheme.typography.titleSmall,
+                    style = MaterialTheme.typography.titleMedium,
                     color = colors.text,
                     maxLines = 1,
                 )
-                RoundIconButton(Icons.Filled.Add, stringResource(R.string.add), onAdd, colors.accent, colors.onAccent, size = 30.dp)
+                Box(
+                    Modifier
+                        .size(32.dp)
+                        .clip(RoundedCornerShape(10.dp))
+                        .background(Gold)
+                        .clickable(role = Role.Button, onClick = onAdd),
+                    contentAlignment = Alignment.Center,
+                ) {
+                    Icon(Icons.Filled.Add, contentDescription = stringResource(R.string.add), tint = Coal, modifier = Modifier.size(20.dp))
+                }
             }
         }
     }

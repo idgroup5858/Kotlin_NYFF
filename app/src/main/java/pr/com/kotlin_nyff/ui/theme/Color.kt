@@ -9,6 +9,8 @@ val Taxi = Color(0xFFFFC20E)
 val TaxiPressed = Color(0xFFF2B200)
 val Select = Color(0xFFFE9A00)
 val Coal = Color(0xFF121212)
+/** Taom kartasidagi oltin aksent ("+", soni, "so'm") — web "GoMeal" mavzusidagi `--color-taxi`. */
+val Gold = Color(0xFFF9B406)
 val CoalSoft = Color(0xFF1C1C1C)
 val CoalLine = Color(0xFF2E2E2E)
 
@@ -45,7 +47,8 @@ data class NyffColors(
 
 val LightNyffColors = NyffColors(
     isDark = false,
-    page = Color(0xFFF1F1ED),
+    // web "GoMeal" mavzusidagi och kulrang fon (`--color-page`)
+    page = Color(0xFFF3F3F3),
     surface = Color(0xFFFFFFFF),
     surfaceMuted = Color(0xFFECECE7),
     line = Color(0xFFE5E5E0),

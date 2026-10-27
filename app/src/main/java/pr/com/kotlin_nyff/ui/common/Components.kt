@@ -62,11 +62,21 @@ import pr.com.kotlin_nyff.ui.theme.Coal
 import pr.com.kotlin_nyff.ui.theme.NyffShapes
 import pr.com.kotlin_nyff.ui.theme.NyffTheme
 
-/** Taom / kategoriya rasmi serverdan (`/images/...`); yo'q bo'lsa — kulrang fon va belgi. */
+/**
+ * Taom / kategoriya rasmi serverdan (`/images/...`); yo'q bo'lsa — belgi. [background] va [contentScale] — menyu
+ * kartasida oq fon va butun rasm (shaffof PNG kesilmasin).
+ */
 @Composable
-fun FoodImage(path: String, modifier: Modifier = Modifier, shape: Shape = RectangleShape, iconSize: Dp = 28.dp) {
+fun FoodImage(
+    path: String,
+    modifier: Modifier = Modifier,
+    shape: Shape = RectangleShape,
+    iconSize: Dp = 28.dp,
+    background: Color = NyffTheme.colors.surfaceMuted,
+    contentScale: ContentScale = ContentScale.Crop,
+) {
     val colors = NyffTheme.colors
-    Box(modifier.clip(shape).background(colors.surfaceMuted), contentAlignment = Alignment.Center) {
+    Box(modifier.clip(shape).background(background), contentAlignment = Alignment.Center) {
         val url = imageUrl(path)
         if (url == null) {
             Icon(Icons.Outlined.Fastfood, contentDescription = null, tint = colors.textFaint, modifier = Modifier.size(iconSize))
@@ -74,7 +84,7 @@ fun FoodImage(path: String, modifier: Modifier = Modifier, shape: Shape = Rectan
             AsyncImage(
                 model = url,
                 contentDescription = null,
-                contentScale = ContentScale.Crop,
+                contentScale = contentScale,
                 modifier = Modifier.matchParentSize(),
             )
         }
