@@ -105,7 +105,6 @@ import pr.com.kotlin_nyff.ui.common.SettingsMenuButton
 import pr.com.kotlin_nyff.ui.common.Tone
 import pr.com.kotlin_nyff.ui.common.branchStateText
 import pr.com.kotlin_nyff.ui.common.errorRes
-import pr.com.kotlin_nyff.ui.common.feeText
 import pr.com.kotlin_nyff.ui.common.headlineRes
 import pr.com.kotlin_nyff.ui.common.imageUrl
 import pr.com.kotlin_nyff.ui.common.money
@@ -404,7 +403,7 @@ private fun CurrentOrderBanner(number: Int, text: String, onClick: () -> Unit) {
     }
 }
 
-/** Dostavkada — manzil va server tanlagan filial; olib ketishda — tanlangan filial yopiq bo'lsa ogohlantirish. */
+/** Dostavkada — manzil belgilanmagan yoki filial topilmagan bo'lsa; olib ketishda — tanlangan filial yopiq bo'lsa ogohlantirish. */
 @Composable
 private fun PlaceNotice(state: HomeUiState, onOpenLocation: () -> Unit, onRetryRoute: () -> Unit) {
     val colors = NyffTheme.colors
@@ -451,18 +450,9 @@ private fun PlaceNotice(state: HomeUiState, onOpenLocation: () -> Unit, onRetryR
             Icons.Outlined.ErrorOutline,
             action = { PillButton(stringResource(R.string.retry), onRetryRoute) },
         )
-        route == null -> Notice(stringResource(R.string.checking), Tone.INFO, modifier)
-        route.branchId == null -> Notice(stringResource(R.string.no_branch_open), Tone.DANGER, modifier, Icons.Outlined.ErrorOutline)
-        else -> Notice(
-            stringResource(R.string.route_to, state.routeBranch?.name.orEmpty()),
-            Tone.INFO,
-            modifier,
-            Icons.Filled.LocationOn,
-            supporting = buildString {
-                append(stringResource(R.string.delivery_fee)).append(": ").append(feeText(route.fee))
-                if (route.redirected) append("\n").append(stringResource(R.string.route_redirected))
-            },
-        )
+        // qaysi filial olishi va yetkazish narxi — rasmiylashtirishda ko'rinadi; bu yerda faqat muammo
+        route != null && route.branchId == null ->
+            Notice(stringResource(R.string.no_branch_open), Tone.DANGER, modifier, Icons.Outlined.ErrorOutline)
     }
 }
 

@@ -32,6 +32,7 @@
     <string name="branch_by_location">При доставке филиал выбирается по вашему местоположению</string>
     <string name="menu_preview_hint">После выбора адреса меню и цены будут того филиала</string>
     <string name="route_to">Заказ примет филиал «%1$s»</string>
+    <string name="route_branch">Филиал «%1$s»</string>
     <string name="route_redirected">Филиал вашей зоны сейчас закрыт — заказ примет другой филиал</string>
     <string name="delivery_fee">Доставка</string>
     <string name="free">Бесплатно</string>
@@ -76,7 +77,6 @@
     <string name="items_total">Блюда</string>
     <string name="total">Итого</string>
     <string name="fee_separate">отдельно курьеру</string>
-    <string name="pickup_branch">Филиал самовывоза</string>
     <string name="name_required">Введите имя</string>
     <string name="line_unavailable">Нет в продаже в этом филиале</string>
     <string name="unavailable_excluded">Блюда, которых нет в продаже, не войдут в заказ</string>

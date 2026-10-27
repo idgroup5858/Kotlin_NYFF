@@ -59,6 +59,7 @@ import pr.com.kotlin_nyff.domain.OrderHeadline
 import pr.com.kotlin_nyff.domain.OrderMode
 import pr.com.kotlin_nyff.domain.OrderProgress
 import pr.com.kotlin_nyff.ui.theme.Coal
+import pr.com.kotlin_nyff.ui.theme.InterDisplay
 import pr.com.kotlin_nyff.ui.theme.NyffShapes
 import pr.com.kotlin_nyff.ui.theme.NyffTheme
 
@@ -369,7 +370,7 @@ fun PrimaryButton(
             Spacer(Modifier.width(10.dp))
             Text(
                 trailing,
-                style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Black),
+                style = MaterialTheme.typography.titleMedium.copy(fontFamily = InterDisplay, fontWeight = FontWeight.ExtraBold),
                 color = colors.onAccent,
                 maxLines = 1,
             )

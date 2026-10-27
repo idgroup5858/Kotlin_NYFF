@@ -34,6 +34,7 @@
     <string name="branch_by_location">Yetkazib berishda filial joylashuvingiz bo\'yicha tanlanadi</string>
     <string name="menu_preview_hint">Manzil belgilangach menyu va narxlar o\'sha filialniki bo\'ladi</string>
     <string name="route_to">Buyurtmani «%1$s» filiali oladi</string>
+    <string name="route_branch">«%1$s» filiali</string>
     <string name="route_redirected">Hududingizdagi filial hozir yopiq — buyurtmani boshqa filial oladi</string>
     <string name="delivery_fee">Yetkazib berish</string>
     <string name="free">Bepul</string>
@@ -78,7 +79,6 @@
     <string name="items_total">Taomlar</string>
     <string name="total">Jami</string>
     <string name="fee_separate">kuryerga alohida</string>
-    <string name="pickup_branch">Olib ketish filiali</string>
     <string name="name_required">Ismingizni kiriting</string>
     <string name="line_unavailable">Bu filialda sotuvda yo\'q</string>
     <string name="unavailable_excluded">Sotuvda yo\'q taomlar buyurtmaga kirmaydi</string>

@@ -2,12 +2,16 @@ package pr.com.kotlin_nyff.ui.checkout
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
@@ -29,7 +33,6 @@ import androidx.compose.material.icons.outlined.Storefront
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -117,7 +120,7 @@ fun CheckoutScreen(
                 .weight(1f)
                 .verticalScroll(rememberScrollState())
                 .padding(16.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp),
+            verticalArrangement = Arrangement.spacedBy(12.dp),
         ) {
             OrderModeSwitch(state.mode, vm::setMode, onDark = false)
             PlaceCard(state, onOpenLocation = onOpenLocation, onOpenBranches = { branchSheet = true })
@@ -168,46 +171,49 @@ fun CheckoutScreen(
     }
 }
 
-/** Dostavka — belgilangan joy va uni oladigan filial; olib ketish — tanlangan filial. */
+/**
+ * Dostavka — belgilangan joyni oladigan filial va yetkazish narxi; olib ketish — tanlangan filial. Ixcham: bir qator
+ * nom + bir qator izoh, butun qator bosiladi ("O'zgartirish").
+ */
 @Composable
 private fun PlaceCard(state: CheckoutUiState, onOpenLocation: () -> Unit, onOpenBranches: () -> Unit) {
     val colors = NyffTheme.colors
     val delivery = state.mode == OrderMode.DELIVERY
     NyffCard(Modifier.fillMaxWidth()) {
-        Row(Modifier.padding(14.dp), verticalAlignment = Alignment.CenterVertically) {
+        Row(
+            Modifier
+                .fillMaxWidth()
+                .clickable(role = Role.Button, onClick = if (delivery) onOpenLocation else onOpenBranches)
+                .padding(horizontal = 12.dp, vertical = 10.dp),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
             Icon(
                 if (delivery) Icons.Filled.LocationOn else Icons.Outlined.Storefront,
                 contentDescription = null,
                 tint = colors.select,
-                modifier = Modifier.size(24.dp),
+                modifier = Modifier.size(18.dp),
             )
-            Spacer(Modifier.width(12.dp))
+            Spacer(Modifier.width(10.dp))
             Column(Modifier.weight(1f)) {
-                Text(
-                    stringResource(if (delivery) R.string.location else R.string.pickup_branch),
-                    style = MaterialTheme.typography.bodySmall,
-                    color = colors.textMuted,
-                )
                 val route = state.route
                 val (title, detail) = when {
                     !delivery -> (state.takeawayBranch?.name ?: stringResource(R.string.choose_branch)) to
-                        state.takeawayBranch?.let { "${it.address}\n${branchStateText(it)}" }
+                        state.takeawayBranch?.let { "${it.address} · ${branchStateText(it)}" }
                     state.deliveryPoint == null -> stringResource(R.string.set_address) to stringResource(R.string.branch_by_location)
                     route == null -> stringResource(R.string.checking) to null
                     route.branchId == null -> stringResource(R.string.no_branch_open) to null
-                    else -> stringResource(R.string.route_to, state.routeBranch?.name.orEmpty()) to buildString {
+                    else -> stringResource(R.string.route_branch, state.routeBranch?.name.orEmpty()) to buildString {
                         append(stringResource(R.string.delivery_fee)).append(": ").append(feeText(route.fee))
                         if (route.redirected) append("\n").append(stringResource(R.string.route_redirected))
                     }
                 }
-                Text(title, style = MaterialTheme.typography.titleSmall, color = colors.text)
+                Text(title, style = MaterialTheme.typography.titleSmall, color = colors.text, maxLines = 1, overflow = TextOverflow.Ellipsis)
                 if (!detail.isNullOrBlank()) {
-                    Text(detail, style = MaterialTheme.typography.bodySmall, color = colors.textMuted)
+                    Text(detail, style = MaterialTheme.typography.bodySmall, color = colors.textMuted, maxLines = 2, overflow = TextOverflow.Ellipsis)
                 }
             }
-            TextButton(onClick = if (delivery) onOpenLocation else onOpenBranches) {
-                Text(stringResource(R.string.change), color = colors.select, style = MaterialTheme.typography.labelMedium)
-            }
+            Spacer(Modifier.width(8.dp))
+            Text(stringResource(R.string.change), color = colors.select, style = MaterialTheme.typography.labelMedium)
         }
         val problem = when {
             delivery && state.deliveryPoint != null && state.route != null && state.route.branchId == null -> R.string.no_branch_open
@@ -219,7 +225,7 @@ private fun PlaceCard(state: CheckoutUiState, onOpenLocation: () -> Unit, onOpen
             Notice(
                 stringResource(problem),
                 Tone.DANGER,
-                Modifier.padding(start = 14.dp, end = 14.dp, bottom = 14.dp),
+                Modifier.padding(start = 12.dp, end = 12.dp, bottom = 10.dp),
                 icon = Icons.Outlined.ErrorOutline,
             )
         }
@@ -227,7 +233,7 @@ private fun PlaceCard(state: CheckoutUiState, onOpenLocation: () -> Unit, onOpen
             PillButton(
                 stringResource(R.string.pick_on_map),
                 onOpenLocation,
-                Modifier.padding(start = 14.dp, end = 14.dp, bottom = 14.dp),
+                Modifier.padding(start = 12.dp, end = 12.dp, bottom = 10.dp),
                 icon = Icons.Filled.LocationOn,
             )
         }
@@ -346,14 +352,17 @@ private fun PaymentSection(mode: OrderMode, payment: OnlinePayment, onChange: (O
     val colors = NyffTheme.colors
     Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
         SectionLabel(stringResource(R.string.payment))
-        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+        // ikkalasi bir xil balandlikda — izoh matni bir qatorga sig'masa ham
+        Row(Modifier.height(IntrinsicSize.Min), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
             PaymentOption(
                 icon = Icons.Outlined.Smartphone,
                 title = stringResource(R.string.pay_click),
                 hint = stringResource(R.string.pay_click_hint),
                 selected = payment == OnlinePayment.CLICK,
                 onClick = { onChange(OnlinePayment.CLICK) },
-                modifier = Modifier.weight(1f),
+                modifier = Modifier
+                    .weight(1f)
+                    .fillMaxHeight(),
             )
             PaymentOption(
                 icon = Icons.Outlined.Payments,
@@ -361,7 +370,9 @@ private fun PaymentSection(mode: OrderMode, payment: OnlinePayment, onChange: (O
                 hint = stringResource(if (mode == OrderMode.DELIVERY) R.string.pay_cash_delivery else R.string.pay_cash_pickup),
                 selected = payment == OnlinePayment.CASH,
                 onClick = { onChange(OnlinePayment.CASH) },
-                modifier = Modifier.weight(1f),
+                modifier = Modifier
+                    .weight(1f)
+                    .fillMaxHeight(),
             )
         }
         if (payment == OnlinePayment.CLICK) {
@@ -386,18 +397,21 @@ private fun PaymentOption(
     modifier: Modifier = Modifier,
 ) {
     val colors = NyffTheme.colors
-    Column(
+    Row(
         modifier
             .clip(NyffShapes.card)
             .background(colors.surface)
-            .border(2.dp, if (selected) colors.select else colors.line, NyffShapes.card)
+            .border(if (selected) 2.dp else 1.dp, if (selected) colors.select else colors.line, NyffShapes.card)
             .selectable(selected = selected, role = Role.RadioButton, onClick = onClick)
-            .padding(12.dp),
-        verticalArrangement = Arrangement.spacedBy(4.dp),
+            .padding(horizontal = 10.dp, vertical = 8.dp),
+        verticalAlignment = Alignment.CenterVertically,
     ) {
-        Icon(icon, contentDescription = null, tint = if (selected) colors.select else colors.textFaint, modifier = Modifier.size(22.dp))
-        Text(title, style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.ExtraBold), color = colors.text)
-        Text(hint, style = MaterialTheme.typography.bodySmall, color = colors.textMuted)
+        Icon(icon, contentDescription = null, tint = if (selected) colors.select else colors.textFaint, modifier = Modifier.size(20.dp))
+        Spacer(Modifier.width(8.dp))
+        Column(Modifier.weight(1f)) {
+            Text(title, style = MaterialTheme.typography.titleSmall, color = colors.text, maxLines = 1)
+            Text(hint, style = MaterialTheme.typography.bodySmall, color = colors.textMuted, maxLines = 2, overflow = TextOverflow.Ellipsis)
+        }
     }
 }
 
@@ -406,7 +420,7 @@ private fun PaymentOption(
 private fun Summary(state: CheckoutUiState) {
     val colors = NyffTheme.colors
     NyffCard(Modifier.fillMaxWidth()) {
-        Column(Modifier.padding(14.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
+        Column(Modifier.padding(horizontal = 14.dp, vertical = 12.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
             SummaryRow(stringResource(R.string.items_total), money(state.itemsTotal))
             val route = state.route
             if (state.mode == OrderMode.DELIVERY && route?.branchId != null) {
@@ -418,8 +432,14 @@ private fun Summary(state: CheckoutUiState) {
             }
             Spacer(Modifier.size(2.dp))
             Row(verticalAlignment = Alignment.CenterVertically) {
-                Text(stringResource(R.string.total), modifier = Modifier.weight(1f), style = MaterialTheme.typography.titleMedium, color = colors.text)
-                Text(money(state.itemsTotal), style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Black), color = colors.text)
+                Text(
+                    stringResource(R.string.total),
+                    modifier = Modifier.weight(1f),
+                    style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold),
+                    color = colors.text,
+                )
+                // jami summa — Ultra Bold (Inter ExtraBold)
+                Text(money(state.itemsTotal), style = MaterialTheme.typography.headlineMedium, color = colors.text, maxLines = 1)
             }
         }
     }
@@ -433,7 +453,7 @@ private fun SummaryRow(label: String, value: String, muted: Boolean = false) {
         Spacer(Modifier.width(12.dp))
         Text(
             value,
-            style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Bold),
+            style = MaterialTheme.typography.bodyMedium,
             color = if (muted) colors.textMuted else colors.text,
             textAlign = TextAlign.End,
         )

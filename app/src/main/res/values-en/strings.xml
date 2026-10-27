@@ -32,6 +32,7 @@
     <string name="branch_by_location">For delivery the branch is chosen by your location</string>
     <string name="menu_preview_hint">Once the address is set, the menu and prices are from that branch</string>
     <string name="route_to">The «%1$s» branch will take your order</string>
+    <string name="route_branch">«%1$s» branch</string>
     <string name="route_redirected">The branch for your area is closed — another branch will take the order</string>
     <string name="delivery_fee">Delivery</string>
     <string name="free">Free</string>
@@ -76,7 +77,6 @@
     <string name="items_total">Items</string>
     <string name="total">Total</string>
     <string name="fee_separate">paid to the courier</string>
-    <string name="pickup_branch">Pickup branch</string>
     <string name="name_required">Enter your name</string>
     <string name="line_unavailable">Not sold at this branch</string>
     <string name="unavailable_excluded">Items that are not on sale will not be ordered</string>

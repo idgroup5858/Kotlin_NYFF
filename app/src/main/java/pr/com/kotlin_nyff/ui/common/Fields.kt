@@ -1,23 +1,32 @@
 package pr.com.kotlin_nyff.ui.common
 
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.input.OffsetMapping
 import androidx.compose.ui.text.input.TransformedText
 import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.dp
 import pr.com.kotlin_nyff.domain.Phone
 import pr.com.kotlin_nyff.ui.theme.NyffShapes
 import pr.com.kotlin_nyff.ui.theme.NyffTheme
 
-/** Oq fonli maydon (web `fieldClass`): fokusda to'q sariq chegara, xatoda qizil va pastida matn. */
+/**
+ * Oq fonli maydon (web `fieldClass`): fokusda to'q sariq chegara, xatoda qizil va pastida matn. Material
+ * `OutlinedTextField`ning 56dp minimal balandligi o'rniga ixcham — ~42dp (ichki bo'shliq 12dp).
+ */
 @Composable
 fun NyffTextField(
     value: String,
@@ -33,34 +42,65 @@ fun NyffTextField(
     visualTransformation: VisualTransformation = VisualTransformation.None,
 ) {
     val colors = NyffTheme.colors
-    OutlinedTextField(
+    val interaction = remember { MutableInteractionSource() }
+    val textStyle = MaterialTheme.typography.bodyMedium.copy(color = colors.text)
+    val fieldColors = OutlinedTextFieldDefaults.colors(
+        focusedBorderColor = colors.select,
+        unfocusedBorderColor = colors.line,
+        errorBorderColor = colors.danger,
+        focusedContainerColor = colors.surface,
+        unfocusedContainerColor = colors.surface,
+        errorContainerColor = colors.surface,
+        cursorColor = colors.select,
+        focusedTextColor = colors.text,
+        unfocusedTextColor = colors.text,
+        errorSupportingTextColor = colors.danger,
+    )
+    BasicTextField(
         value = value,
         onValueChange = onValueChange,
         modifier = modifier.fillMaxWidth(),
-        placeholder = { Text(placeholder, color = colors.textFaint) },
-        prefix = prefix?.let { { Text(it, color = colors.text) } },
-        singleLine = singleLine,
-        minLines = minLines,
-        isError = error != null,
-        supportingText = error?.let { { Text(it) } },
+        textStyle = textStyle,
         keyboardOptions = keyboardOptions,
         keyboardActions = keyboardActions,
+        singleLine = singleLine,
+        minLines = minLines,
         visualTransformation = visualTransformation,
-        textStyle = MaterialTheme.typography.bodyLarge,
-        shape = NyffShapes.control,
-        colors = OutlinedTextFieldDefaults.colors(
-            focusedBorderColor = colors.select,
-            unfocusedBorderColor = colors.line,
-            errorBorderColor = colors.danger,
-            focusedContainerColor = colors.surface,
-            unfocusedContainerColor = colors.surface,
-            errorContainerColor = colors.surface,
-            cursorColor = colors.select,
-            focusedTextColor = colors.text,
-            unfocusedTextColor = colors.text,
-            errorSupportingTextColor = colors.danger,
-        ),
-    )
+        interactionSource = interaction,
+        cursorBrush = SolidColor(colors.select),
+    ) { innerTextField ->
+        OutlinedTextFieldDefaults.DecorationBox(
+            value = value,
+            innerTextField = innerTextField,
+            enabled = true,
+            singleLine = singleLine,
+            visualTransformation = visualTransformation,
+            interactionSource = interaction,
+            isError = error != null,
+            placeholder = {
+                Text(
+                    placeholder,
+                    style = textStyle,
+                    color = colors.textFaint,
+                    maxLines = if (singleLine) 1 else Int.MAX_VALUE,
+                    overflow = TextOverflow.Ellipsis,
+                )
+            },
+            prefix = prefix?.let { { Text(it, style = textStyle) } },
+            supportingText = error?.let { { Text(it) } },
+            colors = fieldColors,
+            contentPadding = PaddingValues(horizontal = 14.dp, vertical = 12.dp),
+            container = {
+                OutlinedTextFieldDefaults.Container(
+                    enabled = true,
+                    isError = error != null,
+                    interactionSource = interaction,
+                    colors = fieldColors,
+                    shape = NyffShapes.control,
+                )
+            },
+        )
+    }
 }
 
 /** "901234567" → ekranda "90 123 45 67" (qiymatda faqat raqamlar qoladi). */
