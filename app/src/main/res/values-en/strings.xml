@@ -14,6 +14,7 @@
     <string name="home_title">What are we eating today?</string>
     <string name="delivery">Delivery</string>
     <string name="pickup">Pickup</string>
+    <string name="all_categories">All</string>
     <string name="theme_dark">Dark mode</string>
     <string name="theme_light">Light mode</string>
     <string name="place_title">How will you get your order?</string>

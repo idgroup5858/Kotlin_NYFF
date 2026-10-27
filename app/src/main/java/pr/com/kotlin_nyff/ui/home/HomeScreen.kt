@@ -75,6 +75,7 @@ import pr.com.kotlin_nyff.data.model.MenuProduct
 import pr.com.kotlin_nyff.domain.Format
 import pr.com.kotlin_nyff.domain.OrderMode
 import pr.com.kotlin_nyff.domain.OrderProgress
+import pr.com.kotlin_nyff.domain.Shop
 import pr.com.kotlin_nyff.ui.common.BrandBadge
 import pr.com.kotlin_nyff.ui.common.BranchSheet
 import pr.com.kotlin_nyff.ui.common.ErrorBlock
@@ -440,37 +441,55 @@ private fun PlaceNotice(state: HomeUiState, onOpenLocation: () -> Unit, onRetryR
     }
 }
 
+/** "Barchasi" ikonkasi — kategoriya ikonkalari to'plamidan (web `public/images/icons`, server beradi). */
+private const val ALL_CATEGORIES_ICON = "/images/icons/bento-box.png"
+
+/** Kategoriyalar: boshida "Barchasi" (hamma taomlar — standart), keyin menyudagilar. */
 @Composable
 private fun CategoryRow(state: HomeUiState, onCategory: (String) -> Unit) {
-    val colors = NyffTheme.colors
     LazyRow(
         contentPadding = PaddingValues(horizontal = 16.dp),
         horizontalArrangement = Arrangement.spacedBy(8.dp),
     ) {
-        items(state.categories, key = { it.id }) { category ->
-            val active = category.id == state.selectedCategoryId
-            Row(
-                Modifier
-                    .height(34.dp)
-                    .clip(CircleShape)
-                    .background(if (active) colors.accent else colors.surface)
-                    .clickable(role = Role.Tab) { onCategory(category.id) }
-                    .padding(start = if (category.icon.isNotBlank()) 6.dp else 12.dp, end = 12.dp),
-                verticalAlignment = Alignment.CenterVertically,
+        item(key = Shop.ALL_CATEGORIES) {
+            CategoryChip(
+                text = stringResource(R.string.all_categories),
+                active = state.selectedCategoryId == Shop.ALL_CATEGORIES,
+                onClick = { onCategory(Shop.ALL_CATEGORIES) },
             ) {
-                val icon = imageUrl(category.icon)
-                if (icon != null) {
-                    AsyncImage(model = icon, contentDescription = null, modifier = Modifier.size(22.dp))
-                    Spacer(Modifier.width(5.dp))
-                }
-                Text(
-                    category.name.text(),
-                    style = MaterialTheme.typography.labelMedium,
-                    color = if (active) colors.onAccent else colors.text,
-                    maxLines = 1,
-                )
+                // boshqa kategoriyalardagidek 3D ikonka (o'sha to'plamdan — bir qutida turli taomlar)
+                AsyncImage(model = imageUrl(ALL_CATEGORIES_ICON), contentDescription = null, modifier = Modifier.size(22.dp))
             }
         }
+        items(state.categories, key = { it.id }) { category ->
+            val icon = imageUrl(category.icon)
+            CategoryChip(
+                text = category.name.text(),
+                active = category.id == state.selectedCategoryId,
+                onClick = { onCategory(category.id) },
+                leading = icon?.let { url -> { AsyncImage(model = url, contentDescription = null, modifier = Modifier.size(22.dp)) } },
+            )
+        }
+    }
+}
+
+@Composable
+private fun CategoryChip(text: String, active: Boolean, onClick: () -> Unit, leading: (@Composable () -> Unit)? = null) {
+    val colors = NyffTheme.colors
+    Row(
+        Modifier
+            .height(34.dp)
+            .clip(CircleShape)
+            .background(if (active) colors.accent else colors.surface)
+            .clickable(role = Role.Tab, onClick = onClick)
+            .padding(start = if (leading != null) 6.dp else 12.dp, end = 12.dp),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        if (leading != null) {
+            leading()
+            Spacer(Modifier.width(5.dp))
+        }
+        Text(text, style = MaterialTheme.typography.labelMedium, color = if (active) colors.onAccent else colors.text, maxLines = 1)
     }
 }
 

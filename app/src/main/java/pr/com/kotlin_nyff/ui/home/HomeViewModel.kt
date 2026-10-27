@@ -46,8 +46,9 @@ data class HomeUiState(
     val menuError: AppError? = null,
     val menuLoaded: Boolean = false,
     val categories: List<Category> = emptyList(),
-    val selectedCategoryId: String? = null,
-    /** Tanlangan kategoriyaning taomlari. */
+    /** kategoriya id'si yoki [Shop.ALL_CATEGORIES] ("Barchasi" — standart) */
+    val selectedCategoryId: String = Shop.ALL_CATEGORIES,
+    /** Tanlangan kategoriyaning (yoki hamma kategoriyalarning) taomlari. */
     val products: List<MenuProduct> = emptyList(),
     val cartCounts: Map<String, Int> = emptyMap(),
     val cartQty: Int = 0,
@@ -100,8 +101,7 @@ class HomeViewModel @Inject constructor(
         orders.history,
     ) { d, allBranches, menu, (load, category), history ->
         val branches = allBranches?.let(Shop::visibleBranches)
-        val categories = menu?.categories.orEmpty()
-        val categoryId = categories.firstOrNull { it.id == category }?.id ?: categories.firstOrNull()?.id
+        val categoryId = Shop.selectedCategory(menu, category)
         val priced = Shop.price(d.lines, menu).filter { it.available }
         HomeUiState(
             mode = d.mode,
@@ -116,9 +116,9 @@ class HomeViewModel @Inject constructor(
             menuLoading = load.menuLoading,
             menuError = load.menuError,
             menuLoaded = menu != null,
-            categories = categories,
+            categories = menu?.categories.orEmpty(),
             selectedCategoryId = categoryId,
-            products = menu?.products.orEmpty().filter { it.categoryId == categoryId && it.price != null },
+            products = Shop.products(menu, categoryId),
             cartCounts = Cart.countsByProduct(d.lines),
             cartQty = priced.sumOf { it.line.qty },
             cartTotal = priced.sumOf { it.sum },

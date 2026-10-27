@@ -48,6 +48,24 @@ object Shop {
         return visible.firstOrNull { it.id == takeawayBranchId } ?: visible.firstOrNull { it.isOpen }
     }
 
+    /** Bosh sahifadagi "Barchasi" — kategoriyalar ro'yxati boshida (haqiqiy kategoriya emas, faqat mobil ilovada). */
+    const val ALL_CATEGORIES = "__all__"
+
+    /** Tanlangan kategoriya: menyuda bo'lsa — o'sha, aks holda (birinchi ochilish, filial almashganda) — "Barchasi". */
+    fun selectedCategory(menu: Menu?, chosen: String?): String =
+        menu?.categories?.firstOrNull { it.id == chosen }?.id ?: ALL_CATEGORIES
+
+    /**
+     * Sotuvdagi taomlar: "Barchasi" — hamma kategoriyalardan, kategoriyalar tartibida (kategoriya ichida — menyudagi
+     * tartib); aks holda — shu kategoriyaniki.
+     */
+    fun products(menu: Menu?, categoryId: String): List<MenuProduct> {
+        val sold = menu?.products.orEmpty().filter { it.price != null }
+        if (categoryId != ALL_CATEGORIES) return sold.filter { it.categoryId == categoryId }
+        val order = menu?.categories.orEmpty().withIndex().associate { (index, category) -> category.id to index }
+        return sold.filter { it.categoryId in order }.sortedBy { order.getValue(it.categoryId) }
+    }
+
     /** Savat qatorlari menyu narxi bilan; menyuda yo'q (shu filialda sotilmaydigan) taom — `product = null`. */
     fun price(lines: List<CartLine>, menu: Menu?): List<PricedLine> = lines.map { line ->
         PricedLine(line, menu?.products?.firstOrNull { it.id == line.productId && it.price != null })

@@ -49,6 +49,7 @@ demosidan (`ReactJS_NYFF/src/pages/mobile/*`, `src/i18n/*` → `mobile`, `errors
 | Kuryer qismi (2026-10-27) | Alohida `Kotlin_NYFF_Courier` ilovasi shu ilovaga ko'chirildi (eski loyiha hozircha papkada turadi, yangilanmaydi). Kirish: bosh sahifadagi "NY" belgisiga ketma-ket 10 marta (oraliq ≤ 1,5 s) — belgi, ripple, xabar yo'q → login va parol (admin "Xodimlar" da ochadi, ismlar ro'yxati yo'q). Sessiya alohida DataStore'da (`nyff_courier`) — kuryer kirgan bo'lsa ilova har safar kuryer ekranida ochiladi; "Chiqish" — mijoz qismiga. Kuryer so'rovlari alohida Retrofit (token qo'shiladi) — mijoz so'rovlariga token ketmaydi. Matnlar — `strings_courier.xml` (`courier_` prefiksi). Qolgan qarorlar (filial tanlash, tartib, pul, ixcham karta) — `Kotlin_NYFF_Courier/PLAN.md` 2-bo'lim |
 | Buyurtma turi (2026-10-27) | Bosh sahifada "Dostavka / Olib ketish" tanlovi yo'q: sarlavhadagi manzil / filial tugmasi → "Buyurtmani qanday olasiz?" oynasi (o'sha usulni qayta tanlash — joyni o'zgartirish, boshqasiga o'tish — joy yo'q bo'lsa tanlash oynasi). Tanlov rasmiylashtirishda ham bor. Foydalanuvchi: "hozircha tanlov holatida, keyin maslahatlashib o'zgartiramiz" |
 | Ixcham tablar | Kategoriyalar va "Dostavka / Olib ketish" — 34dp; kuryer sarlavhasidagi tablar — 32dp |
+| "Barchasi" kategoriyasi (2026-10-27) | Faqat mobil ilovada (web kiosk / kassada yo'q): kategoriyalar boshida, standart tanlov — hamma sotuvdagi taomlar kategoriyalar tartibida (`Shop.products`). Ikonka — kategoriya ikonkalari to'plamidagi 3D `/images/icons/bento-box.png` |
 
 ## 3. Bosqichlar
 

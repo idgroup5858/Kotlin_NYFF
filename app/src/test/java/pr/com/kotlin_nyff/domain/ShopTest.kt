@@ -7,6 +7,7 @@ import org.junit.Assert.assertTrue
 import org.junit.Test
 import pr.com.kotlin_nyff.data.model.Branch
 import pr.com.kotlin_nyff.data.model.BranchOnlineState
+import pr.com.kotlin_nyff.data.model.Category
 import pr.com.kotlin_nyff.data.model.DeliveryRoute
 import pr.com.kotlin_nyff.data.model.LocalizedText
 import pr.com.kotlin_nyff.data.model.Menu
@@ -56,6 +57,36 @@ class ShopTest {
         val closed = listOf(chilonzor, branch("br_b", BranchOnlineState.OFF_HOURS))
         assertEquals("br_chilonzor", Shop.menuBranchId(OrderMode.DELIVERY, closed, null, null))
         assertNull(Shop.takeawayBranch(closed, null))
+    }
+
+    private fun product(id: String, categoryId: String, price: Long? = 10_000) =
+        MenuProduct(id = id, categoryId = categoryId, name = LocalizedText(uz = id), price = price)
+
+    private val menu = Menu(
+        branchId = "br_chilonzor",
+        categories = listOf(Category("burgers", LocalizedText(uz = "Burgerlar")), Category("drinks", LocalizedText(uz = "Ichimliklar"))),
+        // server tartibi aralash bo'lishi mumkin; sotilmaydigani (narxsiz) va kategoriyasi menyuda yo'qi chiqmaydi
+        products = listOf(
+            product("cola", "drinks"),
+            product("classic", "burgers"),
+            product("fanta", "drinks", price = null),
+            product("double", "burgers"),
+            product("ghost", "hidden"),
+        ),
+    )
+
+    @Test
+    fun `Barchasi — standart tanlov, hamma kategoriyalar taomlari kategoriyalar tartibida`() {
+        assertEquals(Shop.ALL_CATEGORIES, Shop.selectedCategory(menu, null))
+        assertEquals(Shop.ALL_CATEGORIES, Shop.selectedCategory(menu, "removed"))
+        assertEquals(listOf("classic", "double", "cola"), Shop.products(menu, Shop.ALL_CATEGORIES).map { it.id })
+    }
+
+    @Test
+    fun `kategoriya tanlansa — faqat uning sotuvdagi taomlari`() {
+        assertEquals("drinks", Shop.selectedCategory(menu, "drinks"))
+        assertEquals(listOf("cola"), Shop.products(menu, "drinks").map { it.id })
+        assertTrue(Shop.products(null, Shop.ALL_CATEGORIES).isEmpty())
     }
 
     @Test
