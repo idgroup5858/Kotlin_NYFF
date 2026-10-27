@@ -392,7 +392,7 @@ private fun CurrentOrderBanner(number: Int, text: String, onClick: () -> Unit) {
             .padding(horizontal = 16.dp),
         onClick = onClick,
     ) {
-        Row(Modifier.padding(14.dp), verticalAlignment = Alignment.CenterVertically) {
+        Row(Modifier.padding(horizontal = 14.dp, vertical = 8.dp), verticalAlignment = Alignment.CenterVertically) {
             Text(Format.orderNumber(number), style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Black), color = colors.text)
             Spacer(Modifier.width(12.dp))
             Column(Modifier.weight(1f)) {

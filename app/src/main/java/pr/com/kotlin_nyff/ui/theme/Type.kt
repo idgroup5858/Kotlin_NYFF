@@ -20,13 +20,16 @@ val Inter = FontFamily(
     Font(R.font.inter_bold, FontWeight.Bold),
 )
 
+/** Faqat katta sarlavha uchun — Inter ExtraBold (Ultra Bold, 800); boshqa `Black` yozuvlar `Inter`da Bold bo'lib qoladi. */
+private val InterDisplay = FontFamily(Font(R.font.inter_extrabold, FontWeight.ExtraBold))
+
 /**
  * iOS uslubida: bitta juda katta, qalin sarlavha ("Large Title" — `headlineLarge`), qolgan matnlar kichik va yengil
  * (Regular / Medium); qalinroq faqat tugma yozuvi va ekran sarlavhalari (SemiBold).
  */
 val Typography = Typography(
     displayMedium = TextStyle(fontFamily = Inter, fontWeight = FontWeight.Bold, fontSize = 56.sp, lineHeight = 60.sp),
-    headlineLarge = TextStyle(fontFamily = Inter, fontWeight = FontWeight.Bold, fontSize = 32.sp, lineHeight = 38.sp, letterSpacing = (-0.6).sp),
+    headlineLarge = TextStyle(fontFamily = InterDisplay, fontWeight = FontWeight.ExtraBold, fontSize = 28.sp, lineHeight = 33.sp, letterSpacing = (-0.6).sp),
     headlineSmall = TextStyle(fontFamily = Inter, fontWeight = FontWeight.Bold, fontSize = 24.sp, lineHeight = 29.sp),
     titleLarge = TextStyle(fontFamily = Inter, fontWeight = FontWeight.SemiBold, fontSize = 18.sp, lineHeight = 23.sp),
     titleMedium = TextStyle(fontFamily = Inter, fontWeight = FontWeight.Medium, fontSize = 15.sp, lineHeight = 20.sp),

@@ -236,12 +236,12 @@ fun Notice(
             .fillMaxWidth()
             .clip(NyffShapes.card)
             .background(background)
-            .padding(horizontal = 14.dp, vertical = 12.dp),
+            .padding(horizontal = 12.dp, vertical = 8.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         if (icon != null) {
-            Icon(icon, contentDescription = null, tint = content, modifier = Modifier.size(20.dp))
-            Spacer(Modifier.width(10.dp))
+            Icon(icon, contentDescription = null, tint = content, modifier = Modifier.size(18.dp))
+            Spacer(Modifier.width(8.dp))
         }
         Column(Modifier.weight(1f)) {
             Text(text, style = MaterialTheme.typography.titleSmall, color = content)
