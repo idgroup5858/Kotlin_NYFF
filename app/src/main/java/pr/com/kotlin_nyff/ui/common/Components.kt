@@ -396,7 +396,7 @@ fun DarkButton(text: String, onClick: () -> Unit, modifier: Modifier = Modifier)
             .clickable(role = Role.Button, onClick = onClick),
         contentAlignment = Alignment.Center,
     ) {
-        Text(text, style = MaterialTheme.typography.labelLarge, color = colors.onBar)
+        Text(text, style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.ExtraBold), color = colors.onBar)
     }
 }
 
