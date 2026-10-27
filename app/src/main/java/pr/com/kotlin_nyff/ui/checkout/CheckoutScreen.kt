@@ -315,7 +315,6 @@ private fun ContactSection(state: CheckoutUiState, vm: CheckoutViewModel) {
             value = state.contact.name,
             onValueChange = { value -> vm.updateContact { it.copy(name = value.take(100)) } },
             placeholder = stringResource(R.string.name),
-            error = if (problems?.name == true) stringResource(R.string.name_required) else null,
             keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Words),
         )
         NyffTextField(

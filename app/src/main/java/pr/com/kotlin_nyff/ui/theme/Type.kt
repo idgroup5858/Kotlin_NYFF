@@ -21,13 +21,16 @@ val Inter = FontFamily(
     Font(R.font.inter_extrabold, FontWeight.ExtraBold),
 )
 
+/** Faqat bosh sahifa sarlavhasi uchun — Inter Black (900); boshqa `Black` yozuvlar `Inter`da ExtraBold bo'lib qoladi. */
+private val InterBlack = FontFamily(Font(R.font.inter_black, FontWeight.Black))
+
 /**
- * iOS uslubida: bitta juda katta, Ultra Bold sarlavha ("Large Title" — `headlineLarge`) va jami summalar
+ * iOS uslubida: bitta juda katta, Black (900) sarlavha ("Large Title" — `headlineLarge`) va Ultra Bold jami summalar
  * (`headlineMedium`); qolgan matnlar kichik va yengil (Regular / Medium); ekran sarlavhalari Bold.
  */
 val Typography = Typography(
     displayMedium = TextStyle(fontFamily = Inter, fontWeight = FontWeight.ExtraBold, fontSize = 56.sp, lineHeight = 60.sp),
-    headlineLarge = TextStyle(fontFamily = Inter, fontWeight = FontWeight.ExtraBold, fontSize = 28.sp, lineHeight = 33.sp, letterSpacing = (-0.6).sp),
+    headlineLarge = TextStyle(fontFamily = InterBlack, fontWeight = FontWeight.Black, fontSize = 27.sp, lineHeight = 32.sp, letterSpacing = (-0.6).sp),
     // jami summa (rasmiylashtirish, kuryerning "Bugun" raqamlari)
     headlineMedium = TextStyle(fontFamily = Inter, fontWeight = FontWeight.ExtraBold, fontSize = 22.sp, lineHeight = 26.sp, letterSpacing = (-0.4).sp),
     headlineSmall = TextStyle(fontFamily = Inter, fontWeight = FontWeight.ExtraBold, fontSize = 24.sp, lineHeight = 29.sp, letterSpacing = (-0.4).sp),

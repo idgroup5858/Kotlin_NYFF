@@ -36,13 +36,12 @@ import pr.com.kotlin_nyff.domain.Shop
 import pr.com.kotlin_nyff.ui.common.errorRes
 import javax.inject.Inject
 
-/** Formadagi kamchiliklar — tugma bosilgandan keyin maydon ostida ko'rsatiladi. */
+/** Formadagi kamchiliklar — tugma bosilgandan keyin maydon ostida ko'rsatiladi. Ism ixtiyoriy. */
 data class FormProblems(
-    val name: Boolean = false,
     val phone: Boolean = false,
     val address: Boolean = false,
 ) {
-    val any: Boolean get() = name || phone || address
+    val any: Boolean get() = phone || address
 }
 
 data class CheckoutUiState(
@@ -123,7 +122,6 @@ class CheckoutViewModel @Inject constructor(
             note = f.note,
             showProblems = f.showProblems,
             problems = FormProblems(
-                name = f.contact.name.isBlank(),
                 phone = !Phone.isComplete(f.contact.phone),
                 address = delivery && f.contact.address.isBlank(),
             ),

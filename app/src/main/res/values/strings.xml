@@ -79,7 +79,6 @@
     <string name="items_total">Taomlar</string>
     <string name="total">Jami</string>
     <string name="fee_separate">kuryerga alohida</string>
-    <string name="name_required">Ismingizni kiriting</string>
     <string name="line_unavailable">Bu filialda sotuvda yo\'q</string>
     <string name="unavailable_excluded">Sotuvda yo\'q taomlar buyurtmaga kirmaydi</string>
     <string name="network_place">Aloqa uzildi — buyurtma yetib bordimi, aniq emas. «Buyurtmalarim»ni tekshiring; qayta yuborsangiz, ikki marta tushishi mumkin.</string>

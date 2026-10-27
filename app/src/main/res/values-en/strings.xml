@@ -77,7 +77,6 @@
     <string name="items_total">Items</string>
     <string name="total">Total</string>
     <string name="fee_separate">paid to the courier</string>
-    <string name="name_required">Enter your name</string>
     <string name="line_unavailable">Not sold at this branch</string>
     <string name="unavailable_excluded">Items that are not on sale will not be ordered</string>
     <string name="network_place">Connection lost — we can\'t tell whether the order went through. Check «My orders»; sending again may create a duplicate.</string>
