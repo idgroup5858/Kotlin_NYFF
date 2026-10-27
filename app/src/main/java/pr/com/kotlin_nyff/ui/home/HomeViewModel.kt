@@ -156,9 +156,13 @@ class HomeViewModel @Inject constructor(
         }
     }
 
+    /** "Qayta urinish": aloqa uzilgan bo'lsa filiallar, yo'nalish va menyu birga yuklanmagan bo'ladi. */
     fun retryMenu() {
-        val id = menuBranchId.value
-        viewModelScope.launch { if (id == null) loadBranches() else loadMenu(id, force = true) }
+        viewModelScope.launch {
+            loadBranches()
+            draft.deliveryPoint.value?.takeIf { draft.route.value == null }?.let { loadRoute(it) }
+            menuBranchId.value?.let { id -> if (catalog.menus.value[id] == null) loadMenu(id, force = false) }
+        }
     }
 
     fun retryRoute() {
