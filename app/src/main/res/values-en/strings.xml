@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- English. Texts from the web app's src/i18n/en.ts (mobile, errors). -->
+<resources>
+    <!-- common -->
+    <string name="soum">UZS</string>
+    <string name="retry">Try again</string>
+    <string name="back">Back</string>
+    <string name="change">Change</string>
+    <string name="language">Language</string>
+    <string name="load_failed">Could not load the data</string>
+
+    <!-- home -->
+    <string name="greeting">Hi there! 👋</string>
+    <string name="home_title">What are we eating today?</string>
+    <string name="delivery">Delivery</string>
+    <string name="pickup">Pickup</string>
+    <string name="add">Add</string>
+    <string name="cart">Cart</string>
+    <string name="items_count">%1$d item(s)</string>
+    <string name="my_order">My order</string>
+    <string name="my_orders">My orders</string>
+    <string name="choose_branch">Choose a branch</string>
+    <string name="set_address">Set the address</string>
+    <string name="pick_on_map">Mark on the map</string>
+    <string name="branch_by_location">For delivery the branch is chosen by your location</string>
+    <string name="menu_preview_hint">Once the address is set, the menu and prices are from that branch</string>
+    <string name="route_to">The «%1$s» branch will take your order</string>
+    <string name="route_redirected">The branch for your area is closed — another branch will take the order</string>
+    <string name="delivery_fee">Delivery</string>
+    <string name="free">Free</string>
+    <string name="courier_fee">The courier quotes the delivery fee</string>
+    <string name="no_branch_open">We are not taking orders right now</string>
+    <string name="menu_empty">Nothing is on sale at this branch right now</string>
+    <string name="state_open">Open</string>
+    <string name="closed_now">Closed now</string>
+    <string name="closed_until">Closed · opens at %1$s</string>
+    <string name="state_paused">Not taking orders right now</string>
+    <string name="takeaway_closed">The chosen branch is closed — choose another one</string>
+    <string name="composition">Ingredients</string>
+    <string name="item_note_placeholder">Note, e.g. no onions</string>
+    <string name="add_to_cart">Add to cart</string>
+
+    <!-- map -->
+    <string name="location">Delivery location</string>
+    <string name="locate">Detect my location</string>
+    <string name="locate_denied">Location access was denied — allow it in the phone settings</string>
+    <string name="locate_failed">Could not detect your location — please try again</string>
+    <string name="map_hint">Move the map to put the pin on the exact spot</string>
+    <string name="choose_this_place">Use this place</string>
+    <string name="checking">Checking…</string>
+
+    <!-- checkout -->
+    <string name="checkout">Checkout</string>
+    <string name="empty_cart">Your cart is empty — pick something from the menu</string>
+    <string name="contacts">Your details</string>
+    <string name="name">Your name</string>
+    <string name="address">Address</string>
+    <string name="address_placeholder">Street, building, apartment, landmark</string>
+    <string name="note">Note</string>
+    <string name="note_placeholder">E.g. call me at the door</string>
+    <string name="payment">Payment method</string>
+    <string name="pay_click">Click</string>
+    <string name="pay_click_hint">Pay now in the app</string>
+    <string name="pay_cash">Cash</string>
+    <string name="pay_cash_delivery">Cash to the courier</string>
+    <string name="pay_cash_pickup">Cash at the branch</string>
+    <string name="click_not_connected">Click is not connected yet — no money is charged</string>
+    <string name="place_order">Place order</string>
+    <string name="items_total">Items</string>
+    <string name="total">Total</string>
+    <string name="fee_separate">paid to the courier</string>
+    <string name="pickup_branch">Pickup branch</string>
+    <string name="name_required">Enter your name</string>
+    <string name="line_unavailable">Not sold at this branch</string>
+    <string name="unavailable_excluded">Items that are not on sale will not be ordered</string>
+    <string name="network_place">Connection lost — we can\'t tell whether the order went through. Check «My orders»; sending again may create a duplicate.</string>
+
+    <!-- order status -->
+    <string name="order_no">Order number</string>
+    <string name="step_placed">Waiting for confirmation</string>
+    <string name="step_placed_hint">The branch is confirming your order</string>
+    <string name="step_cooking">Being prepared</string>
+    <string name="step_cooking_hint">The cooks are on it</string>
+    <string name="step_ready_delivery">Handed to the courier</string>
+    <string name="step_ready_delivery_hint">It will be with you soon</string>
+    <string name="step_ready_pickup">Ready!</string>
+    <string name="step_ready_pickup_hint">You can pick it up at the branch</string>
+    <string name="cancelled">Order cancelled</string>
+    <string name="cancelled_hint">Questions? Call the branch</string>
+    <string name="cancel_timeout">The branch did not respond</string>
+    <string name="cancel_timeout_pickup">The branch did not respond — choose another branch</string>
+    <string name="cancel_branch_closed">The branch has closed</string>
+    <string name="cancel_branch_closed_pickup">The branch has closed — choose another branch</string>
+    <string name="waiting_branch">Waiting for the branch · %1$s</string>
+    <string name="waiting_branch_long">Waiting for the branch…</string>
+    <string name="transferred">Your order was moved to the %1$s branch</string>
+    <string name="transferred_hint">The order number has changed</string>
+    <string name="call_branch">Call the branch</string>
+    <string name="new_order">New order</string>
+    <string name="paid_online">Paid via Click</string>
+    <string name="pay_on_delivery">Cash — to courier</string>
+    <string name="pay_on_pickup">Cash — at branch</string>
+    <string name="order_not_found">The order was not found on the server</string>
+    <string name="offline_hint">No connection — the status is not updating</string>
+
+    <!-- order history -->
+    <string name="no_orders">You haven\'t ordered yet</string>
+    <string name="status_pending">Waiting</string>
+    <string name="status_preparing">Preparing</string>
+    <string name="status_ready">Ready</string>
+    <string name="status_cancelled">Cancelled</string>
+
+    <!-- errors (backend `code`) -->
+    <string name="error_not_found">Not found</string>
+    <string name="error_empty_order">The cart is empty</string>
+    <string name="error_product_unavailable">This item is not on sale right now</string>
+    <string name="error_invalid_qty">Invalid quantity</string>
+    <string name="error_invalid_status">The status has already changed</string>
+    <string name="error_branch_required">Choose a branch</string>
+    <string name="error_phone_required">Enter a phone number</string>
+    <string name="error_address_required">Enter the delivery address</string>
+    <string name="error_invalid_location">Invalid point on the map</string>
+    <string name="error_invalid_input">Some fields are filled in incorrectly</string>
+    <string name="error_too_many_attempts">Too many requests — please try again a bit later</string>
+    <string name="error_branch_closed">This branch is not taking orders right now</string>
+    <string name="error_location_required">Mark the delivery location on the map</string>
+    <string name="error_network">No connection to the server — check the internet</string>
+    <string name="error_unknown">An unexpected error occurred</string>
+</resources>

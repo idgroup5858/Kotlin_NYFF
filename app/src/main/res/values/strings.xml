@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- O'zbekcha (standart). Matnlar web ilovaning src/i18n/uz.ts (mobile, errors) bo'limlaridan. -->
+<resources>
+    <string name="app_name" translatable="false">New York Fast Food</string>
+
+    <!-- umumiy -->
+    <string name="soum">so\'m</string>
+    <string name="retry">Qayta urinish</string>
+    <string name="back">Orqaga</string>
+    <string name="change">O\'zgartirish</string>
+    <string name="language">Til</string>
+    <string name="load_failed">Ma\'lumotni yuklab bo\'lmadi</string>
+
+    <!-- bosh sahifa -->
+    <string name="greeting">Salom! 👋</string>
+    <string name="home_title">Bugun nima yeymiz?</string>
+    <string name="delivery">Yetkazib berish</string>
+    <string name="pickup">Olib ketish</string>
+    <string name="add">Qo\'shish</string>
+    <string name="cart">Savat</string>
+    <string name="items_count">%1$d ta taom</string>
+    <string name="my_order">Buyurtmam</string>
+    <string name="my_orders">Buyurtmalarim</string>
+    <string name="choose_branch">Filialni tanlang</string>
+    <string name="set_address">Manzilni belgilang</string>
+    <string name="pick_on_map">Xaritada belgilash</string>
+    <string name="branch_by_location">Yetkazib berishda filial joylashuvingiz bo\'yicha tanlanadi</string>
+    <string name="menu_preview_hint">Manzil belgilangach menyu va narxlar o\'sha filialniki bo\'ladi</string>
+    <string name="route_to">Buyurtmani «%1$s» filiali oladi</string>
+    <string name="route_redirected">Hududingizdagi filial hozir yopiq — buyurtmani boshqa filial oladi</string>
+    <string name="delivery_fee">Yetkazib berish</string>
+    <string name="free">Bepul</string>
+    <string name="courier_fee">Yetkazish narxini kuryer aytadi</string>
+    <string name="no_branch_open">Hozir buyurtma qabul qilmayapmiz</string>
+    <string name="menu_empty">Bu filialda hozir sotuvdagi taom yo\'q</string>
+    <string name="state_open">Ochiq</string>
+    <string name="closed_now">Hozir yopiq</string>
+    <string name="closed_until">Yopiq · %1$s da ochiladi</string>
+    <string name="state_paused">Hozir buyurtma qabul qilmayapti</string>
+    <string name="takeaway_closed">Tanlangan filial hozir yopiq — boshqasini tanlang</string>
+    <string name="composition">Tarkibi</string>
+    <string name="item_note_placeholder">Izoh, masalan: piyozsiz</string>
+    <string name="add_to_cart">Savatga qo\'shish</string>
+
+    <!-- xarita -->
+    <string name="location">Yetkazib berish joyi</string>
+    <string name="locate">Joylashuvimni aniqlash</string>
+    <string name="locate_denied">Joylashuvga ruxsat berilmadi — telefon sozlamalarida ruxsat bering</string>
+    <string name="locate_failed">Joylashuvni aniqlab bo\'lmadi — qaytadan urinib ko\'ring</string>
+    <string name="map_hint">Xaritani surib, pinni aniq joyga keltiring</string>
+    <string name="choose_this_place">Shu joyni tanlash</string>
+    <string name="checking">Aniqlanmoqda…</string>
+
+    <!-- rasmiylashtirish -->
+    <string name="checkout">Rasmiylashtirish</string>
+    <string name="empty_cart">Savat bo\'sh — menyudan taom tanlang</string>
+    <string name="contacts">Ma\'lumotlaringiz</string>
+    <string name="name">Ismingiz</string>
+    <string name="address">Manzil</string>
+    <string name="address_placeholder">Ko\'cha, uy, xonadon, mo\'ljal</string>
+    <string name="note">Izoh</string>
+    <string name="note_placeholder">Masalan: eshik oldida qo\'ng\'iroq qiling</string>
+    <string name="payment">To\'lov usuli</string>
+    <string name="pay_click">Click</string>
+    <string name="pay_click_hint">Hozir ilovada to\'lash</string>
+    <string name="pay_cash">Naqd</string>
+    <string name="pay_cash_delivery">Kuryerga naqd beraman</string>
+    <string name="pay_cash_pickup">Filialda naqd to\'layman</string>
+    <string name="click_not_connected">Click hali ulanmagan — pul yechilmaydi</string>
+    <string name="place_order">Buyurtma berish</string>
+    <string name="items_total">Taomlar</string>
+    <string name="total">Jami</string>
+    <string name="fee_separate">kuryerga alohida</string>
+    <string name="pickup_branch">Olib ketish filiali</string>
+    <string name="name_required">Ismingizni kiriting</string>
+    <string name="line_unavailable">Bu filialda sotuvda yo\'q</string>
+    <string name="unavailable_excluded">Sotuvda yo\'q taomlar buyurtmaga kirmaydi</string>
+    <string name="network_place">Aloqa uzildi — buyurtma yetib bordimi, aniq emas. «Buyurtmalarim»ni tekshiring; qayta yuborsangiz, ikki marta tushishi mumkin.</string>
+
+    <!-- buyurtma holati -->
+    <string name="order_no">Buyurtma raqami</string>
+    <string name="step_placed">Qabul qilinishi kutilmoqda</string>
+    <string name="step_placed_hint">Filial buyurtmani tasdiqlaydi</string>
+    <string name="step_cooking">Tayyorlanmoqda</string>
+    <string name="step_cooking_hint">Oshpazlar ishga kirishdi</string>
+    <string name="step_ready_delivery">Kuryerga topshirildi</string>
+    <string name="step_ready_delivery_hint">Tez orada yetib boradi</string>
+    <string name="step_ready_pickup">Tayyor!</string>
+    <string name="step_ready_pickup_hint">Filialdan olib ketishingiz mumkin</string>
+    <string name="cancelled">Buyurtma bekor qilindi</string>
+    <string name="cancelled_hint">Savollar bo\'lsa, filialga qo\'ng\'iroq qiling</string>
+    <string name="cancel_timeout">Filial javob bermadi</string>
+    <string name="cancel_timeout_pickup">Filial javob bermadi — boshqa filialni tanlang</string>
+    <string name="cancel_branch_closed">Filial yopildi</string>
+    <string name="cancel_branch_closed_pickup">Filial yopildi — boshqa filialni tanlang</string>
+    <string name="waiting_branch">Filial javobini kutyapmiz · %1$s</string>
+    <string name="waiting_branch_long">Filial javobini kutyapmiz…</string>
+    <string name="transferred">Buyurtma %1$s filialiga o\'tkazildi</string>
+    <string name="transferred_hint">Buyurtma raqami yangilandi</string>
+    <string name="call_branch">Filialga qo\'ng\'iroq qilish</string>
+    <string name="new_order">Yangi buyurtma</string>
+    <string name="paid_online">Click orqali to\'langan</string>
+    <string name="pay_on_delivery">Naqd — kuryerga</string>
+    <string name="pay_on_pickup">Naqd — filialda</string>
+    <string name="order_not_found">Buyurtma serverda topilmadi</string>
+    <string name="offline_hint">Aloqa yo\'q — holat yangilanmayapti</string>
+
+    <!-- buyurtmalar tarixi -->
+    <string name="no_orders">Hali buyurtma bermagansiz</string>
+    <string name="status_pending">Qabul kutilmoqda</string>
+    <string name="status_preparing">Tayyorlanmoqda</string>
+    <string name="status_ready">Tayyor</string>
+    <string name="status_cancelled">Bekor qilindi</string>
+
+    <!-- xatolar (backend `code`) -->
+    <string name="error_not_found">Topilmadi</string>
+    <string name="error_empty_order">Savat bo\'sh</string>
+    <string name="error_product_unavailable">Bu taom hozir sotuvda yo\'q</string>
+    <string name="error_invalid_qty">Miqdor noto\'g\'ri</string>
+    <string name="error_invalid_status">Holat allaqachon o\'zgargan</string>
+    <string name="error_branch_required">Filialni tanlang</string>
+    <string name="error_phone_required">Telefon raqamini kiriting</string>
+    <string name="error_address_required">Yetkazib berish manzilini kiriting</string>
+    <string name="error_invalid_location">Xaritadagi nuqta noto\'g\'ri</string>
+    <string name="error_invalid_input">Ma\'lumot noto\'g\'ri to\'ldirilgan</string>
+    <string name="error_too_many_attempts">Juda ko\'p so\'rov — birozdan keyin urinib ko\'ring</string>
+    <string name="error_branch_closed">Filial hozir buyurtma qabul qilmayapti</string>
+    <string name="error_location_required">Yetkazib berish joyini xaritada belgilang</string>
+    <string name="error_network">Server bilan aloqa yo\'q — internetni tekshiring</string>
+    <string name="error_unknown">Kutilmagan xato yuz berdi</string>
+</resources>

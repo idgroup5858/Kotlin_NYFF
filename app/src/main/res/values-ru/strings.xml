@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Русский. Тексты из src/i18n/ru.ts веб-приложения (mobile, errors). -->
+<resources>
+    <!-- общее -->
+    <string name="soum">сум</string>
+    <string name="retry">Повторить</string>
+    <string name="back">Назад</string>
+    <string name="change">Изменить</string>
+    <string name="language">Язык</string>
+    <string name="load_failed">Не удалось загрузить данные</string>
+
+    <!-- главная -->
+    <string name="greeting">Привет! 👋</string>
+    <string name="home_title">Что будем есть сегодня?</string>
+    <string name="delivery">Доставка</string>
+    <string name="pickup">Самовывоз</string>
+    <string name="add">Добавить</string>
+    <string name="cart">Корзина</string>
+    <string name="items_count">%1$d шт.</string>
+    <string name="my_order">Мой заказ</string>
+    <string name="my_orders">Мои заказы</string>
+    <string name="choose_branch">Выберите филиал</string>
+    <string name="set_address">Укажите адрес</string>
+    <string name="pick_on_map">Отметить на карте</string>
+    <string name="branch_by_location">При доставке филиал выбирается по вашему местоположению</string>
+    <string name="menu_preview_hint">После выбора адреса меню и цены будут того филиала</string>
+    <string name="route_to">Заказ примет филиал «%1$s»</string>
+    <string name="route_redirected">Филиал вашей зоны сейчас закрыт — заказ примет другой филиал</string>
+    <string name="delivery_fee">Доставка</string>
+    <string name="free">Бесплатно</string>
+    <string name="courier_fee">Стоимость доставки назовёт курьер</string>
+    <string name="no_branch_open">Сейчас мы не принимаем заказы</string>
+    <string name="menu_empty">В этом филиале сейчас нет блюд в продаже</string>
+    <string name="state_open">Открыт</string>
+    <string name="closed_now">Сейчас закрыт</string>
+    <string name="closed_until">Закрыт · откроется в %1$s</string>
+    <string name="state_paused">Сейчас не принимает заказы</string>
+    <string name="takeaway_closed">Выбранный филиал сейчас закрыт — выберите другой</string>
+    <string name="composition">Состав</string>
+    <string name="item_note_placeholder">Комментарий, например: без лука</string>
+    <string name="add_to_cart">В корзину</string>
+
+    <!-- карта -->
+    <string name="location">Место доставки</string>
+    <string name="locate">Определить моё местоположение</string>
+    <string name="locate_denied">Нет доступа к местоположению — разрешите его в настройках телефона</string>
+    <string name="locate_failed">Не удалось определить местоположение — попробуйте ещё раз</string>
+    <string name="map_hint">Двигайте карту, чтобы поставить метку в точное место</string>
+    <string name="choose_this_place">Выбрать это место</string>
+    <string name="checking">Определяем…</string>
+
+    <!-- оформление -->
+    <string name="checkout">Оформление</string>
+    <string name="empty_cart">Корзина пуста — выберите блюдо в меню</string>
+    <string name="contacts">Ваши данные</string>
+    <string name="name">Ваше имя</string>
+    <string name="address">Адрес</string>
+    <string name="address_placeholder">Улица, дом, квартира, ориентир</string>
+    <string name="note">Комментарий</string>
+    <string name="note_placeholder">Например: позвоните у двери</string>
+    <string name="payment">Способ оплаты</string>
+    <string name="pay_click">Click</string>
+    <string name="pay_click_hint">Оплатить сейчас в приложении</string>
+    <string name="pay_cash">Наличные</string>
+    <string name="pay_cash_delivery">Наличными курьеру</string>
+    <string name="pay_cash_pickup">Наличными в филиале</string>
+    <string name="click_not_connected">Click пока не подключён — деньги не списываются</string>
+    <string name="place_order">Заказать</string>
+    <string name="items_total">Блюда</string>
+    <string name="total">Итого</string>
+    <string name="fee_separate">отдельно курьеру</string>
+    <string name="pickup_branch">Филиал самовывоза</string>
+    <string name="name_required">Введите имя</string>
+    <string name="line_unavailable">Нет в продаже в этом филиале</string>
+    <string name="unavailable_excluded">Блюда, которых нет в продаже, не войдут в заказ</string>
+    <string name="network_place">Связь прервалась — неизвестно, дошёл ли заказ. Проверьте «Мои заказы»; при повторной отправке заказ может прийти дважды.</string>
+
+    <!-- статус заказа -->
+    <string name="order_no">Номер заказа</string>
+    <string name="step_placed">Ожидает подтверждения</string>
+    <string name="step_placed_hint">Филиал подтверждает заказ</string>
+    <string name="step_cooking">Готовится</string>
+    <string name="step_cooking_hint">Повара уже работают</string>
+    <string name="step_ready_delivery">Передан курьеру</string>
+    <string name="step_ready_delivery_hint">Скоро будет у вас</string>
+    <string name="step_ready_pickup">Готово!</string>
+    <string name="step_ready_pickup_hint">Можно забрать в филиале</string>
+    <string name="cancelled">Заказ отменён</string>
+    <string name="cancelled_hint">Если есть вопросы — позвоните в филиал</string>
+    <string name="cancel_timeout">Филиал не ответил</string>
+    <string name="cancel_timeout_pickup">Филиал не ответил — выберите другой филиал</string>
+    <string name="cancel_branch_closed">Филиал закрылся</string>
+    <string name="cancel_branch_closed_pickup">Филиал закрылся — выберите другой филиал</string>
+    <string name="waiting_branch">Ждём ответа филиала · %1$s</string>
+    <string name="waiting_branch_long">Ждём ответа филиала…</string>
+    <string name="transferred">Заказ передан в филиал %1$s</string>
+    <string name="transferred_hint">Номер заказа изменился</string>
+    <string name="call_branch">Позвонить в филиал</string>
+    <string name="new_order">Новый заказ</string>
+    <string name="paid_online">Оплачен через Click</string>
+    <string name="pay_on_delivery">Наличные — курьеру</string>
+    <string name="pay_on_pickup">Наличные — в филиале</string>
+    <string name="order_not_found">Заказ не найден на сервере</string>
+    <string name="offline_hint">Нет связи — статус не обновляется</string>
+
+    <!-- история заказов -->
+    <string name="no_orders">Вы ещё не делали заказов</string>
+    <string name="status_pending">Ожидает</string>
+    <string name="status_preparing">Готовится</string>
+    <string name="status_ready">Готово</string>
+    <string name="status_cancelled">Отменён</string>
+
+    <!-- ошибки (backend `code`) -->
+    <string name="error_not_found">Не найдено</string>
+    <string name="error_empty_order">Корзина пуста</string>
+    <string name="error_product_unavailable">Это блюдо сейчас не продаётся</string>
+    <string name="error_invalid_qty">Неверное количество</string>
+    <string name="error_invalid_status">Статус уже изменён</string>
+    <string name="error_branch_required">Выберите филиал</string>
+    <string name="error_phone_required">Введите номер телефона</string>
+    <string name="error_address_required">Введите адрес доставки</string>
+    <string name="error_invalid_location">Неверная точка на карте</string>
+    <string name="error_invalid_input">Данные заполнены неверно</string>
+    <string name="error_too_many_attempts">Слишком много запросов — попробуйте чуть позже</string>
+    <string name="error_branch_closed">Филиал сейчас не принимает заказы</string>
+    <string name="error_location_required">Отметьте место доставки на карте</string>
+    <string name="error_network">Нет связи с сервером — проверьте интернет</string>
+    <string name="error_unknown">Произошла непредвиденная ошибка</string>
+</resources>

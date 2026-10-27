@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--
+        AppCompat mavzusi — ilova tilini (AppCompatDelegate.setApplicationLocales) Android 12 va undan eskisida ham
+        qo'llash uchun. Ko'rinishning o'zi Compose'da (ui/theme).
+    -->
+    <style name="Theme.Kotlin_NYFF" parent="Theme.AppCompat.DayNight.NoActionBar">
+        <item name="android:windowBackground">@color/nyff_window</item>
+        <item name="colorPrimary">@color/nyff_taxi</item>
+    </style>
+</resources>
