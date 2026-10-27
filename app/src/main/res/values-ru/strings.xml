@@ -15,6 +15,7 @@
     <string name="delivery">Доставка</string>
     <string name="pickup">Самовывоз</string>
     <string name="all_categories">Все</string>
+    <string name="settings">Настройки</string>
     <string name="theme_dark">Тёмная тема</string>
     <string name="theme_light">Светлая тема</string>
     <string name="place_title">Как получите заказ?</string>

@@ -4,7 +4,10 @@ import android.os.SystemClock
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.gestures.detectTapGestures
+import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.defaultMinSize
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.SpanStyle
@@ -35,7 +38,6 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyGridScope
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.itemsIndexed
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -91,13 +93,12 @@ import pr.com.kotlin_nyff.ui.common.BranchSheet
 import pr.com.kotlin_nyff.ui.common.ErrorBlock
 import pr.com.kotlin_nyff.ui.common.FoodImage
 import pr.com.kotlin_nyff.ui.common.Notice
-import pr.com.kotlin_nyff.ui.common.LanguageButton
 import pr.com.kotlin_nyff.ui.common.NyffCard
 import pr.com.kotlin_nyff.ui.common.PillButton
 import pr.com.kotlin_nyff.ui.common.PlaceSheet
 import pr.com.kotlin_nyff.ui.common.RoundIconButton
 import pr.com.kotlin_nyff.ui.common.SystemBarIcons
-import pr.com.kotlin_nyff.ui.common.ThemeButton
+import pr.com.kotlin_nyff.ui.common.SettingsMenuButton
 import pr.com.kotlin_nyff.ui.common.Tone
 import pr.com.kotlin_nyff.ui.common.branchStateText
 import pr.com.kotlin_nyff.ui.common.errorRes
@@ -267,17 +268,29 @@ private fun LazyGridScope.menuContent(
             fullWidth("categories") {
                 CategoryRow(state, onCategory)
             }
-            itemsIndexed(state.products, key = { _, product -> product.id }) { index, product ->
-                ProductCard(
-                    product = product,
-                    count = state.cartCounts[product.id],
-                    onOpen = { onOpen(product) },
-                    onAdd = { onAdd(product) },
-                    modifier = Modifier.padding(
-                        start = if (index % 2 == 0) 16.dp else 6.dp,
-                        end = if (index % 2 == 0) 6.dp else 16.dp,
-                    ),
-                )
+            // juft-juft qator: ikkala karta bir xil balandlikda (nomi 2 qatorli bo'lsa — yonidagisi ham cho'ziladi)
+            val rows = state.products.chunked(2)
+            items(rows.size, key = { rows[it].first().id }, span = { GridItemSpan(maxLineSpan) }) { index ->
+                Row(
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp)
+                        .height(IntrinsicSize.Max),
+                    horizontalArrangement = Arrangement.spacedBy(12.dp),
+                ) {
+                    rows[index].forEach { product ->
+                        ProductCard(
+                            product = product,
+                            count = state.cartCounts[product.id],
+                            onOpen = { onOpen(product) },
+                            onAdd = { onAdd(product) },
+                            modifier = Modifier
+                                .weight(1f)
+                                .fillMaxHeight(),
+                        )
+                    }
+                    if (rows[index].size == 1) Spacer(Modifier.weight(1f))
+                }
             }
         }
     }
@@ -324,9 +337,8 @@ private fun HomeHeader(
             Spacer(Modifier.width(8.dp))
             HeaderIconButton(Icons.AutoMirrored.Outlined.ReceiptLong, stringResource(R.string.my_orders), onOrders)
             Spacer(Modifier.width(8.dp))
-            ThemeButton()
-            Spacer(Modifier.width(8.dp))
-            LanguageButton()
+            // til va yorug' / tungi rejim — bitta "⋮" menyusida
+            SettingsMenuButton()
         }
         Column {
             Text(stringResource(R.string.greeting), style = MaterialTheme.typography.bodyMedium, color = colors.onHeaderMuted)
@@ -549,7 +561,12 @@ private fun ProductCard(
                 }
             }
         }
-        Column(Modifier.padding(8.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+        // nom tepada, narx qatori doim pastda — qatordagi kartalar narxi bir chiziqda
+        Column(
+            Modifier
+                .weight(1f)
+                .padding(8.dp),
+        ) {
             Text(
                 product.name.text(),
                 style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Medium, lineHeight = 18.sp),
@@ -557,18 +574,23 @@ private fun ProductCard(
                 maxLines = 2,
                 overflow = TextOverflow.Ellipsis,
             )
+            Spacer(Modifier.weight(1f).heightIn(min = 8.dp))
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Text(
                     buildAnnotatedString {
                         append(Format.number(product.price ?: 0))
                         append(NBSP)
-                        withStyle(SpanStyle(color = Gold)) { append(soum) }
+                        // "so'm" kichikroq — narx bilan "+" bitta qatorga sig'sin
+                        withStyle(SpanStyle(color = Gold, fontSize = 12.sp)) { append(soum) }
                     },
                     modifier = Modifier.weight(1f),
-                    style = MaterialTheme.typography.titleMedium,
+                    style = MaterialTheme.typography.titleSmall.copy(fontSize = 15.sp),
                     color = colors.text,
                     maxLines = 1,
+                    softWrap = false,
+                    overflow = TextOverflow.Ellipsis,
                 )
+                Spacer(Modifier.width(6.dp))
                 Box(
                     Modifier
                         .size(32.dp)
