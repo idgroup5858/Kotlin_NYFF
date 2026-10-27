@@ -24,6 +24,8 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.Logout
 import androidx.compose.material.icons.outlined.CloudOff
+import androidx.compose.material.icons.outlined.DarkMode
+import androidx.compose.material.icons.outlined.LightMode
 import androidx.compose.material.icons.outlined.MoreVert
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.DropdownMenu
@@ -53,6 +55,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import pr.com.kotlin_nyff.R
+import pr.com.kotlin_nyff.core.AppTheme
 import pr.com.kotlin_nyff.data.remote.AppError
 import pr.com.kotlin_nyff.courier.ui.Notifier
 import pr.com.kotlin_nyff.courier.ui.courierErrorRes
@@ -139,6 +142,7 @@ fun MainScreen(vm: MainViewModel = hiltViewModel()) {
 @Composable
 private fun Header(state: MainUiState, vm: MainViewModel, tab: Tab, onTab: (Tab) -> Unit) {
     val colors = NyffTheme.colors
+    val context = LocalContext.current
     var menu by remember { mutableStateOf(false) }
     Column(
         Modifier
@@ -185,6 +189,18 @@ private fun Header(state: MainUiState, vm: MainViewModel, tab: Tab, onTab: (Tab)
                     iconSize = 22.dp,
                 )
                 DropdownMenu(expanded = menu, onDismissRequest = { menu = false }) {
+                    // yorug' / tungi rejim — mijoz qismidagi bilan bitta tanlov
+                    val dark = colors.isDark
+                    DropdownMenuItem(
+                        text = { Text(stringResource(if (dark) R.string.theme_light else R.string.theme_dark)) },
+                        leadingIcon = {
+                            Icon(if (dark) Icons.Outlined.LightMode else Icons.Outlined.DarkMode, contentDescription = null)
+                        },
+                        onClick = {
+                            menu = false
+                            AppTheme.apply(context, if (dark) AppTheme.LIGHT else AppTheme.DARK)
+                        },
+                    )
                     DropdownMenuItem(
                         text = { Text(stringResource(R.string.courier_logout)) },
                         leadingIcon = { Icon(Icons.AutoMirrored.Outlined.Logout, contentDescription = null) },

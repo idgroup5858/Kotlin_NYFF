@@ -86,6 +86,7 @@ import pr.com.kotlin_nyff.ui.common.PillButton
 import pr.com.kotlin_nyff.ui.common.PlaceSheet
 import pr.com.kotlin_nyff.ui.common.RoundIconButton
 import pr.com.kotlin_nyff.ui.common.SystemBarIcons
+import pr.com.kotlin_nyff.ui.common.ThemeButton
 import pr.com.kotlin_nyff.ui.common.Tone
 import pr.com.kotlin_nyff.ui.common.branchStateText
 import pr.com.kotlin_nyff.ui.common.errorRes
@@ -311,6 +312,8 @@ private fun HomeHeader(
             }
             Spacer(Modifier.width(8.dp))
             HeaderIconButton(Icons.AutoMirrored.Outlined.ReceiptLong, stringResource(R.string.my_orders), onOrders)
+            Spacer(Modifier.width(8.dp))
+            ThemeButton()
             Spacer(Modifier.width(8.dp))
             LanguageButton()
         }

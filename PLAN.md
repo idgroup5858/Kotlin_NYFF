@@ -3,7 +3,8 @@
 > **Holat (2026-10-27):** 0–5, 7 va 8 bosqichlar tayyor (pastda). Unit testlar: 51 ta (`gradlew testDebugUnitTest`), lint — 0 xato.
 > 8: kuryer ilovasi shu ilovaga birlashtirildi ("NY" belgisiga 10 marta → login / parol) — emulyatorda test bazasi bilan
 > tekshirilgan: noto'g'ri parol xatosi, kirish, ilova qayta ochilganda kuryer ekrani, "Chiqish" → mijoz qismi; bosh
-> sahifada "Dostavka / Olib ketish" o'rniga joy tanlash oynasi, tablar ixchamroq.
+> sahifada "Dostavka / Olib ketish" o'rniga joy tanlash oynasi, tablar ixchamroq. Keyin: yorug' / tungi rejim tugmasi
+> (standart — yorug'), qayta ochilganda saqlanishi va kuryer qismi ham shu rejimda ekani emulyatorda tekshirilgan.
 > Emulyatorda (AVD `nyff_api36`, API 36.1, Google Play) lokal backend bilan uchidan-uchiga tekshirilgan: menyu, xarita +
 > GPS → Chilonzor hududi, dostavka buyurtmasi → 5 daqiqadan keyin Yunusobodga o'tkazildi (raqam socket orqali jonli
 > yangilandi) → kassir qabul qildi → "Tayyor"; olib ketish buyurtmasi → kassir bekor qildi; tarix, ruscha, tungi mavzu.
@@ -31,7 +32,7 @@ demosidan (`ReactJS_NYFF/src/pages/mobile/*`, `src/i18n/*` → `mobile`, `errors
 | Joylashuv | Yaqinda (2 daqiqa ichida) ma'lum bo'lgan joy darhol olinadi, aks holda yangi aniqlash 20 s gacha kutiladi (telefonda birinchi GPS aniqlash 10 s dan oshib ketgan) |
 | Xarita | Google Maps (maps-compose). Xarita joriy joylashuvda ochiladi, mijoz xaritani surib markazdagi pinni aniq joyga keltiradi. Kalit — web `.env` dagi `VITE_GOOGLE_MAPS_API_KEY`, `local.properties` dagi `MAPS_API_KEY` (git'ga tushmaydi). Pullik Geocoding / Places ishlatilmaydi — manzil matni qo'lda (ROADMAP 3) |
 | Tillar | uz (standart, `values/`), ru, en. AppCompat per-app language (`AppCompatDelegate.setApplicationLocales`); birinchi ishga tushishda — o'zbekcha. Android 13+ da sozlamalardagi "Ilova tili" bilan bir xil |
-| Mavzu | Yorug' va tungi — telefon sozlamasiga qarab. Ranglar web tokenlaridan: taksi sarig'i `#FFC20E`, qora `#121212`, tanlangan `#FE9A00` |
+| Mavzu | Yorug' (standart) va tungi — ilovadagi tugma bilan (2026-10-27; avval telefon sozlamasiga qarab edi): bosh sahifa sarlavhasida oy / quyosh, kuryer qismida "⋮" menyusida. Tanlov SharedPreferences'da (`core/AppTheme`), AppCompat tungi rejimi orqali — Compose, oyna foni va `values-night` birga almashadi. Ranglar web tokenlaridan: taksi sarig'i `#FFC20E`, qora `#121212`, tanlangan `#FE9A00` |
 | Buyurtmalar tarixi | Telefonda (Room) saqlanadi, **o'chirilmaydi**. Serverdagi buyurtmalarga tegilmaydi. Har yozuvda `trackingToken` (faqat buyurtma javobida keladi) |
 | Kontakt | Ism, telefon (`+998` + 9 raqam), manzil, to'lov usuli — DataStore'da, keyingi buyurtmada qayta yozilmaydi. Standart to'lov — naqd (Click hali ulanmagan) |
 | Qoralama | Buyurtma turi, olib ketish filiali, dostavka nuqtasi — DataStore'da; savat — faqat xotirada |

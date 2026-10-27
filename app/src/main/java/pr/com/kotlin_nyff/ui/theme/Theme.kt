@@ -38,7 +38,10 @@ object NyffShapes {
     val header = RoundedCornerShape(bottomStart = 28.dp, bottomEnd = 28.dp)
 }
 
-/** Ilova mavzusi: telefon sozlamasiga qarab yorug' yoki tungi. */
+/**
+ * Ilova mavzusi: yorug' yoki tungi — ilovadagi tanlov (`core/AppTheme`, AppCompat tungi rejimi), telefon sozlamasiga
+ * qaramaydi; `isSystemInDarkTheme` shu tanlovni qaytaradi.
+ */
 @Composable
 fun NyffTheme(darkTheme: Boolean = isSystemInDarkTheme(), content: @Composable () -> Unit) {
     val colors = if (darkTheme) DarkNyffColors else LightNyffColors
