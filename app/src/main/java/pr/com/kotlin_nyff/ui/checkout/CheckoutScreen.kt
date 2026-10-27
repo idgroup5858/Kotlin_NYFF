@@ -309,7 +309,7 @@ private fun CartLineRow(line: PricedLine, onQty: (String, Int) -> Unit, onRemove
 @Composable
 private fun ContactSection(state: CheckoutUiState, vm: CheckoutViewModel) {
     val problems = state.problems.takeIf { state.showProblems }
-    Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+    Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
         SectionLabel(stringResource(R.string.contacts))
         NyffTextField(
             value = state.contact.name,
@@ -332,8 +332,8 @@ private fun ContactSection(state: CheckoutUiState, vm: CheckoutViewModel) {
                 value = state.contact.address,
                 onValueChange = { value -> vm.updateContact { it.copy(address = value.take(300)) } },
                 placeholder = "${stringResource(R.string.address)}: ${stringResource(R.string.address_placeholder)}",
+                // bir qatordan boshlanadi, yozilgan sari o'sadi
                 singleLine = false,
-                minLines = 2,
                 error = if (problems?.address == true) stringResource(R.string.error_address_required) else null,
                 keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Sentences),
             )
@@ -435,7 +435,7 @@ private fun Summary(state: CheckoutUiState) {
                 Text(
                     stringResource(R.string.total),
                     modifier = Modifier.weight(1f),
-                    style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold),
+                    style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.ExtraBold),
                     color = colors.text,
                 )
                 // jami summa — Ultra Bold (Inter ExtraBold)

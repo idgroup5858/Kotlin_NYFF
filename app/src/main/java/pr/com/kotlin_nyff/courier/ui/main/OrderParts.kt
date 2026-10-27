@@ -77,7 +77,8 @@ fun ItemsToggle(
             Text(
                 trailing,
                 modifier = Modifier.weight(1f),
-                style = MaterialTheme.typography.titleSmall,
+                // pul — Ultra Bold
+                style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.ExtraBold),
                 color = colors.text,
                 textAlign = TextAlign.End,
                 maxLines = 2,

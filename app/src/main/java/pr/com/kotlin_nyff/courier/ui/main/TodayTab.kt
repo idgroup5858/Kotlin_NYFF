@@ -70,9 +70,10 @@ fun TodayTab(state: MainUiState, vm: MainViewModel) {
 private fun Stat(label: String, value: String, modifier: Modifier = Modifier) {
     val colors = NyffTheme.colors
     NyffCard(modifier) {
-        Column(Modifier.padding(14.dp)) {
+        Column(Modifier.padding(horizontal = 12.dp, vertical = 10.dp)) {
             Text(label, style = MaterialTheme.typography.bodySmall, color = colors.textMuted)
-            Text(value, style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Black), color = colors.text, maxLines = 1)
+            // raqam / summa — Ultra Bold (rasmiylashtirishdagi "Jami" kabi)
+            Text(value, style = MaterialTheme.typography.headlineMedium, color = colors.text, maxLines = 1)
         }
     }
 }
@@ -81,9 +82,9 @@ private fun Stat(label: String, value: String, modifier: Modifier = Modifier) {
 private fun DoneRow(order: CourierOrder, branchName: String) {
     val colors = NyffTheme.colors
     NyffCard(Modifier.fillMaxWidth()) {
-        Column(Modifier.padding(14.dp)) {
+        Column(Modifier.padding(horizontal = 14.dp, vertical = 10.dp)) {
             Row(verticalAlignment = Alignment.CenterVertically) {
-                Text(Format.orderNumber(order.number), style = MaterialTheme.typography.titleMedium, color = colors.text)
+                Text(Format.orderNumber(order.number), style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Black), color = colors.text)
                 Spacer(Modifier.width(10.dp))
                 if (order.deliveredAt != null) {
                     Chip(stringResource(R.string.courier_done_delivered, Format.time(order.deliveredAt)), colors.successSoft, colors.success)

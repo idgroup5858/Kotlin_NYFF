@@ -4,6 +4,7 @@ import android.Manifest
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -32,7 +33,6 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -45,6 +45,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -62,6 +63,7 @@ import pr.com.kotlin_nyff.ui.common.PrimaryButton
 import pr.com.kotlin_nyff.ui.common.RoundIconButton
 import pr.com.kotlin_nyff.courier.ui.courierFeeText
 import pr.com.kotlin_nyff.ui.common.money
+import pr.com.kotlin_nyff.ui.theme.NyffShapes
 import pr.com.kotlin_nyff.ui.theme.NyffTheme
 
 /** "Meniki": filialda — olib ketish va kassaga to'lash; yo'lda — xarita va server taklif qilgan tartib. */
@@ -122,7 +124,7 @@ private fun AtBranch(state: MainUiState, vm: MainViewModel) {
                                     { context.dial(phone) },
                                     colors.surfaceMuted,
                                     colors.text,
-                                    size = 38.dp,
+                                    size = 34.dp,
                                 )
                             }
                         }
@@ -132,7 +134,7 @@ private fun AtBranch(state: MainUiState, vm: MainViewModel) {
                             Spacer(Modifier.width(8.dp))
                             Text(
                                 if (kassa > 0) stringResource(R.string.courier_pay_kassa, money(kassa)) else stringResource(R.string.courier_pay_kassa_none),
-                                style = MaterialTheme.typography.titleSmall,
+                                style = MaterialTheme.typography.titleSmall.copy(fontWeight = if (kassa > 0) FontWeight.ExtraBold else FontWeight.Medium),
                                 color = colors.text,
                             )
                         }
@@ -141,15 +143,23 @@ private fun AtBranch(state: MainUiState, vm: MainViewModel) {
             }
             items(state.active, key = { it.id }) { order ->
                 NyffCard(Modifier.fillMaxWidth()) {
-                    Column(Modifier.padding(start = 14.dp, end = 6.dp, top = 4.dp, bottom = 10.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                    Column(Modifier.padding(start = 14.dp, end = 6.dp, top = 6.dp, bottom = 10.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
                         Row(verticalAlignment = Alignment.CenterVertically) {
                             Text(Format.orderNumber(order.number), style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Black), color = colors.text)
                             Spacer(Modifier.width(8.dp))
                             StatusChip(order.status)
                             Spacer(Modifier.weight(1f))
-                            TextButton(onClick = { vm.release(order.id) }, enabled = state.busy == null) {
-                                Text(stringResource(R.string.courier_release), color = colors.danger, style = MaterialTheme.typography.labelMedium)
-                            }
+                            // TextButton'ning 48dp balandligisiz — karta ixcham qoladi
+                            val canRelease = state.busy == null
+                            Text(
+                                stringResource(R.string.courier_release),
+                                modifier = Modifier
+                                    .clip(NyffShapes.control)
+                                    .clickable(enabled = canRelease, role = Role.Button) { vm.release(order.id) }
+                                    .padding(horizontal = 8.dp, vertical = 4.dp),
+                                color = if (canRelease) colors.danger else colors.danger.copy(alpha = 0.4f),
+                                style = MaterialTheme.typography.labelMedium,
+                            )
                         }
                         Column(Modifier.padding(end = 8.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
                             CustomerLines(order)
@@ -262,20 +272,20 @@ private fun StopCard(
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Box(
                     Modifier
-                        .size(32.dp)
+                        .size(28.dp)
                         .clip(CircleShape)
                         .background(if (next) colors.accent else colors.surfaceMuted),
                     contentAlignment = Alignment.Center,
                 ) {
                     Text(
                         (order.courierSeq ?: 0).toString(),
-                        style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Black),
+                        style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.Black),
                         color = if (next) colors.onAccent else colors.text,
                     )
                 }
                 Spacer(Modifier.width(10.dp))
                 Column(Modifier.weight(1f)) {
-                    Text(Format.orderNumber(order.number), style = MaterialTheme.typography.titleMedium, color = colors.text)
+                    Text(Format.orderNumber(order.number), style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Black), color = colors.text)
                     val leg = order.courierLegKm
                     if (next || leg != null) {
                         Text(
@@ -295,7 +305,7 @@ private fun StopCard(
                         { context.dial(phone) },
                         colors.surfaceMuted,
                         colors.text,
-                        size = 38.dp,
+                        size = 34.dp,
                     )
                 }
             }

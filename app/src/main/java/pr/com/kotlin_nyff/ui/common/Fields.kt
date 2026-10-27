@@ -25,7 +25,7 @@ import pr.com.kotlin_nyff.ui.theme.NyffTheme
 
 /**
  * Oq fonli maydon (web `fieldClass`): fokusda to'q sariq chegara, xatoda qizil va pastida matn. Material
- * `OutlinedTextField`ning 56dp minimal balandligi o'rniga ixcham — ~42dp (ichki bo'shliq 12dp).
+ * `OutlinedTextField`ning 56dp minimal balandligi o'rniga ixcham — ~36dp (ichki bo'shliq 9dp).
  */
 @Composable
 fun NyffTextField(
@@ -89,7 +89,7 @@ fun NyffTextField(
             prefix = prefix?.let { { Text(it, style = textStyle) } },
             supportingText = error?.let { { Text(it) } },
             colors = fieldColors,
-            contentPadding = PaddingValues(horizontal = 14.dp, vertical = 12.dp),
+            contentPadding = PaddingValues(horizontal = 12.dp, vertical = 9.dp),
             container = {
                 OutlinedTextFieldDefaults.Container(
                     enabled = true,

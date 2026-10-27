@@ -114,7 +114,7 @@ fun LoginScreen(vm: LoginViewModel = hiltViewModel()) {
                 .navigationBarsPadding(),
         ) {
             NyffCard(Modifier.fillMaxWidth()) {
-                Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                Column(Modifier.padding(14.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
                     NyffTextField(
                         value = state.login,
                         onValueChange = vm::setLogin,

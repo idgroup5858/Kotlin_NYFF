@@ -10,33 +10,28 @@ import pr.com.kotlin_nyff.R
 
 /**
  * Inter — iOS shrifti (SF Pro) ga eng yaqin ochiq shrift (SIL OFL 1.1, `third_party/inter/LICENSE.txt`); SF Pro'ning
- * o'zini Apple litsenziyasi Android ilovada ishlatishga ruxsat bermaydi. To'rt og'irlik: 400–700; `Black` / `ExtraBold`
- * so'ralsa — eng yaqini `Bold`.
+ * o'zini Apple litsenziyasi Android ilovada ishlatishga ruxsat bermaydi. Besh og'irlik: 400–800; `Black` so'ralsa —
+ * eng yaqini `ExtraBold` (Ultra Bold).
  */
 val Inter = FontFamily(
     Font(R.font.inter_regular, FontWeight.Normal),
     Font(R.font.inter_medium, FontWeight.Medium),
     Font(R.font.inter_semibold, FontWeight.SemiBold),
     Font(R.font.inter_bold, FontWeight.Bold),
+    Font(R.font.inter_extrabold, FontWeight.ExtraBold),
 )
 
 /**
- * Faqat katta sarlavha va jami summalar uchun — Inter ExtraBold (Ultra Bold, 800); boshqa `Black` yozuvlar `Inter`da
- * Bold bo'lib qoladi.
- */
-val InterDisplay = FontFamily(Font(R.font.inter_extrabold, FontWeight.ExtraBold))
-
-/**
- * iOS uslubida: bitta juda katta, qalin sarlavha ("Large Title" — `headlineLarge`), qolgan matnlar kichik va yengil
- * (Regular / Medium); qalinroq faqat tugma yozuvi va ekran sarlavhalari (SemiBold).
+ * iOS uslubida: bitta juda katta, Ultra Bold sarlavha ("Large Title" — `headlineLarge`) va jami summalar
+ * (`headlineMedium`); qolgan matnlar kichik va yengil (Regular / Medium); ekran sarlavhalari Bold.
  */
 val Typography = Typography(
-    displayMedium = TextStyle(fontFamily = Inter, fontWeight = FontWeight.Bold, fontSize = 56.sp, lineHeight = 60.sp),
-    headlineLarge = TextStyle(fontFamily = InterDisplay, fontWeight = FontWeight.ExtraBold, fontSize = 28.sp, lineHeight = 33.sp, letterSpacing = (-0.6).sp),
-    // jami summa (rasmiylashtirish)
-    headlineMedium = TextStyle(fontFamily = InterDisplay, fontWeight = FontWeight.ExtraBold, fontSize = 22.sp, lineHeight = 26.sp, letterSpacing = (-0.4).sp),
-    headlineSmall = TextStyle(fontFamily = Inter, fontWeight = FontWeight.Bold, fontSize = 24.sp, lineHeight = 29.sp),
-    titleLarge = TextStyle(fontFamily = Inter, fontWeight = FontWeight.SemiBold, fontSize = 18.sp, lineHeight = 23.sp),
+    displayMedium = TextStyle(fontFamily = Inter, fontWeight = FontWeight.ExtraBold, fontSize = 56.sp, lineHeight = 60.sp),
+    headlineLarge = TextStyle(fontFamily = Inter, fontWeight = FontWeight.ExtraBold, fontSize = 28.sp, lineHeight = 33.sp, letterSpacing = (-0.6).sp),
+    // jami summa (rasmiylashtirish, kuryerning "Bugun" raqamlari)
+    headlineMedium = TextStyle(fontFamily = Inter, fontWeight = FontWeight.ExtraBold, fontSize = 22.sp, lineHeight = 26.sp, letterSpacing = (-0.4).sp),
+    headlineSmall = TextStyle(fontFamily = Inter, fontWeight = FontWeight.ExtraBold, fontSize = 24.sp, lineHeight = 29.sp, letterSpacing = (-0.4).sp),
+    titleLarge = TextStyle(fontFamily = Inter, fontWeight = FontWeight.Bold, fontSize = 18.sp, lineHeight = 23.sp, letterSpacing = (-0.2).sp),
     titleMedium = TextStyle(fontFamily = Inter, fontWeight = FontWeight.Medium, fontSize = 15.sp, lineHeight = 20.sp),
     titleSmall = TextStyle(fontFamily = Inter, fontWeight = FontWeight.Medium, fontSize = 13.sp, lineHeight = 17.sp),
     bodyLarge = TextStyle(fontFamily = Inter, fontWeight = FontWeight.Normal, fontSize = 15.sp, lineHeight = 20.sp),
