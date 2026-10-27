@@ -13,13 +13,16 @@ Socket.IO, Room, DataStore, Coil 3, Google Maps (maps-compose), Play Services Lo
 
 ```properties
 sdk.dir=...
-# backend manzili; emulyatordan kompyuterdagi server — 10.0.2.2
-nyff.apiUrl=http://10.0.2.2:3000
+# backend manzili — kompyuterning LAN IP si (ipconfig): haqiqiy telefon (shu Wi-Fi da) ham, emulyator ham ulanadi.
+# 10.0.2.2 faqat emulyatorda ishlaydi — haqiqiy telefonda "Server bilan aloqa yo'q" bo'ladi.
+nyff.apiUrl=http://192.168.1.12:3000
 # Google Maps kaliti (Maps SDK for Android) — web ilovaning .env dagi VITE_GOOGLE_MAPS_API_KEY
 MAPS_API_KEY=...
 ```
 
 Haqiqiy server manzili berilganda faqat `nyff.apiUrl` almashtiriladi (`https://` bo'lsa cleartext o'zi o'chadi).
+Kompyuter IP si o'zgarsa (DHCP) — `nyff.apiUrl` ni yangilab, qayta build qiling. Windows firewall'da Node.js'ga kiruvchi
+ulanish ruxsati bo'lishi kerak (telefondan tekshirish: brauzerda `http://<IP>:3000/api/health` → `{"ok":true}`).
 
 ## Ishga tushirish
 

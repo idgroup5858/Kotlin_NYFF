@@ -22,7 +22,8 @@ demosidan (`ReactJS_NYFF/src/pages/mobile/*`, `src/i18n/*` → `mobile`, `errors
 |---|---|
 | Uslub | KotlinERPSYSTEM ga o'xshatilmaydi ("bu boshqa loyiha"): MVVM + StateFlow, Hilt, Navigation Compose (type-safe), Room, DataStore |
 | Tarmoq | Retrofit 3 + OkHttp 4 + kotlinx.serialization (converter). Socket.IO — `io.socket:socket.io-client` 2.1 (`org.json` chiqarib tashlangan) |
-| Server manzili | Ilovada kiritilmaydi. `local.properties` → `nyff.apiUrl` → `BuildConfig.API_URL`. Hozir emulyator: `http://10.0.2.2:3000`. `http://` bo'lsa cleartext o'zi yoqiladi (manifest placeholder) |
+| Server manzili | Ilovada kiritilmaydi. `local.properties` → `nyff.apiUrl` → `BuildConfig.API_URL`. Hozir kompyuterning LAN IP si `http://192.168.1.12:3000` — haqiqiy telefon (TECNO LG6n, Android 12, shu Wi-Fi) ham, emulyator ham ulanadi (`10.0.2.2` faqat emulyatorda — telefonda ishlamagani topilgan). `http://` bo'lsa cleartext o'zi yoqiladi (manifest placeholder) |
+| Joylashuv | Yaqinda (2 daqiqa ichida) ma'lum bo'lgan joy darhol olinadi, aks holda yangi aniqlash 20 s gacha kutiladi (telefonda birinchi GPS aniqlash 10 s dan oshib ketgan) |
 | Xarita | Google Maps (maps-compose). Xarita joriy joylashuvda ochiladi, mijoz xaritani surib markazdagi pinni aniq joyga keltiradi. Kalit — web `.env` dagi `VITE_GOOGLE_MAPS_API_KEY`, `local.properties` dagi `MAPS_API_KEY` (git'ga tushmaydi). Pullik Geocoding / Places ishlatilmaydi — manzil matni qo'lda (ROADMAP 3) |
 | Tillar | uz (standart, `values/`), ru, en. AppCompat per-app language (`AppCompatDelegate.setApplicationLocales`); birinchi ishga tushishda — o'zbekcha. Android 13+ da sozlamalardagi "Ilova tili" bilan bir xil |
 | Mavzu | Yorug' va tungi — telefon sozlamasiga qarab. Ranglar web tokenlaridan: taksi sarig'i `#FFC20E`, qora `#121212`, tanlangan `#FE9A00` |
