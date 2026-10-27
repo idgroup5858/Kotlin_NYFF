@@ -3,13 +3,11 @@ package pr.com.kotlin_nyff.ui.home
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -25,6 +23,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -64,20 +63,27 @@ fun ProductSheet(product: MenuProduct, onAdd: (qty: Int, note: String) -> Unit, 
                 .padding(bottom = 16.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp),
         ) {
+            // rasm butunligicha (kesilmaydi) — baland butilka ham, keng lavash ham to'liq ko'rinadi
             FoodImage(
                 product.image,
                 Modifier
                     .fillMaxWidth()
-                    .aspectRatio(16f / 10f),
+                    .aspectRatio(4f / 3f),
                 shape = NyffShapes.card,
                 iconSize = 48.dp,
+                contentScale = ContentScale.Fit,
             )
             Text(product.name.text(), style = MaterialTheme.typography.titleLarge, color = colors.text)
-            Text(
-                money(price),
-                style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Black),
-                color = colors.text,
-            )
+            // narx va soni bir qatorda — pastdagi tugma to'liq kenglikda, yozuvi kesilmaydi
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Text(
+                    money(price),
+                    modifier = Modifier.weight(1f),
+                    style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Black),
+                    color = colors.text,
+                )
+                QtyStepper(qty, onChange = { delta -> qty = (qty + delta).coerceIn(1, 99) })
+            }
             if (product.composition.isNotEmpty()) {
                 Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
                     SectionLabel(stringResource(R.string.composition))
@@ -93,16 +99,11 @@ fun ProductSheet(product: MenuProduct, onAdd: (qty: Int, note: String) -> Unit, 
                 onValueChange = { note = it.take(200) },
                 placeholder = stringResource(R.string.item_note_placeholder),
             )
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                QtyStepper(qty, onChange = { delta -> qty = (qty + delta).coerceIn(1, 99) })
-                Spacer(Modifier.width(12.dp))
-                PrimaryButton(
-                    text = stringResource(R.string.add_to_cart),
-                    trailing = money(price * qty),
-                    onClick = { onAdd(qty, note) },
-                    modifier = Modifier.weight(1f),
-                )
-            }
+            PrimaryButton(
+                text = stringResource(R.string.add_to_cart),
+                trailing = money(price * qty),
+                onClick = { onAdd(qty, note) },
+            )
         }
     }
 }

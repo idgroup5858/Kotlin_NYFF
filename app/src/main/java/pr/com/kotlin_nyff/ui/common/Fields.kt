@@ -19,13 +19,14 @@ import androidx.compose.ui.text.input.TransformedText
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import pr.com.kotlin_nyff.domain.Phone
 import pr.com.kotlin_nyff.ui.theme.NyffShapes
 import pr.com.kotlin_nyff.ui.theme.NyffTheme
 
 /**
  * Oq fonli maydon (web `fieldClass`): fokusda to'q sariq chegara, xatoda qizil va pastida matn. Material
- * `OutlinedTextField`ning 56dp minimal balandligi o'rniga ixcham — ~36dp (ichki bo'shliq 9dp).
+ * `OutlinedTextField`ning 56dp minimal balandligi o'rniga ixcham — ~30dp (qator 16sp, ichki bo'shliq 7dp).
  */
 @Composable
 fun NyffTextField(
@@ -43,7 +44,7 @@ fun NyffTextField(
 ) {
     val colors = NyffTheme.colors
     val interaction = remember { MutableInteractionSource() }
-    val textStyle = MaterialTheme.typography.bodyMedium.copy(color = colors.text)
+    val textStyle = MaterialTheme.typography.bodyMedium.copy(color = colors.text, lineHeight = 16.sp)
     val fieldColors = OutlinedTextFieldDefaults.colors(
         focusedBorderColor = colors.select,
         unfocusedBorderColor = colors.line,
@@ -89,7 +90,7 @@ fun NyffTextField(
             prefix = prefix?.let { { Text(it, style = textStyle) } },
             supportingText = error?.let { { Text(it) } },
             colors = fieldColors,
-            contentPadding = PaddingValues(horizontal = 12.dp, vertical = 9.dp),
+            contentPadding = PaddingValues(horizontal = 12.dp, vertical = 7.dp),
             container = {
                 OutlinedTextFieldDefaults.Container(
                     enabled = true,
