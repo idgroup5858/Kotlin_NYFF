@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
@@ -18,7 +17,6 @@ import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -30,7 +28,6 @@ import androidx.compose.ui.unit.dp
 import pr.com.kotlin_nyff.R
 import pr.com.kotlin_nyff.data.model.MenuProduct
 import pr.com.kotlin_nyff.ui.common.FoodImage
-import pr.com.kotlin_nyff.ui.common.NyffTextField
 import pr.com.kotlin_nyff.ui.common.PrimaryButton
 import pr.com.kotlin_nyff.ui.common.QtyStepper
 import pr.com.kotlin_nyff.ui.common.SectionLabel
@@ -39,13 +36,12 @@ import pr.com.kotlin_nyff.ui.common.text
 import pr.com.kotlin_nyff.ui.theme.NyffShapes
 import pr.com.kotlin_nyff.ui.theme.NyffTheme
 
-/** Taom tafsiloti: rasm, narx, tarkibi (grammsiz), izoh ("piyozsiz") va soni → savatga. */
+/** Taom tafsiloti: rasm, narx, tarkibi (grammsiz) va soni → savatga. Izoh — umumiy, rasmiylashtirishda. */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ProductSheet(product: MenuProduct, onAdd: (qty: Int, note: String) -> Unit, onDismiss: () -> Unit) {
+fun ProductSheet(product: MenuProduct, onAdd: (qty: Int) -> Unit, onDismiss: () -> Unit) {
     val colors = NyffTheme.colors
     var qty by rememberSaveable(product.id) { mutableIntStateOf(1) }
-    var note by rememberSaveable(product.id) { mutableStateOf("") }
     val price = product.price ?: 0
 
     ModalBottomSheet(
@@ -59,7 +55,6 @@ fun ProductSheet(product: MenuProduct, onAdd: (qty: Int, note: String) -> Unit, 
                 .verticalScroll(rememberScrollState())
                 .padding(horizontal = 16.dp)
                 .navigationBarsPadding()
-                .imePadding()
                 .padding(bottom = 16.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp),
         ) {
@@ -94,15 +89,10 @@ fun ProductSheet(product: MenuProduct, onAdd: (qty: Int, note: String) -> Unit, 
                     )
                 }
             }
-            NyffTextField(
-                value = note,
-                onValueChange = { note = it.take(200) },
-                placeholder = stringResource(R.string.item_note_placeholder),
-            )
             PrimaryButton(
                 text = stringResource(R.string.add_to_cart),
                 trailing = money(price * qty),
-                onClick = { onAdd(qty, note) },
+                onClick = { onAdd(qty) },
             )
         }
     }

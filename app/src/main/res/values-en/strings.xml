@@ -42,7 +42,6 @@
     <string name="state_paused">Not taking orders right now</string>
     <string name="takeaway_closed">The chosen branch is closed — choose another one</string>
     <string name="composition">Ingredients</string>
-    <string name="item_note_placeholder">Note, e.g. no onions</string>
     <string name="add_to_cart">Add to cart</string>
 
     <!-- map -->

@@ -175,7 +175,7 @@ class HomeViewModel @Inject constructor(
         selectedCategory.value = id
     }
 
-    fun add(productId: String, qty: Int = 1, note: String = "") = draft.add(productId, qty, note)
+    fun add(productId: String, qty: Int = 1) = draft.add(productId, qty)
 
     private suspend fun loadBranches() {
         try {

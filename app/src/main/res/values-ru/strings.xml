@@ -42,7 +42,6 @@
     <string name="state_paused">Сейчас не принимает заказы</string>
     <string name="takeaway_closed">Выбранный филиал сейчас закрыт — выберите другой</string>
     <string name="composition">Состав</string>
-    <string name="item_note_placeholder">Комментарий, например: без лука</string>
     <string name="add_to_cart">В корзину</string>
 
     <!-- карта -->

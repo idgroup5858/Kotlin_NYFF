@@ -208,8 +208,8 @@ fun HomeScreen(
     openedProduct?.let { product ->
         ProductSheet(
             product = product,
-            onAdd = { qty, note ->
-                vm.add(product.id, qty, note)
+            onAdd = { qty ->
+                vm.add(product.id, qty)
                 openedProduct = null
             },
             onDismiss = { openedProduct = null },
