@@ -169,8 +169,6 @@ class HomeViewModel @Inject constructor(
         draft.deliveryPoint.value?.let { point -> viewModelScope.launch { loadRoute(point) } }
     }
 
-    fun setMode(mode: OrderMode) = draft.setMode(mode)
-
     fun selectTakeawayBranch(id: String) = draft.setTakeawayBranch(id)
 
     fun selectCategory(id: String) {

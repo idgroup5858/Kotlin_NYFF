@@ -20,9 +20,6 @@
     <string name="settings">Sozlamalar</string>
     <string name="theme_dark">Tungi rejim</string>
     <string name="theme_light">Yorug\' rejim</string>
-    <string name="place_title">Buyurtmani qanday olasiz?</string>
-    <string name="place_delivery_hint">Kuryer manzilingizga olib boradi</string>
-    <string name="place_pickup_hint">Filialdan o\'zingiz olib ketasiz</string>
     <string name="add">Qo\'shish</string>
     <string name="cart">Savat</string>
     <string name="items_count">%1$d ta taom</string>

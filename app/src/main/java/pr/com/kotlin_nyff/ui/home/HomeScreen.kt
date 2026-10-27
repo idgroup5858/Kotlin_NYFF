@@ -98,7 +98,6 @@ import pr.com.kotlin_nyff.ui.common.FoodImage
 import pr.com.kotlin_nyff.ui.common.Notice
 import pr.com.kotlin_nyff.ui.common.NyffCard
 import pr.com.kotlin_nyff.ui.common.PillButton
-import pr.com.kotlin_nyff.ui.common.PlaceSheet
 import pr.com.kotlin_nyff.ui.common.RoundIconButton
 import pr.com.kotlin_nyff.ui.common.SystemBarIcons
 import pr.com.kotlin_nyff.ui.common.SettingsMenuButton
@@ -113,8 +112,9 @@ import pr.com.kotlin_nyff.ui.theme.NyffShapes
 import pr.com.kotlin_nyff.ui.theme.NyffTheme
 
 /**
- * Bosh sahifa (web `MobileHome`): qora sarlavha, joy (manzil / filial — bosilsa yetkazib berish yoki olib ketish
- * tanlanadi), kategoriyalar, taomlar, savat paneli. "NY" belgisiga 10 marta bosilsa — kuryer kirishi ([onCourierEntry]).
+ * Bosh sahifa (web `MobileHome`): qora sarlavha, joy (manzil — bosilsa darhol xarita; olib ketishda filial — filial
+ * ro'yxati; usulning o'zi rasmiylashtirishda tanlanadi), kategoriyalar, taomlar, savat paneli. "NY" belgisiga 10 marta
+ * bosilsa — kuryer kirishi ([onCourierEntry]).
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -128,7 +128,6 @@ fun HomeScreen(
 ) {
     val state by vm.state.collectAsStateWithLifecycle()
     val colors = NyffTheme.colors
-    var placeSheet by rememberSaveable { mutableStateOf(false) }
     var branchSheet by rememberSaveable { mutableStateOf(false) }
     var openedProduct by remember { mutableStateOf<MenuProduct?>(null) }
 
@@ -157,7 +156,8 @@ fun HomeScreen(
                 fullWidth("header") {
                     HomeHeader(
                         state = state,
-                        onPlace = { placeSheet = true },
+                        // dostavka / olib ketish rasmiylashtirishda tanlanadi; bu yerda — darhol xarita (yoki filial ro'yxati)
+                        onPlace = { if (state.mode == OrderMode.DELIVERY) onOpenLocation() else branchSheet = true },
                         onOrders = onOpenOrders,
                         onCourierEntry = onCourierEntry,
                     )
@@ -194,23 +194,6 @@ fun HomeScreen(
         }
     }
 
-    // shu usulni qayta tanlash — joyni o'zgartirish; boshqasiga o'tish — joy hali yo'q bo'lsa tanlash oynasi
-    if (placeSheet) {
-        PlaceSheet(
-            mode = state.mode,
-            onDelivery = {
-                placeSheet = false
-                if (state.mode == OrderMode.DELIVERY || state.deliveryPoint == null) onOpenLocation()
-                vm.setMode(OrderMode.DELIVERY)
-            },
-            onPickup = {
-                placeSheet = false
-                if (state.mode == OrderMode.TAKEAWAY || state.takeawayBranch == null) branchSheet = true
-                vm.setMode(OrderMode.TAKEAWAY)
-            },
-            onDismiss = { placeSheet = false },
-        )
-    }
     if (branchSheet) {
         BranchSheet(
             branches = state.branches.orEmpty(),
