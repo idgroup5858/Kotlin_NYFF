@@ -13,6 +13,9 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.withStyle
+import androidx.compose.foundation.text.BasicText
+import androidx.compose.foundation.text.TextAutoSize
+import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.sp
 import pr.com.kotlin_nyff.domain.NBSP
 import pr.com.kotlin_nyff.ui.theme.Coal
@@ -342,7 +345,7 @@ private fun HomeHeader(
         }
         Column {
             Text(stringResource(R.string.greeting), style = MaterialTheme.typography.bodyMedium, color = colors.onHeaderMuted)
-            Text(stringResource(R.string.home_title), style = MaterialTheme.typography.headlineSmall, color = colors.onHeader)
+            Text(stringResource(R.string.home_title), style = MaterialTheme.typography.headlineLarge, color = colors.onHeader)
         }
     }
 }
@@ -569,26 +572,25 @@ private fun ProductCard(
         ) {
             Text(
                 product.name.text(),
-                style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Medium, lineHeight = 18.sp),
+                style = MaterialTheme.typography.bodyMedium,
                 color = colors.text,
                 maxLines = 2,
                 overflow = TextOverflow.Ellipsis,
             )
             Spacer(Modifier.weight(1f).heightIn(min = 8.dp))
             Row(verticalAlignment = Alignment.CenterVertically) {
-                Text(
+                // joy yetmasa (katta shrift sozlamasi) — narx o'zi kichrayadi, "so'm" kesilmaydi
+                BasicText(
                     buildAnnotatedString {
                         append(Format.number(product.price ?: 0))
                         append(NBSP)
-                        // "so'm" kichikroq — narx bilan "+" bitta qatorga sig'sin
-                        withStyle(SpanStyle(color = Gold, fontSize = 12.sp)) { append(soum) }
+                        withStyle(SpanStyle(color = Gold, fontSize = 0.8.em)) { append(soum) }
                     },
                     modifier = Modifier.weight(1f),
-                    style = MaterialTheme.typography.titleSmall.copy(fontSize = 15.sp),
-                    color = colors.text,
+                    style = MaterialTheme.typography.titleMedium.copy(color = colors.text),
                     maxLines = 1,
                     softWrap = false,
-                    overflow = TextOverflow.Ellipsis,
+                    autoSize = TextAutoSize.StepBased(minFontSize = 9.sp, maxFontSize = 15.sp, stepSize = 0.5.sp),
                 )
                 Spacer(Modifier.width(6.dp))
                 Box(
