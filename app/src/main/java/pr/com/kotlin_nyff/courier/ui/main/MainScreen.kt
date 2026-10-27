@@ -26,10 +26,6 @@ import androidx.compose.material.icons.automirrored.outlined.Logout
 import androidx.compose.material.icons.outlined.CloudOff
 import androidx.compose.material.icons.outlined.MoreVert
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.DropdownMenu
-import androidx.compose.material3.DropdownMenuItem
-import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
@@ -59,8 +55,11 @@ import pr.com.kotlin_nyff.courier.ui.Notifier
 import pr.com.kotlin_nyff.courier.ui.courierErrorRes
 import pr.com.kotlin_nyff.ui.common.BrandBadge
 import pr.com.kotlin_nyff.ui.common.ErrorBlock
-import pr.com.kotlin_nyff.ui.common.SettingsMenuItems
+import pr.com.kotlin_nyff.ui.common.MenuAction
+import pr.com.kotlin_nyff.ui.common.MenuDivider
 import pr.com.kotlin_nyff.ui.common.Notice
+import pr.com.kotlin_nyff.ui.common.NyffMenu
+import pr.com.kotlin_nyff.ui.common.SettingsMenuContent
 import pr.com.kotlin_nyff.ui.common.RoundIconButton
 import pr.com.kotlin_nyff.ui.common.SystemBarIcons
 import pr.com.kotlin_nyff.ui.common.Tone
@@ -184,17 +183,18 @@ private fun Header(state: MainUiState, vm: MainViewModel, tab: Tab, onTab: (Tab)
                     size = 38.dp,
                     iconSize = 22.dp,
                 )
-                DropdownMenu(expanded = menu, onDismissRequest = { menu = false }) {
+                NyffMenu(expanded = menu, onDismiss = { menu = false }) {
                     // yorug' / tungi rejim va til — mijoz qismidagi menyu bilan bir xil
-                    SettingsMenuItems(onDone = { menu = false })
-                    HorizontalDivider()
-                    DropdownMenuItem(
-                        text = { Text(stringResource(R.string.courier_logout)) },
-                        leadingIcon = { Icon(Icons.AutoMirrored.Outlined.Logout, contentDescription = null) },
+                    SettingsMenuContent(onDone = { menu = false })
+                    MenuDivider()
+                    MenuAction(
+                        Icons.AutoMirrored.Outlined.Logout,
+                        stringResource(R.string.courier_logout),
                         onClick = {
                             menu = false
                             vm.logout()
                         },
+                        tint = colors.danger,
                     )
                 }
             }

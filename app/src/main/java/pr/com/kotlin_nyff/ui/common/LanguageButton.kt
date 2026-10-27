@@ -12,8 +12,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Translate
-import androidx.compose.material3.DropdownMenu
-import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -27,7 +25,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import pr.com.kotlin_nyff.R
 import pr.com.kotlin_nyff.core.AppLanguage
@@ -53,17 +50,9 @@ fun LanguageButton(modifier: Modifier = Modifier) {
             Spacer(Modifier.width(4.dp))
             Text(current.tag.uppercase(), style = MaterialTheme.typography.labelMedium, color = colors.onHeader)
         }
-        DropdownMenu(expanded = open, onDismissRequest = { open = false }) {
-            AppLanguage.entries.forEach { language ->
-                DropdownMenuItem(
-                    text = {
-                        Text(language.label, fontWeight = if (language == current) FontWeight.ExtraBold else FontWeight.Normal)
-                    },
-                    onClick = {
-                        open = false
-                        if (language != current) AppLanguage.apply(language)
-                    },
-                )
+        NyffMenu(expanded = open, onDismiss = { open = false }, width = 180.dp) {
+            Box(Modifier.padding(horizontal = 12.dp, vertical = 4.dp)) {
+                LanguageMenuContent(onDone = { open = false })
             }
         }
     }

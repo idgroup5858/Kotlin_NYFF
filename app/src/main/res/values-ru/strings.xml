@@ -16,8 +16,9 @@
     <string name="pickup">Самовывоз</string>
     <string name="all_categories">Все</string>
     <string name="settings">Настройки</string>
-    <string name="theme_dark">Тёмная тема</string>
-    <string name="theme_light">Светлая тема</string>
+    <string name="theme">Тема</string>
+    <string name="theme_dark">Тёмная</string>
+    <string name="theme_light">Светлая</string>
     <string name="add">Добавить</string>
     <string name="cart">Корзина</string>
     <string name="items_count">%1$d шт.</string>
