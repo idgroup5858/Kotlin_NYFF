@@ -14,7 +14,6 @@ import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -519,30 +518,32 @@ private fun ProductCard(
                         .clip(RoundedCornerShape(50))
                         .background(colors.accent)
                         .padding(horizontal = 8.dp, vertical = 2.dp),
-                    style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.Black),
+                    style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.SemiBold),
                     color = colors.onAccent,
                 )
             }
         }
-        Column(Modifier.padding(10.dp)) {
+        // ixcham: nom (1–2 qator, bo'sh qator ajratilmaydi) va darhol ostida narx + "qo'shish"
+        Column(
+            Modifier.padding(start = 10.dp, end = 8.dp, top = 8.dp, bottom = 8.dp),
+            verticalArrangement = Arrangement.spacedBy(4.dp),
+        ) {
             Text(
                 product.name.text(),
-                modifier = Modifier.heightIn(min = 38.dp),
-                style = MaterialTheme.typography.titleSmall,
+                style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.Medium),
                 color = colors.text,
                 maxLines = 2,
                 overflow = TextOverflow.Ellipsis,
             )
-            Spacer(Modifier.height(6.dp))
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Text(
                     money(product.price ?: 0),
                     modifier = Modifier.weight(1f),
-                    style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.ExtraBold),
+                    style = MaterialTheme.typography.titleSmall,
                     color = colors.text,
                     maxLines = 1,
                 )
-                RoundIconButton(Icons.Filled.Add, stringResource(R.string.add), onAdd, colors.accent, colors.onAccent)
+                RoundIconButton(Icons.Filled.Add, stringResource(R.string.add), onAdd, colors.accent, colors.onAccent, size = 30.dp)
             }
         }
     }
