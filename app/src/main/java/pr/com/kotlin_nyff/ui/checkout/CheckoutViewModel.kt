@@ -134,8 +134,9 @@ class CheckoutViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-            val saved = prefs.contact.first()
-            form.update { it.copy(contact = saved) }
+            // maydonlar bo'sh ochiladi — faqat oxirgi to'lov turi
+            val payment = prefs.payment.first()
+            form.update { it.copy(contact = it.contact.copy(payment = payment)) }
         }
         viewModelScope.launch { refreshPlace() }
     }
@@ -185,7 +186,7 @@ class CheckoutViewModel @Inject constructor(
         viewModelScope.launch {
             try {
                 val saved = orders.place(request, deliveryFee = if (delivery) current.route?.fee else null)
-                prefs.saveContact(contact)
+                prefs.savePayment(contact.payment)
                 draft.clearCart()
                 form.update { it.copy(placing = false) }
                 placed.send(saved.order.id)

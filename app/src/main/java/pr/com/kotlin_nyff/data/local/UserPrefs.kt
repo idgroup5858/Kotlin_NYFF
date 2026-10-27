@@ -13,7 +13,10 @@ import pr.com.kotlin_nyff.domain.OrderMode
 import javax.inject.Inject
 import javax.inject.Singleton
 
-/** Mijoz ma'lumotlari — keyingi buyurtmada qayta yozilmasin. `phone` — `+998` dan keyingi 9 ta raqam. */
+/**
+ * Rasmiylashtirish formasi. `phone` — `+998` dan keyingi 9 ta raqam. Ism / telefon / manzil saqlanmaydi — forma har
+ * safar bo'sh ochiladi; faqat to'lov turi eslab qolinadi.
+ */
 data class Contact(
     val name: String = "",
     val phone: String = "",
@@ -31,13 +34,8 @@ data class SavedDraft(
 @Singleton
 class UserPrefs @Inject constructor(private val store: DataStore<Preferences>) {
 
-    val contact: Flow<Contact> = store.data.map { prefs ->
-        Contact(
-            name = prefs[NAME].orEmpty(),
-            phone = prefs[PHONE].orEmpty(),
-            address = prefs[ADDRESS].orEmpty(),
-            payment = OnlinePayment.entries.firstOrNull { it.name == prefs[PAYMENT] } ?: OnlinePayment.CASH,
-        )
+    val payment: Flow<OnlinePayment> = store.data.map { prefs ->
+        OnlinePayment.entries.firstOrNull { it.name == prefs[PAYMENT] } ?: OnlinePayment.CASH
     }
 
     val draft: Flow<SavedDraft> = store.data.map { prefs ->
@@ -50,12 +48,13 @@ class UserPrefs @Inject constructor(private val store: DataStore<Preferences>) {
         )
     }
 
-    suspend fun saveContact(contact: Contact) {
+    suspend fun savePayment(payment: OnlinePayment) {
         store.edit {
-            it[NAME] = contact.name.trim()
-            it[PHONE] = contact.phone
-            it[ADDRESS] = contact.address.trim()
-            it[PAYMENT] = contact.payment.name
+            it[PAYMENT] = payment.name
+            // oldingi versiyalar saqlagan ism / telefon / manzil — endi kerak emas
+            it.remove(OLD_NAME)
+            it.remove(OLD_PHONE)
+            it.remove(OLD_ADDRESS)
         }
     }
 
@@ -74,9 +73,9 @@ class UserPrefs @Inject constructor(private val store: DataStore<Preferences>) {
     }
 
     private companion object {
-        val NAME = stringPreferencesKey("contact_name")
-        val PHONE = stringPreferencesKey("contact_phone")
-        val ADDRESS = stringPreferencesKey("contact_address")
+        val OLD_NAME = stringPreferencesKey("contact_name")
+        val OLD_PHONE = stringPreferencesKey("contact_phone")
+        val OLD_ADDRESS = stringPreferencesKey("contact_address")
         val PAYMENT = stringPreferencesKey("contact_payment")
         val MODE = stringPreferencesKey("draft_mode")
         val TAKEAWAY_BRANCH = stringPreferencesKey("draft_takeaway_branch")
