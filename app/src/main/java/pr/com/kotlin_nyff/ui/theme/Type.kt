@@ -29,7 +29,8 @@ private val InterBlack = FontFamily(Font(R.font.inter_black, FontWeight.Black))
  * (`headlineMedium`); qolgan matnlar kichik va yengil (Regular / Medium); ekran sarlavhalari Bold.
  */
 val Typography = Typography(
-    displayMedium = TextStyle(fontFamily = Inter, fontWeight = FontWeight.ExtraBold, fontSize = 56.sp, lineHeight = 60.sp),
+    // buyurtma raqami (kuzatish ekrani)
+    displayMedium = TextStyle(fontFamily = Inter, fontWeight = FontWeight.ExtraBold, fontSize = 44.sp, lineHeight = 48.sp, letterSpacing = (-1).sp),
     headlineLarge = TextStyle(fontFamily = InterBlack, fontWeight = FontWeight.Black, fontSize = 27.sp, lineHeight = 32.sp, letterSpacing = (-0.6).sp),
     // jami summa (rasmiylashtirish, kuryerning "Bugun" raqamlari)
     headlineMedium = TextStyle(fontFamily = Inter, fontWeight = FontWeight.ExtraBold, fontSize = 22.sp, lineHeight = 26.sp, letterSpacing = (-0.4).sp),

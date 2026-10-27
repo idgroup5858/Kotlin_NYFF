@@ -56,6 +56,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
@@ -129,7 +130,7 @@ fun TrackingScreen(
                     .weight(1f)
                     .verticalScroll(rememberScrollState())
                     .padding(bottom = 16.dp),
-                verticalArrangement = Arrangement.spacedBy(14.dp),
+                verticalArrangement = Arrangement.spacedBy(12.dp),
             ) {
                 Header(saved.order, state.branch(saved.order.branchId), onBack)
                 val inset = Modifier
@@ -194,7 +195,7 @@ private fun Header(order: CustomerOrder, branch: Branch?, onBack: () -> Unit) {
         Column(
             Modifier
                 .fillMaxWidth()
-                .padding(top = 20.dp, bottom = 24.dp, start = 16.dp, end = 16.dp),
+                .padding(top = 16.dp, bottom = 18.dp, start = 16.dp, end = 16.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             Text(
@@ -209,7 +210,7 @@ private fun Header(order: CustomerOrder, branch: Branch?, onBack: () -> Unit) {
                 val type = stringResource(if (order.type == OrderType.DELIVERY) R.string.delivery else R.string.pickup)
                 Text(
                     listOfNotNull(branch?.name, type).joinToString(" · "),
-                    style = MaterialTheme.typography.bodyMedium,
+                    style = MaterialTheme.typography.bodySmall,
                     color = colors.onHeaderMuted,
                 )
             }
@@ -243,7 +244,7 @@ private fun Steps(order: CustomerOrder, modifier: Modifier) {
     val completed = OrderProgress.completed(order)
     val steps = OrderProgress.steps(order.type).map { stepOf(it, order) }
     NyffCard(modifier) {
-        Column(Modifier.padding(16.dp)) {
+        Column(Modifier.padding(horizontal = 14.dp, vertical = 12.dp)) {
             steps.forEachIndexed { index, step ->
                 val done = index < reached || (completed && index == reached)
                 val current = index == reached && !done
@@ -259,21 +260,25 @@ private fun Steps(order: CustomerOrder, modifier: Modifier) {
                             )
                         }
                     }
-                    Spacer(Modifier.width(12.dp))
+                    Spacer(Modifier.width(10.dp))
                     Column(
                         Modifier
                             .weight(1f)
-                            .padding(top = 2.dp, bottom = if (index < steps.lastIndex) 20.dp else 0.dp),
+                            .padding(top = 6.dp, bottom = if (index < steps.lastIndex) 14.dp else 0.dp),
                     ) {
                         Row(verticalAlignment = Alignment.CenterVertically) {
                             Text(
                                 stringResource(step.title),
                                 modifier = Modifier.weight(1f),
-                                style = MaterialTheme.typography.titleMedium,
+                                style = MaterialTheme.typography.titleSmall,
                                 color = if (done || current) colors.text else colors.textFaint,
+                                maxLines = 1,
+                                overflow = TextOverflow.Ellipsis,
                             )
                             if (step.at != null && (done || current)) {
-                                Text(Format.time(step.at), style = MaterialTheme.typography.labelMedium, color = colors.textFaint)
+                                // vaqt sarlavha ustiga chiqmaydi — orada bo'shliq
+                                Spacer(Modifier.width(8.dp))
+                                Text(Format.time(step.at), style = MaterialTheme.typography.bodySmall, color = colors.textFaint)
                             }
                         }
                         Text(stringResource(step.hint), style = MaterialTheme.typography.bodySmall, color = colors.textMuted)
@@ -292,7 +297,7 @@ private fun StepIcon(icon: ImageVector, done: Boolean, current: Boolean) {
     val alpha by pulse.animateFloat(1f, 0.35f, infiniteRepeatable(tween(800), RepeatMode.Reverse), label = "alpha")
     Box(
         Modifier
-            .size(40.dp)
+            .size(30.dp)
             .clip(CircleShape)
             .background(
                 when {
@@ -301,7 +306,7 @@ private fun StepIcon(icon: ImageVector, done: Boolean, current: Boolean) {
                     else -> colors.surfaceMuted
                 },
             )
-            .then(if (current) Modifier.border(3.dp, colors.accent.copy(alpha = 0.45f), CircleShape) else Modifier),
+            .then(if (current) Modifier.border(2.dp, colors.accent.copy(alpha = 0.45f), CircleShape) else Modifier),
         contentAlignment = Alignment.Center,
     ) {
         Icon(
@@ -313,7 +318,7 @@ private fun StepIcon(icon: ImageVector, done: Boolean, current: Boolean) {
                 else -> colors.textFaint
             },
             modifier = Modifier
-                .size(18.dp)
+                .size(15.dp)
                 .alpha(if (current) alpha else 1f),
         )
     }
@@ -383,17 +388,17 @@ private fun Details(saved: SavedOrder, modifier: Modifier) {
     val colors = NyffTheme.colors
     val order = saved.order
     NyffCard(modifier) {
-        Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
+        Column(Modifier.padding(horizontal = 14.dp, vertical = 12.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
             order.items.forEach { item ->
                 Row {
                     Text(
                         "${item.qty}× ${item.name.text()}" + if (item.note.isNotBlank()) " (${item.note})" else "",
                         modifier = Modifier.weight(1f),
-                        style = MaterialTheme.typography.bodyMedium,
+                        style = MaterialTheme.typography.bodySmall,
                         color = colors.textMuted,
                     )
                     Spacer(Modifier.width(12.dp))
-                    Text(money(item.price * item.qty), style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.SemiBold), color = colors.text)
+                    Text(money(item.price * item.qty), style = MaterialTheme.typography.bodySmall, color = colors.text)
                 }
             }
             if (order.type == OrderType.DELIVERY) {
@@ -401,22 +406,23 @@ private fun Details(saved: SavedOrder, modifier: Modifier) {
                     Text(
                         "${stringResource(R.string.delivery_fee)} · ${stringResource(R.string.fee_separate)}",
                         modifier = Modifier.weight(1f),
-                        style = MaterialTheme.typography.bodyMedium,
+                        style = MaterialTheme.typography.bodySmall,
                         color = colors.textMuted,
                     )
                     Spacer(Modifier.width(12.dp))
-                    Text(feeText(order.deliveryFee ?: saved.deliveryFee), style = MaterialTheme.typography.bodyMedium, color = colors.textMuted, textAlign = TextAlign.End)
+                    Text(feeText(order.deliveryFee ?: saved.deliveryFee), style = MaterialTheme.typography.bodySmall, color = colors.textMuted, textAlign = TextAlign.End)
                 }
             }
-            HorizontalDivider(Modifier.padding(vertical = 6.dp), color = colors.line)
-            Row(verticalAlignment = Alignment.Bottom) {
+            HorizontalDivider(Modifier.padding(vertical = 4.dp), color = colors.line)
+            Row(verticalAlignment = Alignment.CenterVertically) {
                 Text(
                     paymentRes(order)?.let { stringResource(it) }.orEmpty(),
                     modifier = Modifier.weight(1f),
                     style = MaterialTheme.typography.bodySmall,
                     color = colors.textMuted,
                 )
-                Text(money(order.total), style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Black), color = colors.text)
+                // jami — qalin, lekin ixcham
+                Text(money(order.total), style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.ExtraBold), color = colors.text)
             }
             val address = order.online?.address.orEmpty()
             if (address.isNotBlank()) {
