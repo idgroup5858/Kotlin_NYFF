@@ -127,9 +127,11 @@ private fun OrderRow(saved: SavedOrder, branchName: String?, onClick: () -> Unit
                 Spacer(Modifier.weight(1f))
                 Text(money(order.total), style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.ExtraBold), color = colors.text)
             }
-            val type = stringResource(if (order.type == OrderType.DELIVERY) R.string.delivery else R.string.pickup)
+            val delivery = order.type == OrderType.DELIVERY
+            val type = stringResource(if (delivery) R.string.delivery else R.string.pickup)
+            // dostavkada filial nomi ko'rsatilmaydi — qaysi filial olishini tizim hal qiladi
             Text(
-                listOfNotNull(Format.dateTime(order.createdAt), branchName, type).joinToString(" · "),
+                listOfNotNull(Format.dateTime(order.createdAt), branchName?.takeUnless { delivery }, type).joinToString(" · "),
                 style = MaterialTheme.typography.bodySmall,
                 color = colors.textMuted,
             )

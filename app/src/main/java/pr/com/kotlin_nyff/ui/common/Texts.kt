@@ -106,6 +106,12 @@ fun feeText(fee: Long?): String = when (fee) {
     else -> money(fee)
 }
 
+/** "Yetkazib berish: 10 000 so'm" / "Bepul"; narx yo'q bo'lsa — faqat "Yetkazish narxini kuryer aytadi". */
+@Composable
+@ReadOnlyComposable
+fun deliveryFeeLine(fee: Long?): String =
+    if (fee == null) feeText(null) else stringResource(R.string.delivery_fee) + ": " + feeText(fee)
+
 /** Joriy ilova tili ("uz" / "ru" / "en"). */
 @Composable
 @ReadOnlyComposable

@@ -143,13 +143,18 @@ fun TrackingScreen(
                 }
                 val order = saved.order
                 if (order.transferCount > 0 && order.status != OrderStatus.CANCELLED) {
-                    Notice(
-                        stringResource(R.string.transferred, state.branch(order.branchId)?.name.orEmpty()),
-                        Tone.WARNING,
-                        inset,
-                        Icons.Outlined.SwapHoriz,
-                        supporting = stringResource(R.string.transferred_hint),
-                    )
+                    // dostavkada qaysi filial olgani ko'rsatilmaydi — faqat raqam yangilangani
+                    if (order.type == OrderType.DELIVERY) {
+                        Notice(stringResource(R.string.transferred_hint), Tone.WARNING, inset, Icons.Outlined.SwapHoriz)
+                    } else {
+                        Notice(
+                            stringResource(R.string.transferred, state.branch(order.branchId)?.name.orEmpty()),
+                            Tone.WARNING,
+                            inset,
+                            Icons.Outlined.SwapHoriz,
+                            supporting = stringResource(R.string.transferred_hint),
+                        )
+                    }
                 }
                 if (order.status == OrderStatus.CANCELLED) {
                     CancelledCard(order, state.branch(order.branchId), inset)
@@ -207,9 +212,11 @@ private fun Header(order: CustomerOrder, branch: Branch?, onBack: () -> Unit) {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Icon(Icons.Filled.LocationOn, contentDescription = null, tint = colors.accent, modifier = Modifier.size(14.dp))
                 Spacer(Modifier.width(4.dp))
-                val type = stringResource(if (order.type == OrderType.DELIVERY) R.string.delivery else R.string.pickup)
+                val delivery = order.type == OrderType.DELIVERY
+                val type = stringResource(if (delivery) R.string.delivery else R.string.pickup)
+                // dostavkada filial nomi ko'rsatilmaydi; olib ketishda — mijoz o'zi tanlagan filial
                 Text(
-                    listOfNotNull(branch?.name, type).joinToString(" · "),
+                    listOfNotNull(branch?.name?.takeUnless { delivery }, type).joinToString(" · "),
                     style = MaterialTheme.typography.bodySmall,
                     color = colors.onHeaderMuted,
                 )

@@ -309,10 +309,10 @@ private fun HomeHeader(
             Box(Modifier.weight(1f)) {
                 HeaderChip(
                     icon = if (delivery) Icons.Filled.LocationOn else Icons.Outlined.Storefront,
-                    text = when {
-                        delivery && state.deliveryPoint == null -> stringResource(R.string.set_address)
-                        delivery -> stringResource(R.string.location)
-                        else -> state.takeawayBranch?.name ?: stringResource(R.string.choose_branch)
+                    text = if (delivery) {
+                        stringResource(R.string.my_location)
+                    } else {
+                        state.takeawayBranch?.name ?: stringResource(R.string.choose_branch)
                     },
                     onClick = onPlace,
                 )
@@ -413,12 +413,12 @@ private fun PlaceNotice(state: HomeUiState, onOpenLocation: () -> Unit, onRetryR
                 Icon(Icons.Outlined.Map, contentDescription = null, tint = colors.select, modifier = Modifier.size(28.dp))
                 Spacer(Modifier.width(12.dp))
                 Column(Modifier.weight(1f)) {
-                    Text(stringResource(R.string.branch_by_location), style = MaterialTheme.typography.titleSmall, color = colors.text)
+                    Text(stringResource(R.string.set_address), style = MaterialTheme.typography.titleSmall, color = colors.text)
                     Text(stringResource(R.string.menu_preview_hint), style = MaterialTheme.typography.bodySmall, color = colors.textMuted)
                 }
             }
             PillButton(
-                stringResource(R.string.pick_on_map),
+                stringResource(R.string.my_location),
                 onOpenLocation,
                 Modifier.padding(start = 14.dp, end = 14.dp, bottom = 14.dp),
                 icon = Icons.Filled.LocationOn,
@@ -431,7 +431,7 @@ private fun PlaceNotice(state: HomeUiState, onOpenLocation: () -> Unit, onRetryR
             Icons.Outlined.ErrorOutline,
             action = { PillButton(stringResource(R.string.retry), onRetryRoute) },
         )
-        // qaysi filial olishi va yetkazish narxi — rasmiylashtirishda ko'rinadi; bu yerda faqat muammo
+        // qaysi filial olishi mijozga ko'rsatilmaydi (tizim o'zi hal qiladi); yetkazish narxi — rasmiylashtirishda
         route != null && route.branchId == null ->
             Notice(stringResource(R.string.no_branch_open), Tone.DANGER, modifier, Icons.Outlined.ErrorOutline)
     }

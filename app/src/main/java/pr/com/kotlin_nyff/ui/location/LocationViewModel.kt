@@ -6,20 +6,15 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import pr.com.kotlin_nyff.data.CatalogRepository
 import pr.com.kotlin_nyff.data.DraftStore
-import pr.com.kotlin_nyff.data.model.Branch
 import pr.com.kotlin_nyff.data.model.DeliveryRoute
 import pr.com.kotlin_nyff.data.model.GeoPoint
 import pr.com.kotlin_nyff.data.remote.AppError
-import pr.com.kotlin_nyff.domain.Shop
 import javax.inject.Inject
 import kotlin.math.roundToLong
 
@@ -41,27 +36,10 @@ class LocationViewModel @Inject constructor(
     /** Oldin tanlangan nuqta — xarita shu yerdan ochiladi. */
     val initialPoint: GeoPoint? = draft.deliveryPoint.value
 
-    /** Hudud chizish uchun (faqat faol filiallar). */
-    val branches: StateFlow<List<Branch>> = catalog.branches
-        .map { it.orEmpty().let(Shop::visibleBranches) }
-        .stateIn(viewModelScope, SharingStarted.Eagerly, emptyList())
-
     private val _state = MutableStateFlow(LocationUiState())
     val state: StateFlow<LocationUiState> = _state.asStateFlow()
 
     private var routeJob: Job? = null
-
-    init {
-        if (catalog.branches.value == null) {
-            viewModelScope.launch {
-                try {
-                    catalog.refreshBranches()
-                } catch (_: AppError) {
-                    // hududlarsiz ham nuqta tanlanadi
-                }
-            }
-        }
-    }
 
     fun onMoving() {
         routeJob?.cancel()
@@ -98,8 +76,6 @@ class LocationViewModel @Inject constructor(
         draft.setDelivery(point, route)
         return true
     }
-
-    fun branchName(id: String?): String? = catalog.branch(id)?.name
 
     /** Server ham 6 xonagacha yaxlitlaydi. */
     private fun round6(value: Double): Double = (value * 1_000_000).roundToLong() / 1_000_000.0

@@ -26,12 +26,8 @@
     <string name="my_orders">My orders</string>
     <string name="choose_branch">Choose a branch</string>
     <string name="set_address">Set the address</string>
-    <string name="pick_on_map">Mark on the map</string>
-    <string name="branch_by_location">For delivery the branch is chosen by your location</string>
-    <string name="menu_preview_hint">Once the address is set, the menu and prices are from that branch</string>
-    <string name="route_to">The «%1$s» branch will take your order</string>
-    <string name="route_branch">«%1$s» branch</string>
-    <string name="route_redirected">The branch for your area is closed — another branch will take the order</string>
+    <string name="my_location">My current location</string>
+    <string name="menu_preview_hint">The menu and prices are shown for your address</string>
     <string name="delivery_fee">Delivery</string>
     <string name="free">Free</string>
     <string name="courier_fee">The courier quotes the delivery fee</string>

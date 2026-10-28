@@ -75,6 +75,7 @@ import pr.com.kotlin_nyff.ui.common.SectionLabel
 import pr.com.kotlin_nyff.ui.common.SystemBarIcons
 import pr.com.kotlin_nyff.ui.common.Tone
 import pr.com.kotlin_nyff.ui.common.branchStateText
+import pr.com.kotlin_nyff.ui.common.deliveryFeeLine
 import pr.com.kotlin_nyff.ui.common.feeText
 import pr.com.kotlin_nyff.ui.common.money
 import pr.com.kotlin_nyff.ui.common.text
@@ -199,13 +200,11 @@ private fun PlaceCard(state: CheckoutUiState, onOpenLocation: () -> Unit, onOpen
                 val (title, detail) = when {
                     !delivery -> (state.takeawayBranch?.name ?: stringResource(R.string.choose_branch)) to
                         state.takeawayBranch?.let { "${it.address} · ${branchStateText(it)}" }
-                    state.deliveryPoint == null -> stringResource(R.string.set_address) to stringResource(R.string.branch_by_location)
+                    state.deliveryPoint == null -> stringResource(R.string.set_address) to null
                     route == null -> stringResource(R.string.checking) to null
                     route.branchId == null -> stringResource(R.string.no_branch_open) to null
-                    else -> stringResource(R.string.route_branch, state.routeBranch?.name.orEmpty()) to buildString {
-                        append(stringResource(R.string.delivery_fee)).append(": ").append(feeText(route.fee))
-                        if (route.redirected) append("\n").append(stringResource(R.string.route_redirected))
-                    }
+                    // qaysi filial olishi mijozga ko'rsatilmaydi — tizim o'zi hal qiladi
+                    else -> stringResource(R.string.my_location) to deliveryFeeLine(route.fee)
                 }
                 Text(title, style = MaterialTheme.typography.titleSmall, color = colors.text, maxLines = 1, overflow = TextOverflow.Ellipsis)
                 if (!detail.isNullOrBlank()) {
@@ -231,7 +230,7 @@ private fun PlaceCard(state: CheckoutUiState, onOpenLocation: () -> Unit, onOpen
         }
         if (delivery && state.deliveryPoint == null) {
             PillButton(
-                stringResource(R.string.pick_on_map),
+                stringResource(R.string.my_location),
                 onOpenLocation,
                 Modifier.padding(start = 12.dp, end = 12.dp, bottom = 10.dp),
                 icon = Icons.Filled.LocationOn,

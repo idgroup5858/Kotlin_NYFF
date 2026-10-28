@@ -55,7 +55,7 @@ demosidan (`ReactJS_NYFF/src/pages/mobile/*`, `src/i18n/*` → `mobile`, `errors
 
 - [x] **0. Karkas** — kutubxonalar, ruxsatlar, Hilt, Room, DataStore, Retrofit + xatolar, tema (2 ta), 3 til, ikonka
 - [x] **1. Bosh sahifa** — filiallar va holati, yetkazib berish / olib ketish, menyu (kategoriyalar, 2 ustun), taom oynasi (tarkib, izoh, soni), savat paneli, til tanlash
-- [x] **2. Xarita** — joriy joylashuv (ruxsat), markazdagi pin, filial hududlari, `/delivery/route` → filial va hudud narxi
+- [x] **2. Xarita** — joriy joylashuv (ruxsat), markazdagi pin, `/delivery/route` → filial va hudud narxi. Hududlar (poligonlar) va dostavkada qaysi filial olgani mijozga ko'rsatilmaydi (xarita, rasmiylashtirish, kuzatish, tarix) — faqat yetkazish narxi; olib ketishda filial nomi ko'rinadi
 - [x] **3. Rasmiylashtirish** — savat, joy (manzil / filial), ism / telefon / manzil / izoh, to'lov, tekshiruvlar, `POST /mobile/orders`
 - [x] **4. Kuzatish va tarix** — 3 bosqich, qabul muddati sanog'i, filialga o'tkazish, bekor qilinish sababi, filialga qo'ng'iroq; "Buyurtmalarim"
 - [x] **5. Testlar** — unit (savat, formatlash, telefon, filial tanlash, holat matnlari, API o'qish / xatolar — MockWebServer); emulyatorda backend bilan

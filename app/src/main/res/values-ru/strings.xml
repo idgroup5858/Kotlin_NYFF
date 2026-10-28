@@ -26,12 +26,8 @@
     <string name="my_orders">Мои заказы</string>
     <string name="choose_branch">Выберите филиал</string>
     <string name="set_address">Укажите адрес</string>
-    <string name="pick_on_map">Отметить на карте</string>
-    <string name="branch_by_location">При доставке филиал выбирается по вашему местоположению</string>
-    <string name="menu_preview_hint">После выбора адреса меню и цены будут того филиала</string>
-    <string name="route_to">Заказ примет филиал «%1$s»</string>
-    <string name="route_branch">Филиал «%1$s»</string>
-    <string name="route_redirected">Филиал вашей зоны сейчас закрыт — заказ примет другой филиал</string>
+    <string name="my_location">Моё местоположение</string>
+    <string name="menu_preview_hint">Меню и цены показываются по вашему адресу</string>
     <string name="delivery_fee">Доставка</string>
     <string name="free">Бесплатно</string>
     <string name="courier_fee">Стоимость доставки назовёт курьер</string>

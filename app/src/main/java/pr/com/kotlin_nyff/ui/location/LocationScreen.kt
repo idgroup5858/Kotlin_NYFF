@@ -55,7 +55,6 @@ import com.google.maps.android.compose.ComposeMapColorScheme
 import com.google.maps.android.compose.GoogleMap
 import com.google.maps.android.compose.MapProperties
 import com.google.maps.android.compose.MapUiSettings
-import com.google.maps.android.compose.Polygon
 import com.google.maps.android.compose.rememberCameraPositionState
 import kotlinx.coroutines.launch
 import pr.com.kotlin_nyff.R
@@ -66,7 +65,7 @@ import pr.com.kotlin_nyff.ui.common.RoundIconButton
 import pr.com.kotlin_nyff.ui.common.SystemBarIcons
 import pr.com.kotlin_nyff.ui.common.Tone
 import pr.com.kotlin_nyff.ui.common.errorRes
-import pr.com.kotlin_nyff.ui.common.feeText
+import pr.com.kotlin_nyff.ui.common.deliveryFeeLine
 import pr.com.kotlin_nyff.ui.theme.Coal
 import pr.com.kotlin_nyff.ui.theme.NyffShapes
 import pr.com.kotlin_nyff.ui.theme.NyffTheme
@@ -77,14 +76,14 @@ private val TASHKENT = LatLng(41.311, 69.279)
 
 /**
  * Yetkazib berish joyi: xarita joriy joylashuvda ochiladi, mijoz xaritani surib pinni aniq joyga keltiradi. Har
- * to'xtashda server qaysi filial olishini va hudud narxini aytadi (ROADMAP 1, API.md 5.2).
+ * to'xtashda server qaysi filial olishini va hudud narxini aytadi (ROADMAP 1, API.md 5.2). Hududlar (poligonlar) va
+ * filial nomi mijozga ko'rsatilmaydi — faqat yetkazish narxi.
  */
 @Composable
 fun LocationScreen(onBack: () -> Unit, vm: LocationViewModel = hiltViewModel()) {
     val context = LocalContext.current
     val colors = NyffTheme.colors
     val state by vm.state.collectAsStateWithLifecycle()
-    val branches by vm.branches.collectAsStateWithLifecycle()
     val scope = rememberCoroutineScope()
 
     val start = vm.initialPoint
@@ -150,16 +149,7 @@ fun LocationScreen(onBack: () -> Unit, vm: LocationViewModel = hiltViewModel()) 
                 tiltGesturesEnabled = false,
             ),
             mapColorScheme = ComposeMapColorScheme.FOLLOW_SYSTEM,
-        ) {
-            branches.filter { it.deliveryZone.size >= 3 }.forEach { branch ->
-                Polygon(
-                    points = branch.deliveryZone.map { LatLng(it.lat, it.lng) },
-                    fillColor = Taxi.copy(alpha = 0.12f),
-                    strokeColor = Taxi.copy(alpha = 0.9f),
-                    strokeWidth = 4f,
-                )
-            }
-        }
+        )
 
         CenterPin(lifted = camera.isMoving, modifier = Modifier.align(Alignment.Center))
 
@@ -225,7 +215,6 @@ fun LocationScreen(onBack: () -> Unit, vm: LocationViewModel = hiltViewModel()) 
             }
             BottomPanel(
                 state = state,
-                branchName = vm.branchName(state.route?.branchId),
                 message = message,
                 onRetry = vm::retry,
                 onConfirm = { if (vm.confirm()) onBack() },
@@ -278,7 +267,6 @@ private fun CenterPin(lifted: Boolean, modifier: Modifier = Modifier) {
 @Composable
 private fun BottomPanel(
     state: LocationUiState,
-    branchName: String?,
     message: Int?,
     onRetry: () -> Unit,
     onConfirm: () -> Unit,
@@ -317,15 +305,8 @@ private fun BottomPanel(
                 Text(stringResource(R.string.checking), style = MaterialTheme.typography.titleSmall, color = colors.textMuted)
             }
             route.branchId == null -> Notice(stringResource(R.string.no_branch_open), Tone.DANGER, icon = Icons.Outlined.ErrorOutline)
-            else -> Notice(
-                stringResource(R.string.route_to, branchName.orEmpty()),
-                Tone.INFO,
-                icon = Icons.Filled.LocationOn,
-                supporting = buildString {
-                    append(stringResource(R.string.delivery_fee)).append(": ").append(feeText(route.fee))
-                    if (route.redirected) append("\n").append(stringResource(R.string.route_redirected))
-                },
-            )
+            // qaysi filial olishi mijozga ko'rsatilmaydi — tizim o'zi hal qiladi; faqat yetkazish narxi
+            else -> Notice(deliveryFeeLine(route.fee), Tone.INFO, icon = Icons.Filled.LocationOn)
         }
         PrimaryButton(
             text = stringResource(R.string.choose_this_place),
