@@ -430,35 +430,48 @@ fun BrandBadge(modifier: Modifier = Modifier, size: Dp = 38.dp) {
 /** Ro'yxatdagi holat belgisi (dostavkada — kuryer bosqichi bilan). */
 @Composable
 fun StatusChip(order: CustomerOrder, modifier: Modifier = Modifier) {
-    StatusLabel(stringResource(statusRes(order)), OrderProgress.headline(order), modifier)
-}
-
-/**
- * Holat rangli belgida: kutilmoqda / qaytdi — to'q sariq, tayyorlanmoqda / yo'lda — sariq, tayyor / yetkazildi —
- * yashil, bekor — qizil. Ro'yxatda va bosh sahifadagi "Buyurtmam"da bir xil; [showIcon] — boshida bosqich ikonkasi.
- */
-@Composable
-fun StatusLabel(text: String, headline: OrderHeadline, modifier: Modifier = Modifier, showIcon: Boolean = false) {
     val colors = NyffTheme.colors
-    val (background, content) = when (headline) {
+    val (background, content) = when (OrderProgress.headline(order)) {
         OrderHeadline.WAITING -> colors.warningSoft to colors.warning
         OrderHeadline.COOKING, OrderHeadline.ON_THE_WAY -> colors.accent.copy(alpha = 0.22f) to colors.text
         OrderHeadline.READY_DELIVERY, OrderHeadline.READY_PICKUP, OrderHeadline.DELIVERED -> colors.successSoft to colors.success
         OrderHeadline.RETURNED -> colors.warningSoft to colors.warning
         else -> colors.dangerSoft to colors.danger
     }
-    Row(
-        modifier
+    Text(
+        stringResource(statusRes(order)),
+        modifier = modifier
             .clip(RoundedCornerShape(6.dp))
             .background(background)
             .padding(horizontal = 8.dp, vertical = 3.dp),
-        verticalAlignment = Alignment.CenterVertically,
-    ) {
-        if (showIcon) {
-            Icon(statusIcon(headline), contentDescription = null, tint = content, modifier = Modifier.size(14.dp))
-            Spacer(Modifier.width(5.dp))
-        }
-        Text(text, style = MaterialTheme.typography.labelMedium, color = content, maxLines = 1, overflow = TextOverflow.Ellipsis)
+        style = MaterialTheme.typography.labelMedium,
+        color = content,
+    )
+}
+
+/**
+ * Bosh sahifadagi "Buyurtmam" holati: fonsiz — faqat rangli matn va bosqich ikonkasi. Kutilmoqda / qaytdi — to'q sariq,
+ * tayyorlanmoqda / yo'lda — sariq, tayyor / yetkazildi — yashil, bekor — qizil.
+ */
+@Composable
+fun StatusLine(text: String, headline: OrderHeadline, modifier: Modifier = Modifier) {
+    val colors = NyffTheme.colors
+    val tint = when (headline) {
+        OrderHeadline.WAITING, OrderHeadline.RETURNED -> colors.warning
+        OrderHeadline.COOKING, OrderHeadline.ON_THE_WAY -> colors.select
+        OrderHeadline.READY_DELIVERY, OrderHeadline.READY_PICKUP, OrderHeadline.DELIVERED -> colors.success
+        else -> colors.danger
+    }
+    Row(modifier, verticalAlignment = Alignment.CenterVertically) {
+        Icon(statusIcon(headline), contentDescription = null, tint = tint, modifier = Modifier.size(16.dp))
+        Spacer(Modifier.width(5.dp))
+        Text(
+            text,
+            style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.SemiBold),
+            color = tint,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
+        )
     }
 }
 

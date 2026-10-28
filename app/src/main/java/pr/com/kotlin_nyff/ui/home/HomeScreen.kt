@@ -100,7 +100,7 @@ import pr.com.kotlin_nyff.ui.common.PillButton
 import pr.com.kotlin_nyff.ui.common.RoundIconButton
 import pr.com.kotlin_nyff.ui.common.SystemBarIcons
 import pr.com.kotlin_nyff.ui.common.SettingsMenuButton
-import pr.com.kotlin_nyff.ui.common.StatusLabel
+import pr.com.kotlin_nyff.ui.common.StatusLine
 import pr.com.kotlin_nyff.ui.common.Tone
 import pr.com.kotlin_nyff.ui.common.branchStateText
 import pr.com.kotlin_nyff.ui.common.errorRes
@@ -381,9 +381,8 @@ private fun CurrentOrderBanner(number: Int, text: String, headline: OrderHeadlin
             Spacer(Modifier.width(12.dp))
             Column(Modifier.weight(1f)) {
                 Text(stringResource(R.string.my_order), style = MaterialTheme.typography.bodySmall, color = colors.textMuted)
-                Spacer(Modifier.height(3.dp))
-                // holat rangli belgida ("Buyurtmalarim" ro'yxatidagi kabi) + kuzatish ekranidagi bosqich ikonkasi
-                StatusLabel(text, headline, showIcon = true)
+                // holat — rangli matn + kuzatish ekranidagi bosqich ikonkasi (fonsiz)
+                StatusLine(text, headline)
             }
             Icon(Icons.AutoMirrored.Filled.KeyboardArrowRight, contentDescription = null, tint = colors.textFaint)
         }
