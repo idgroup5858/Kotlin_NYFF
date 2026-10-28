@@ -24,9 +24,15 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Remove
+import androidx.compose.material.icons.outlined.Celebration
 import androidx.compose.material.icons.outlined.CloudOff
 import androidx.compose.material.icons.outlined.DeliveryDining
+import androidx.compose.material.icons.outlined.ErrorOutline
 import androidx.compose.material.icons.outlined.Fastfood
+import androidx.compose.material.icons.outlined.Home
+import androidx.compose.material.icons.outlined.Inventory2
+import androidx.compose.material.icons.outlined.Restaurant
+import androidx.compose.material.icons.outlined.Schedule
 import androidx.compose.material.icons.outlined.ShoppingBag
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
@@ -317,7 +323,13 @@ fun PillButton(
             Icon(icon, contentDescription = null, tint = content, modifier = Modifier.size(18.dp))
             Spacer(Modifier.width(6.dp))
         }
-        Text(text, style = MaterialTheme.typography.labelMedium, color = content, maxLines = 1, overflow = TextOverflow.Ellipsis)
+        Text(
+            text,
+            style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.ExtraBold),
+            color = content,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
+        )
     }
 }
 
@@ -360,7 +372,7 @@ fun PrimaryButton(
         Text(
             text,
             modifier = Modifier.weight(1f),
-            style = MaterialTheme.typography.titleMedium,
+            style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.ExtraBold),
             color = colors.onAccent,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
@@ -418,23 +430,47 @@ fun BrandBadge(modifier: Modifier = Modifier, size: Dp = 38.dp) {
 /** Ro'yxatdagi holat belgisi (dostavkada — kuryer bosqichi bilan). */
 @Composable
 fun StatusChip(order: CustomerOrder, modifier: Modifier = Modifier) {
+    StatusLabel(stringResource(statusRes(order)), OrderProgress.headline(order), modifier)
+}
+
+/**
+ * Holat rangli belgida: kutilmoqda / qaytdi — to'q sariq, tayyorlanmoqda / yo'lda — sariq, tayyor / yetkazildi —
+ * yashil, bekor — qizil. Ro'yxatda va bosh sahifadagi "Buyurtmam"da bir xil; [showIcon] — boshida bosqich ikonkasi.
+ */
+@Composable
+fun StatusLabel(text: String, headline: OrderHeadline, modifier: Modifier = Modifier, showIcon: Boolean = false) {
     val colors = NyffTheme.colors
-    val (background, content) = when (OrderProgress.headline(order)) {
+    val (background, content) = when (headline) {
         OrderHeadline.WAITING -> colors.warningSoft to colors.warning
         OrderHeadline.COOKING, OrderHeadline.ON_THE_WAY -> colors.accent.copy(alpha = 0.22f) to colors.text
         OrderHeadline.READY_DELIVERY, OrderHeadline.READY_PICKUP, OrderHeadline.DELIVERED -> colors.successSoft to colors.success
         OrderHeadline.RETURNED -> colors.warningSoft to colors.warning
         else -> colors.dangerSoft to colors.danger
     }
-    Text(
-        stringResource(statusRes(order)),
-        modifier = modifier
+    Row(
+        modifier
             .clip(RoundedCornerShape(6.dp))
             .background(background)
             .padding(horizontal = 8.dp, vertical = 3.dp),
-        style = MaterialTheme.typography.labelMedium,
-        color = content,
-    )
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        if (showIcon) {
+            Icon(statusIcon(headline), contentDescription = null, tint = content, modifier = Modifier.size(14.dp))
+            Spacer(Modifier.width(5.dp))
+        }
+        Text(text, style = MaterialTheme.typography.labelMedium, color = content, maxLines = 1, overflow = TextOverflow.Ellipsis)
+    }
+}
+
+/** Kuzatish ekranidagi bosqich ikonkalari bilan bir xil; bekor / qaytdi — ogohlantirish belgisi. */
+private fun statusIcon(headline: OrderHeadline): ImageVector = when (headline) {
+    OrderHeadline.WAITING -> Icons.Outlined.Schedule
+    OrderHeadline.COOKING -> Icons.Outlined.Restaurant
+    OrderHeadline.READY_DELIVERY -> Icons.Outlined.Inventory2
+    OrderHeadline.READY_PICKUP -> Icons.Outlined.Celebration
+    OrderHeadline.ON_THE_WAY -> Icons.Outlined.DeliveryDining
+    OrderHeadline.DELIVERED -> Icons.Outlined.Home
+    else -> Icons.Outlined.ErrorOutline
 }
 
 /**

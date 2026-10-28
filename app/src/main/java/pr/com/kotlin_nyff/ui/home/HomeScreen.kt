@@ -86,6 +86,7 @@ import pr.com.kotlin_nyff.R
 import pr.com.kotlin_nyff.core.AppLanguage
 import pr.com.kotlin_nyff.data.model.MenuProduct
 import pr.com.kotlin_nyff.domain.Format
+import pr.com.kotlin_nyff.domain.OrderHeadline
 import pr.com.kotlin_nyff.domain.OrderMode
 import pr.com.kotlin_nyff.domain.OrderProgress
 import pr.com.kotlin_nyff.domain.Shop
@@ -99,6 +100,7 @@ import pr.com.kotlin_nyff.ui.common.PillButton
 import pr.com.kotlin_nyff.ui.common.RoundIconButton
 import pr.com.kotlin_nyff.ui.common.SystemBarIcons
 import pr.com.kotlin_nyff.ui.common.SettingsMenuButton
+import pr.com.kotlin_nyff.ui.common.StatusLabel
 import pr.com.kotlin_nyff.ui.common.Tone
 import pr.com.kotlin_nyff.ui.common.branchStateText
 import pr.com.kotlin_nyff.ui.common.errorRes
@@ -162,9 +164,11 @@ fun HomeScreen(
                 }
                 state.currentOrder?.let { current ->
                     fullWidth("current-order") {
+                        val headline = OrderProgress.headline(current.order)
                         CurrentOrderBanner(
                             number = current.order.number,
-                            text = stringResource(headlineRes(OrderProgress.headline(current.order))),
+                            text = stringResource(headlineRes(headline)),
+                            headline = headline,
                             onClick = { onOpenOrder(current.order.id) },
                         )
                     }
@@ -364,7 +368,7 @@ private fun HeaderIconButton(icon: ImageVector, description: String, onClick: ()
 }
 
 @Composable
-private fun CurrentOrderBanner(number: Int, text: String, onClick: () -> Unit) {
+private fun CurrentOrderBanner(number: Int, text: String, headline: OrderHeadline, onClick: () -> Unit) {
     val colors = NyffTheme.colors
     NyffCard(
         Modifier
@@ -377,7 +381,9 @@ private fun CurrentOrderBanner(number: Int, text: String, onClick: () -> Unit) {
             Spacer(Modifier.width(12.dp))
             Column(Modifier.weight(1f)) {
                 Text(stringResource(R.string.my_order), style = MaterialTheme.typography.bodySmall, color = colors.textMuted)
-                Text(text, style = MaterialTheme.typography.titleSmall, color = colors.text, maxLines = 1, overflow = TextOverflow.Ellipsis)
+                Spacer(Modifier.height(3.dp))
+                // holat rangli belgida ("Buyurtmalarim" ro'yxatidagi kabi) + kuzatish ekranidagi bosqich ikonkasi
+                StatusLabel(text, headline, showIcon = true)
             }
             Icon(Icons.AutoMirrored.Filled.KeyboardArrowRight, contentDescription = null, tint = colors.textFaint)
         }
