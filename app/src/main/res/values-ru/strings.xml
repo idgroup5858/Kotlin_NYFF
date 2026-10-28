@@ -31,6 +31,7 @@
     <string name="delivery_fee">Доставка</string>
     <string name="free">Бесплатно</string>
     <string name="courier_fee">Стоимость доставки назовёт курьер</string>
+    <string name="fee_by_distance">Рассчитывается по расстоянию</string>
     <string name="no_branch_open">Сейчас мы не принимаем заказы</string>
     <string name="menu_empty">В этом филиале сейчас нет блюд в продаже</string>
     <string name="state_open">Открыт</string>

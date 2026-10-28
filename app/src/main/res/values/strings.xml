@@ -33,6 +33,7 @@
     <string name="delivery_fee">Yetkazib berish</string>
     <string name="free">Bepul</string>
     <string name="courier_fee">Yetkazish narxini kuryer aytadi</string>
+    <string name="fee_by_distance">Masofa orqali hisoblanadi</string>
     <string name="no_branch_open">Hozir buyurtma qabul qilmayapmiz</string>
     <string name="menu_empty">Bu filialda hozir sotuvdagi taom yo\'q</string>
     <string name="state_open">Ochiq</string>

@@ -306,7 +306,12 @@ private fun BottomPanel(
             }
             route.branchId == null -> Notice(stringResource(R.string.no_branch_open), Tone.DANGER, icon = Icons.Outlined.ErrorOutline)
             // qaysi filial olishi mijozga ko'rsatilmaydi — tizim o'zi hal qiladi; faqat yetkazish narxi
-            else -> Notice(deliveryFeeLine(route.fee), Tone.INFO, icon = Icons.Filled.LocationOn)
+            else -> Notice(
+                deliveryFeeLine(route.fee),
+                Tone.INFO,
+                icon = Icons.Filled.LocationOn,
+                supporting = if (route.fee == null) stringResource(R.string.fee_by_distance) else null,
+            )
         }
         PrimaryButton(
             text = stringResource(R.string.choose_this_place),

@@ -31,6 +31,7 @@
     <string name="delivery_fee">Delivery</string>
     <string name="free">Free</string>
     <string name="courier_fee">The courier quotes the delivery fee</string>
+    <string name="fee_by_distance">Calculated by distance</string>
     <string name="no_branch_open">We are not taking orders right now</string>
     <string name="menu_empty">Nothing is on sale at this branch right now</string>
     <string name="state_open">Open</string>

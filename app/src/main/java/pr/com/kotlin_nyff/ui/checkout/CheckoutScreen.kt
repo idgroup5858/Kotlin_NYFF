@@ -210,6 +210,10 @@ private fun PlaceCard(state: CheckoutUiState, onOpenLocation: () -> Unit, onOpen
                 if (!detail.isNullOrBlank()) {
                     Text(detail, style = MaterialTheme.typography.bodySmall, color = colors.textMuted, maxLines = 2, overflow = TextOverflow.Ellipsis)
                 }
+                // "Yetkazish narxini kuryer aytadi" — tagida kichik izoh
+                if (delivery && route != null && route.branchId != null && route.fee == null) {
+                    Text(stringResource(R.string.fee_by_distance), style = MaterialTheme.typography.bodySmall, color = colors.textFaint)
+                }
             }
             Spacer(Modifier.width(8.dp))
             Text(stringResource(R.string.change), color = colors.select, style = MaterialTheme.typography.labelMedium)
