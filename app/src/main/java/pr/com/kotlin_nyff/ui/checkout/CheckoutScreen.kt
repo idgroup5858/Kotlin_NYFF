@@ -1,5 +1,6 @@
 package pr.com.kotlin_nyff.ui.checkout
 
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -43,7 +44,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.PathEffect
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
@@ -426,13 +429,19 @@ private fun Summary(state: CheckoutUiState) {
             SummaryRow(stringResource(R.string.items_total), money(state.itemsTotal))
             val route = state.route
             if (state.mode == OrderMode.DELIVERY && route?.branchId != null) {
-                SummaryRow(
-                    "${stringResource(R.string.delivery_fee)} · ${stringResource(R.string.fee_separate)}",
-                    feeText(route.fee),
-                    muted = true,
-                )
+                if (route.fee == null) {
+                    // narx noma'lum — ikki ustunga bo'linmaydi, bitta jumla
+                    Text(stringResource(R.string.fee_courier_note), style = MaterialTheme.typography.bodyMedium, color = colors.textMuted)
+                } else {
+                    SummaryRow(
+                        "${stringResource(R.string.delivery_fee)} · ${stringResource(R.string.fee_separate)}",
+                        feeText(route.fee),
+                        muted = true,
+                    )
+                }
             }
-            Spacer(Modifier.size(2.dp))
+            // chekdagidek uzuq-uzuq chiziq — jami ustida
+            DashedDivider(colors.textFaint, Modifier.padding(vertical = 4.dp))
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Text(
                     stringResource(R.string.total),
@@ -447,9 +456,29 @@ private fun Summary(state: CheckoutUiState) {
     }
 }
 
+/** Chekdagi uzuq-uzuq chiziq (1dp, 5dp chiziq / 4dp oraliq). */
+@Composable
+private fun DashedDivider(color: Color, modifier: Modifier = Modifier) {
+    Canvas(
+        modifier
+            .fillMaxWidth()
+            .height(1.dp),
+    ) {
+        val y = size.height / 2
+        drawLine(
+            color = color,
+            start = Offset(0f, y),
+            end = Offset(size.width, y),
+            strokeWidth = 1.dp.toPx(),
+            pathEffect = PathEffect.dashPathEffect(floatArrayOf(5.dp.toPx(), 4.dp.toPx())),
+        )
+    }
+}
+
 @Composable
 private fun SummaryRow(label: String, value: String, muted: Boolean = false) {
     val colors = NyffTheme.colors
+    // qiymat — qisqa (summa / "Bepul"), doim o'ng chetda
     Row(verticalAlignment = Alignment.Top) {
         Text(label, modifier = Modifier.weight(1f), style = MaterialTheme.typography.bodyMedium, color = colors.textMuted)
         Spacer(Modifier.width(12.dp))
@@ -457,7 +486,7 @@ private fun SummaryRow(label: String, value: String, muted: Boolean = false) {
             value,
             style = MaterialTheme.typography.bodyMedium,
             color = if (muted) colors.textMuted else colors.text,
-            textAlign = TextAlign.End,
+            maxLines = 1,
         )
     }
 }

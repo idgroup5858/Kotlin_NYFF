@@ -20,17 +20,18 @@ import pr.com.kotlin_nyff.data.remote.apiCall
 import javax.inject.Inject
 
 data class LoginUiState(
-    val login: String = "",
+    val email: String = "",
     val password: String = "",
     val busy: Boolean = false,
     @param:StringRes val error: Int? = null,
 ) {
-    val canSubmit: Boolean get() = login.isNotBlank() && password.isNotEmpty() && !busy
+    val canSubmit: Boolean get() = email.isNotBlank() && password.isNotEmpty() && !busy
 }
 
 /**
- * Kuryer kirishi (API.md 4.3): admin bergan login va parol → token (ismlar ro'yxati yo'q). Sessiya telefonda qoladi —
- * ilova keyingi safar to'g'ridan-to'g'ri kuryer ekranida ochiladi.
+ * Kuryer kirishi (API.md 4.3): admin bergan email va parol → token (ismlar ro'yxati yo'q). Email katta-kichik harfni
+ * farqlamaydi (server kichik harfga o'tkazadi). Sessiya telefonda qoladi — ilova keyingi safar to'g'ridan-to'g'ri kuryer
+ * ekranida ochiladi.
  */
 @HiltViewModel
 class LoginViewModel @Inject constructor(
@@ -41,7 +42,7 @@ class LoginViewModel @Inject constructor(
     private val _state = MutableStateFlow(LoginUiState())
     val state: StateFlow<LoginUiState> = _state.asStateFlow()
 
-    fun setLogin(value: String) = _state.update { it.copy(login = value.filterNot(Char::isWhitespace).take(40), error = null) }
+    fun setEmail(value: String) = _state.update { it.copy(email = value.filterNot(Char::isWhitespace).take(100), error = null) }
 
     fun setPassword(value: String) = _state.update { it.copy(password = value.take(64), error = null) }
 
@@ -51,12 +52,12 @@ class LoginViewModel @Inject constructor(
         _state.update { it.copy(busy = true, error = null) }
         viewModelScope.launch {
             try {
-                val result = apiCall { api.login(CourierLoginRequest(current.login, current.password)) }
+                val result = apiCall { api.login(CourierLoginRequest(current.email, current.password)) }
                 if (result.user.role != "courier") {
                     _state.update { it.copy(busy = false, error = R.string.courier_error_forbidden) }
                     return@launch
                 }
-                session.save(Session(result.token, result.user.id, result.user.name))
+                session.save(Session(result.token, result.user.id, result.user.fullName))
                 _state.value = LoginUiState()
             } catch (e: AppError) {
                 _state.update { it.copy(busy = false, password = "", error = courierErrorRes(e)) }

@@ -95,7 +95,7 @@ private fun DoneRow(order: CourierOrder, branchName: String) {
                 Text(branchName, style = MaterialTheme.typography.labelMedium, color = colors.select)
             }
             Text(
-                order.online?.address.orEmpty(),
+                order.online?.address.orEmpty().ifBlank { stringResource(R.string.courier_address_pin) },
                 style = MaterialTheme.typography.bodySmall,
                 color = colors.textMuted,
                 maxLines = 1,

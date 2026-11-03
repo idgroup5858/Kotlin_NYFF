@@ -49,19 +49,39 @@ class CourierApiTest {
     }
 
     @Test
-    fun `kirish — login va parol yuboriladi, noto'g'ri bo'lsa wrong_login`() = runTest {
-        respond(200, """{"token":"jwt","user":{"id":"usr_1","name":"Bobur","role":"courier","branchId":null},"shift":null}""")
-        val result = api.login(CourierLoginRequest("bobur", "222222"))
+    fun `kirish — email va parol yuboriladi, noto'g'ri bo'lsa wrong_login`() = runTest {
+        respond(
+            200,
+            """{"token":"jwt","user":{"id":"usr_1","name":"Bobur","surname":"Aliyev","role":"courier","branchId":null,
+                "email":"bobur@gmail.com"},"shift":null}""",
+        )
+        val result = api.login(CourierLoginRequest("bobur@gmail.com", "bobur2222"))
         val request = server.takeRequest()
         assertEquals("/api/auth/courier-login", request.path)
         val body = NyffJson.parseToJsonElement(request.body.readUtf8()).jsonObject
-        assertEquals("bobur", body["login"]!!.jsonPrimitive.content)
-        assertEquals("222222", body["password"]!!.jsonPrimitive.content)
+        assertEquals(setOf("email", "password"), body.keys)
+        assertEquals("bobur@gmail.com", body["email"]!!.jsonPrimitive.content)
+        assertEquals("bobur2222", body["password"]!!.jsonPrimitive.content)
         assertEquals("courier", result.user.role)
+        assertEquals("bobur@gmail.com", result.user.email)
+        assertEquals("Bobur Aliyev", result.user.fullName)
 
-        respond(401, """{"statusCode":401,"code":"wrong_login","message":"Login yoki parol noto'g'ri"}""")
-        val error = runCatching { apiCall { api.login(CourierLoginRequest("bobur", "x")) } }.exceptionOrNull() as AppError.Server
+        respond(401, """{"statusCode":401,"code":"wrong_login","message":"Email yoki parol noto'g'ri"}""")
+        val error = runCatching { apiCall { api.login(CourierLoginRequest("bobur@gmail.com", "x")) } }.exceptionOrNull() as AppError.Server
         assertEquals("wrong_login", error.code)
+    }
+
+    @Test
+    fun `kuryer holati — familiyasi bo'sh eski xodim faqat ism bilan`() = runTest {
+        respond(
+            200,
+            """{"user":{"id":"usr_1","name":"Bobur","surname":"","role":"courier","branchId":null,"email":"bobur@gmail.com"},
+                "onDuty":true,"branchId":null,"departed":false}""",
+        )
+        val me = api.me()
+        assertEquals("/api/courier/me", server.takeRequest().path)
+        assertEquals("Bobur", me.user.fullName)
+        assertTrue(me.onDuty)
     }
 
     @Test

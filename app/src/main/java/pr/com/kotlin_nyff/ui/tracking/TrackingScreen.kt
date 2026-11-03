@@ -409,15 +409,21 @@ private fun Details(saved: SavedOrder, modifier: Modifier) {
                 }
             }
             if (order.type == OrderType.DELIVERY) {
-                Row {
-                    Text(
-                        "${stringResource(R.string.delivery_fee)} · ${stringResource(R.string.fee_separate)}",
-                        modifier = Modifier.weight(1f),
-                        style = MaterialTheme.typography.bodySmall,
-                        color = colors.textMuted,
-                    )
-                    Spacer(Modifier.width(12.dp))
-                    Text(feeText(order.deliveryFee ?: saved.deliveryFee), style = MaterialTheme.typography.bodySmall, color = colors.textMuted, textAlign = TextAlign.End)
+                val fee = order.deliveryFee ?: saved.deliveryFee
+                if (fee == null) {
+                    // narx noma'lum — ikki ustunga bo'linmaydi, bitta jumla
+                    Text(stringResource(R.string.fee_courier_note), style = MaterialTheme.typography.bodySmall, color = colors.textMuted)
+                } else {
+                    Row {
+                        Text(
+                            "${stringResource(R.string.delivery_fee)} · ${stringResource(R.string.fee_separate)}",
+                            modifier = Modifier.weight(1f),
+                            style = MaterialTheme.typography.bodySmall,
+                            color = colors.textMuted,
+                        )
+                        Spacer(Modifier.width(12.dp))
+                        Text(feeText(fee), style = MaterialTheme.typography.bodySmall, color = colors.textMuted, maxLines = 1)
+                    }
                 }
             }
             HorizontalDivider(Modifier.padding(vertical = 4.dp), color = colors.line)

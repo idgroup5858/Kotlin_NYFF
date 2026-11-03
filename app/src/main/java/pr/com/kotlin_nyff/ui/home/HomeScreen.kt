@@ -94,6 +94,7 @@ import pr.com.kotlin_nyff.ui.common.BrandBadge
 import pr.com.kotlin_nyff.ui.common.BranchSheet
 import pr.com.kotlin_nyff.ui.common.ErrorBlock
 import pr.com.kotlin_nyff.ui.common.FoodImage
+import pr.com.kotlin_nyff.ui.common.MessageBlock
 import pr.com.kotlin_nyff.ui.common.Notice
 import pr.com.kotlin_nyff.ui.common.NyffCard
 import pr.com.kotlin_nyff.ui.common.PillButton
@@ -233,6 +234,10 @@ private fun LazyGridScope.menuContent(
     val error = state.menuError ?: state.branchesError.takeIf { state.branches == null }
     when {
         !state.menuLoaded && error != null -> fullWidth("menu-error") { ErrorBlock(error, onRetry) }
+        // filial yo'q — menyu so'ralmaydi, yuklanish belgisi to'xtamay aylanib qolmasin
+        !state.menuLoaded && state.menuUnavailable -> fullWidth("menu-unavailable") {
+            MessageBlock(Icons.Outlined.Storefront, R.string.menu_unavailable_title, R.string.menu_unavailable_text, onRetry)
+        }
         !state.menuLoaded -> fullWidth("menu-loading") {
             Box(
                 Modifier

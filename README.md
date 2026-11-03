@@ -5,7 +5,7 @@ Mijoz ilovasi: filial yoki dostavka manzili (Google Maps) → menyu → savat �
 Reja va qarorlar — [PLAN.md](PLAN.md).
 
 **Kuryer qismi** shu ilova ichida: bosh sahifadagi "NY" belgisiga ketma-ket 10 marta bosilsa — kuryer kirish oynasi
-(login va parolni admin web ilovada beradi: Xodimlar → rol "Kuryer"; demo: `bobur` / 222222). Kuryer kirgan bo'lsa
+(email va parolni admin web ilovada beradi: Xodimlar → rol "Kuryer"; demo: `bobur@gmail.com` / 222222). Kuryer kirgan bo'lsa
 ilova har safar kuryer ekranida ochiladi; "Chiqish" — mijoz qismiga (API.md 12-bo'lim).
 
 Stek: Kotlin 2.2, Jetpack Compose (Material 3), Hilt, Navigation Compose, Retrofit 3 + OkHttp + kotlinx.serialization,
@@ -17,16 +17,16 @@ Socket.IO, Room, DataStore, Coil 3, Google Maps (maps-compose), Play Services Lo
 
 ```properties
 sdk.dir=...
-# backend manzili — kompyuterning LAN IP si (ipconfig): haqiqiy telefon (shu Wi-Fi da) ham, emulyator ham ulanadi.
-# 10.0.2.2 faqat emulyatorda ishlaydi — haqiqiy telefonda "Server bilan aloqa yo'q" bo'ladi.
-nyff.apiUrl=http://192.168.1.12:3000
+# backend manzili — haqiqiy server (Apache /api, /socket.io, /images ni backendga uzatadi; 3000-port tashqaridan yopiq)
+nyff.apiUrl=https://newyork24.uz
 # Google Maps kaliti (Maps SDK for Android) — web ilovaning .env dagi VITE_GOOGLE_MAPS_API_KEY
 MAPS_API_KEY=...
 ```
 
-Haqiqiy server manzili berilganda faqat `nyff.apiUrl` almashtiriladi (`https://` bo'lsa cleartext o'zi o'chadi).
-Kompyuter IP si o'zgarsa (DHCP) — `nyff.apiUrl` ni yangilab, qayta build qiling. Windows firewall'da Node.js'ga kiruvchi
-ulanish ruxsati bo'lishi kerak (telefondan tekshirish: brauzerda `http://<IP>:3000/api/health` → `{"ok":true}`).
+`https://` — cleartext o'zi o'chiq (`http://` bo'lsa yoqiladi). Lokal backend bilan sinash — `local.properties` ga
+tegmasdan: `gradlew assembleDebug -Pnyff.apiUrl=http://<kompyuter LAN IP>:3000` (`ipconfig`; `10.0.2.2` faqat
+emulyatorda). Bunda Windows firewall'da Node.js'ga kiruvchi ulanish ruxsati bo'lishi kerak (telefondan tekshirish:
+brauzerda `http://<IP>:3000/api/health` → `{"ok":true}`).
 
 ## Ishga tushirish
 

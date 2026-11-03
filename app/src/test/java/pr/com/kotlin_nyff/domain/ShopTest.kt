@@ -53,6 +53,14 @@ class ShopTest {
     }
 
     @Test
+    fun `ko'rinadigan filial yo'q — menyu filiali yo'q (bosh sahifada "Menyu hozircha yo'q")`() {
+        assertNull(Shop.menuBranchId(OrderMode.DELIVERY, emptyList(), null, null))
+        assertNull(Shop.menuBranchId(OrderMode.TAKEAWAY, emptyList(), null, null))
+        assertNull(Shop.menuBranchId(OrderMode.DELIVERY, listOf(old), null, DeliveryRoute(branchId = null)))
+        assertNull(Shop.menuBranchId(OrderMode.TAKEAWAY, listOf(old), "br_old", null))
+    }
+
+    @Test
     fun `hech bir filial ochiq emas — birinchi ko'rinadigan`() {
         val closed = listOf(chilonzor, branch("br_b", BranchOnlineState.OFF_HOURS))
         assertEquals("br_chilonzor", Shop.menuBranchId(OrderMode.DELIVERY, closed, null, null))
@@ -87,6 +95,23 @@ class ShopTest {
         assertEquals("drinks", Shop.selectedCategory(menu, "drinks"))
         assertEquals(listOf("cola"), Shop.products(menu, "drinks").map { it.id })
         assertTrue(Shop.products(null, Shop.ALL_CATEGORIES).isEmpty())
+    }
+
+    @Test
+    fun `faqat zalda beriladigan taom (choynakdagi choy) mobil menyuda yo'q, faqat shundaylar qolgan kategoriya ham`() {
+        val teaPot = product("tea-pot", "tea").copy(dineInOnly = true)
+        val full = menu.copy(
+            categories = menu.categories + Category("tea", LocalizedText(uz = "Choy")),
+            products = menu.products + teaPot + product("tea-cup", "drinks").copy(dineInOnly = false),
+        )
+        val mobile = Shop.forMobile(full)
+        assertEquals(listOf("burgers", "drinks"), mobile.categories.map { it.id })
+        assertFalse(mobile.products.any { it.id == "tea-pot" })
+        assertTrue(mobile.products.any { it.id == "tea-cup" })
+        // savatda qolgan bo'lsa — sotilmaydi
+        assertFalse(Shop.price(listOf(CartLine("a", "tea-pot", 1, "")), mobile)[0].available)
+        // belgisiz menyu o'zgarmaydi
+        assertTrue(Shop.forMobile(menu) === menu)
     }
 
     @Test

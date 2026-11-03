@@ -34,6 +34,8 @@
     <string name="fee_by_distance">Рассчитывается по расстоянию</string>
     <string name="no_branch_open">Сейчас мы не принимаем заказы</string>
     <string name="menu_empty">В этом филиале сейчас нет блюд в продаже</string>
+    <string name="menu_unavailable_title">Меню пока недоступно</string>
+    <string name="menu_unavailable_text">Блюда появятся здесь, когда заработает наш филиал. Попробуйте чуть позже.</string>
     <string name="state_open">Открыт</string>
     <string name="closed_now">Сейчас закрыт</string>
     <string name="closed_until">Закрыт · откроется в %1$s</string>
@@ -71,6 +73,7 @@
     <string name="items_total">Блюда</string>
     <string name="total">Итого</string>
     <string name="fee_separate">отдельно курьеру</string>
+    <string name="fee_courier_note">Стоимость доставки назовёт курьер, оплата ему отдельно</string>
     <string name="line_unavailable">Нет в продаже в этом филиале</string>
     <string name="unavailable_excluded">Блюда, которых нет в продаже, не войдут в заказ</string>
     <string name="network_place">Связь прервалась — неизвестно, дошёл ли заказ. Проверьте «Мои заказы»; при повторной отправке заказ может прийти дважды.</string>
@@ -124,6 +127,7 @@
     <string name="error_not_found">Не найдено</string>
     <string name="error_empty_order">Корзина пуста</string>
     <string name="error_product_unavailable">Это блюдо сейчас не продаётся</string>
+    <string name="error_dine_in_only">Это блюдо подаётся только в зале — уберите его из корзины</string>
     <string name="error_invalid_qty">Неверное количество</string>
     <string name="error_invalid_status">Статус уже изменён</string>
     <string name="error_branch_required">Выберите филиал</string>

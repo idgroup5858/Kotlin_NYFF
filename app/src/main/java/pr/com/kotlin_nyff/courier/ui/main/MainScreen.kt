@@ -153,7 +153,7 @@ private fun Header(state: MainUiState, vm: MainViewModel, tab: Tab, onTab: (Tab)
             BrandBadge()
             Spacer(Modifier.width(10.dp))
             Column(Modifier.weight(1f)) {
-                Text(state.me?.user?.name.orEmpty(), style = MaterialTheme.typography.titleMedium, color = colors.onHeader, maxLines = 1)
+                Text(state.me?.user?.fullName.orEmpty(), style = MaterialTheme.typography.titleMedium, color = colors.onHeader, maxLines = 1)
                 Text(
                     stringResource(if (state.onDuty) R.string.courier_on_duty else R.string.courier_off_duty),
                     style = MaterialTheme.typography.bodySmall,

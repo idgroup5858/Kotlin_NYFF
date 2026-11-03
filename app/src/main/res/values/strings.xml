@@ -36,6 +36,8 @@
     <string name="fee_by_distance">Masofa orqali hisoblanadi</string>
     <string name="no_branch_open">Hozir buyurtma qabul qilmayapmiz</string>
     <string name="menu_empty">Bu filialda hozir sotuvdagi taom yo\'q</string>
+    <string name="menu_unavailable_title">Menyu hozircha yo\'q</string>
+    <string name="menu_unavailable_text">Taomlar filialimiz ishga tushgach shu yerda chiqadi. Birozdan keyin qayta urinib ko\'ring.</string>
     <string name="state_open">Ochiq</string>
     <string name="closed_now">Hozir yopiq</string>
     <string name="closed_until">Yopiq · %1$s da ochiladi</string>
@@ -73,6 +75,7 @@
     <string name="items_total">Taomlar</string>
     <string name="total">Jami</string>
     <string name="fee_separate">kuryerga alohida</string>
+    <string name="fee_courier_note">Yetkazish narxini kuryer aytadi, unga alohida to\'lanadi</string>
     <string name="line_unavailable">Bu filialda sotuvda yo\'q</string>
     <string name="unavailable_excluded">Sotuvda yo\'q taomlar buyurtmaga kirmaydi</string>
     <string name="network_place">Aloqa uzildi — buyurtma yetib bordimi, aniq emas. «Buyurtmalarim»ni tekshiring; qayta yuborsangiz, ikki marta tushishi mumkin.</string>
@@ -126,6 +129,7 @@
     <string name="error_not_found">Topilmadi</string>
     <string name="error_empty_order">Savat bo\'sh</string>
     <string name="error_product_unavailable">Bu taom hozir sotuvda yo\'q</string>
+    <string name="error_dine_in_only">Bu taom faqat zalda beriladi — savatdan olib tashlang</string>
     <string name="error_invalid_qty">Miqdor noto\'g\'ri</string>
     <string name="error_invalid_status">Holat allaqachon o\'zgargan</string>
     <string name="error_branch_required">Filialni tanlang</string>

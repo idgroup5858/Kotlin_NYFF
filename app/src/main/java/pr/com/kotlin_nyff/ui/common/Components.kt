@@ -270,6 +270,18 @@ fun ErrorBlock(
     modifier: Modifier = Modifier,
     @StringRes message: Int = errorRes(error),
 ) {
+    MessageBlock(Icons.Outlined.CloudOff, R.string.load_failed, message, onRetry, modifier)
+}
+
+/** Bo'sh joy o'rnidagi xabar: ikonka, sarlavha, izoh va "Qayta urinish" ([ErrorBlock] ham shu ko'rinishda). */
+@Composable
+fun MessageBlock(
+    icon: ImageVector,
+    @StringRes title: Int,
+    @StringRes message: Int,
+    onRetry: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
     val colors = NyffTheme.colors
     Column(
         modifier
@@ -278,8 +290,13 @@ fun ErrorBlock(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(8.dp),
     ) {
-        Icon(Icons.Outlined.CloudOff, contentDescription = null, tint = colors.textFaint, modifier = Modifier.size(40.dp))
-        Text(stringResource(R.string.load_failed), style = MaterialTheme.typography.titleMedium, color = colors.text)
+        Icon(icon, contentDescription = null, tint = colors.textFaint, modifier = Modifier.size(40.dp))
+        Text(
+            stringResource(title),
+            style = MaterialTheme.typography.titleMedium,
+            color = colors.text,
+            textAlign = TextAlign.Center,
+        )
         Text(
             stringResource(message),
             style = MaterialTheme.typography.bodyMedium,

@@ -36,7 +36,7 @@ import pr.com.kotlin_nyff.domain.Shop
 import pr.com.kotlin_nyff.ui.common.errorRes
 import javax.inject.Inject
 
-/** Formadagi kamchiliklar — tugma bosilgandan keyin maydon ostida ko'rsatiladi. Ism ixtiyoriy. */
+/** Formadagi kamchiliklar — tugma bosilgandan keyin maydon ostida ko'rsatiladi. Ism ixtiyoriy; manzil — faqat xaritadan joy tanlanmagan bo'lsa. */
 data class FormProblems(
     val phone: Boolean = false,
     val address: Boolean = false,
@@ -121,7 +121,8 @@ class CheckoutViewModel @Inject constructor(
             showProblems = f.showProblems,
             problems = FormProblems(
                 phone = !Phone.isComplete(f.contact.phone),
-                address = delivery && f.contact.address.isBlank(),
+                // xaritadan joy tanlangan bo'lsa manzil matni ixtiyoriy — kuryer koordinatani oladi
+                address = delivery && d.point == null && f.contact.address.isBlank(),
             ),
             placing = f.placing,
             error = f.error,
@@ -193,7 +194,8 @@ class CheckoutViewModel @Inject constructor(
                 when (e.serverCode) {
                     // holat o'zgargan — ekrandagi filial / narxlar yangilansin
                     "branch_closed", "not_found" -> refreshPlace()
-                    "product_unavailable" -> refreshMenu()
+                    // taom sotuvdan olingan / "faqat zalda" bo'ldi — yangi menyuda u yo'q, savatda "sotilmaydi"
+                    "product_unavailable", "dine_in_only" -> refreshMenu()
                 }
             }
         }

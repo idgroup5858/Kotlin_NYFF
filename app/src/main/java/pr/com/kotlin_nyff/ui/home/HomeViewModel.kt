@@ -44,6 +44,11 @@ data class HomeUiState(
     val menuLoading: Boolean = false,
     val menuError: AppError? = null,
     val menuLoaded: Boolean = false,
+    /**
+     * Filiallar yuklangan, lekin menyu oladigan filial yo'q (hech biri qo'shilmagan yoki hammasi faol emas) — menyu
+     * so'ralmaydi; aylanib turgan belgi o'rniga tushunarli xabar.
+     */
+    val menuUnavailable: Boolean = false,
     val categories: List<Category> = emptyList(),
     /** kategoriya id'si yoki [Shop.ALL_CATEGORIES] ("Barchasi" — standart) */
     val selectedCategoryId: String = Shop.ALL_CATEGORIES,
@@ -114,6 +119,8 @@ class HomeViewModel @Inject constructor(
             menuLoading = load.menuLoading,
             menuError = load.menuError,
             menuLoaded = menu != null,
+            menuUnavailable = allBranches != null &&
+                Shop.menuBranchId(d.mode, allBranches, d.takeawayBranchId, d.route) == null,
             categories = menu?.categories.orEmpty(),
             selectedCategoryId = categoryId,
             products = Shop.products(menu, categoryId),

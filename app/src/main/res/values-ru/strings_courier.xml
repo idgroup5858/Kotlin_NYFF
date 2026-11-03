@@ -6,10 +6,10 @@
     <string name="courier_logout">Выйти</string>
     <string name="courier_menu">Меню</string>
 
-    <!-- вход (логин и пароль выдаёт админ в разделе «Сотрудники») -->
+    <!-- вход (email и пароль выдаёт админ в разделе «Сотрудники») -->
     <string name="courier_courier">Курьер</string>
-    <string name="courier_login_hint">Войдите с логином и паролем от администратора</string>
-    <string name="courier_login_field">Логин</string>
+    <string name="courier_login_hint">Войдите с email и паролем от администратора</string>
+    <string name="courier_email_field">Email</string>
     <string name="courier_password_field">Пароль</string>
     <string name="courier_login">Войти</string>
     <string name="courier_back">Назад</string>
@@ -45,6 +45,7 @@
     <string name="courier_pay_click">Click — оплачен</string>
     <string name="courier_fee_line">Доставка: %1$s</string>
     <string name="courier_fee_unknown">Стоимость доставки называете сами</string>
+    <string name="courier_address_pin">Адрес не указан — точка на карте</string>
 
     <!-- Мои -->
     <string name="courier_no_mine">У вас нет заказов — возьмите из «Новых»</string>
@@ -92,7 +93,7 @@
 
     <!-- ошибки (backend `code`) -->
     <string name="courier_error_not_found">Не найдено</string>
-    <string name="courier_error_wrong_login">Неверный логин или пароль</string>
+    <string name="courier_error_wrong_login">Неверный email или пароль</string>
     <string name="courier_error_user_inactive">Сотрудник заблокирован</string>
     <string name="courier_error_too_many_attempts">Слишком много неверных попыток — попробуйте чуть позже</string>
     <string name="courier_error_invalid_input">Данные заполнены неверно</string>

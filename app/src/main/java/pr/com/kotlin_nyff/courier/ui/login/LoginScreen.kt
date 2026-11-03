@@ -50,7 +50,7 @@ import pr.com.kotlin_nyff.ui.theme.NyffShapes
 import pr.com.kotlin_nyff.ui.theme.NyffTheme
 
 /**
- * Kuryer kirishi — login va parol (admin "Xodimlar" da ochib beradi). Mijoz ilovasidagi "NY" belgisiga 10 marta bosib
+ * Kuryer kirishi — email va parol (admin "Xodimlar" da ochib beradi). Mijoz ilovasidagi "NY" belgisiga 10 marta bosib
  * ochiladi; orqaga — mijoz qismiga.
  */
 @Composable
@@ -116,13 +116,13 @@ fun LoginScreen(vm: LoginViewModel = hiltViewModel()) {
             NyffCard(Modifier.fillMaxWidth()) {
                 Column(Modifier.padding(14.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
                     NyffTextField(
-                        value = state.login,
-                        onValueChange = vm::setLogin,
-                        placeholder = stringResource(R.string.courier_login_field),
+                        value = state.email,
+                        onValueChange = vm::setEmail,
+                        placeholder = stringResource(R.string.courier_email_field),
                         keyboardOptions = KeyboardOptions(
                             capitalization = KeyboardCapitalization.None,
                             autoCorrectEnabled = false,
-                            keyboardType = KeyboardType.Ascii,
+                            keyboardType = KeyboardType.Email,
                             imeAction = ImeAction.Next,
                         ),
                     )
@@ -138,7 +138,7 @@ fun LoginScreen(vm: LoginViewModel = hiltViewModel()) {
                     PrimaryButton(
                         text = stringResource(R.string.courier_login),
                         onClick = vm::login,
-                        enabled = state.login.isNotBlank() && state.password.isNotEmpty(),
+                        enabled = state.email.isNotBlank() && state.password.isNotEmpty(),
                         loading = state.busy,
                     )
                 }

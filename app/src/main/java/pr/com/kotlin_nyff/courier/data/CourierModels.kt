@@ -15,13 +15,23 @@ import pr.com.kotlin_nyff.data.model.OrderStatus
 
 // ---------------------------------------------------------------- kirish
 
-/** Kirgan xodim (kuryer). */
+/** Kirgan xodim (kuryer). `surname` eski xodimlarda bo'sh bo'lishi mumkin; `email` — kirish emaili (kichik harfda). */
 @Serializable
-data class StaffMember(val id: String, val name: String, val role: String = "", val branchId: String? = null)
+data class StaffMember(
+    val id: String,
+    val name: String,
+    val role: String = "",
+    val branchId: String? = null,
+    val surname: String = "",
+    val email: String? = null,
+) {
+    /** Ekranda — "Ism Familiya"; familiya bo'sh bo'lsa faqat ism. */
+    val fullName: String get() = "$name $surname".trim()
+}
 
-/** `POST /auth/courier-login` — admin ochib bergan login va parol. */
+/** `POST /auth/courier-login` — admin ochib bergan email va parol (email katta-kichik harfni farqlamaydi). */
 @Serializable
-data class CourierLoginRequest(val login: String, val password: String)
+data class CourierLoginRequest(val email: String, val password: String)
 
 @Serializable
 data class LoginResponse(val token: String, val user: StaffMember)

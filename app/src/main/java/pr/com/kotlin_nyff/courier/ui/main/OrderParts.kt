@@ -28,6 +28,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.pluralStringResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -118,7 +119,7 @@ fun ItemsToggle(
     }
 }
 
-/** Manzil — bir-ikki qator, joy belgisi bilan. */
+/** Manzil — bir-ikki qator, joy belgisi bilan. Mijoz faqat xaritadan joy tanlagan bo'lsa — "joy xaritada". */
 @Composable
 fun AddressLine(address: String, maxLines: Int = 1) {
     val colors = NyffTheme.colors
@@ -126,10 +127,10 @@ fun AddressLine(address: String, maxLines: Int = 1) {
         Icon(Icons.Filled.LocationOn, contentDescription = null, tint = colors.textFaint, modifier = Modifier.size(16.dp))
         Spacer(Modifier.width(4.dp))
         Text(
-            address,
+            address.ifBlank { stringResource(R.string.courier_address_pin) },
             modifier = Modifier.weight(1f),
             style = MaterialTheme.typography.bodyMedium,
-            color = colors.text,
+            color = if (address.isBlank()) colors.textMuted else colors.text,
             maxLines = maxLines,
             overflow = TextOverflow.Ellipsis,
         )

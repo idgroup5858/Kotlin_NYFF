@@ -244,7 +244,7 @@ class MainViewModel @Inject constructor(
                 context,
                 order.id,
                 context.getString(R.string.courier_notif_title, Format.orderNumber(order.number)),
-                "$branch$distance · ${order.address}",
+                "$branch$distance · ${order.address.ifBlank { context.getString(R.string.courier_address_pin) }}",
             )
         }
     }

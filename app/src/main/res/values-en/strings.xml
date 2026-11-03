@@ -34,6 +34,8 @@
     <string name="fee_by_distance">Calculated by distance</string>
     <string name="no_branch_open">We are not taking orders right now</string>
     <string name="menu_empty">Nothing is on sale at this branch right now</string>
+    <string name="menu_unavailable_title">The menu isn\'t available yet</string>
+    <string name="menu_unavailable_text">Dishes will appear here once our branch is up and running. Please try again a bit later.</string>
     <string name="state_open">Open</string>
     <string name="closed_now">Closed now</string>
     <string name="closed_until">Closed · opens at %1$s</string>
@@ -71,6 +73,7 @@
     <string name="items_total">Items</string>
     <string name="total">Total</string>
     <string name="fee_separate">paid to the courier</string>
+    <string name="fee_courier_note">The courier quotes the delivery fee, paid to them separately</string>
     <string name="line_unavailable">Not sold at this branch</string>
     <string name="unavailable_excluded">Items that are not on sale will not be ordered</string>
     <string name="network_place">Connection lost — we can\'t tell whether the order went through. Check «My orders»; sending again may create a duplicate.</string>
@@ -124,6 +127,7 @@
     <string name="error_not_found">Not found</string>
     <string name="error_empty_order">The cart is empty</string>
     <string name="error_product_unavailable">This item is not on sale right now</string>
+    <string name="error_dine_in_only">This item is served in the hall only — remove it from the cart</string>
     <string name="error_invalid_qty">Invalid quantity</string>
     <string name="error_invalid_status">The status has already changed</string>
     <string name="error_branch_required">Choose a branch</string>

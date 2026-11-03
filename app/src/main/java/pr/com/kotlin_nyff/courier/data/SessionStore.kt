@@ -15,7 +15,7 @@ import pr.com.kotlin_nyff.di.ApplicationScope
 import javax.inject.Inject
 import javax.inject.Singleton
 
-/** Kirgan kuryer: JWT (24 soat) va ismi. */
+/** Kirgan kuryer: JWT (24 soat) va "Ism Familiya" si. */
 data class Session(val token: String, val userId: String, val name: String)
 
 /**

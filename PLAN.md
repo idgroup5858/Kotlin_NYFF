@@ -1,6 +1,8 @@
 # NYFF Android — reja va ishlar ro'yxati
 
-> **Holat (2026-10-27):** 0–5, 7 va 8 bosqichlar tayyor (pastda). Unit testlar: 51 ta (`gradlew testDebugUnitTest`), lint — 0 xato.
+> **Holat (2026-11-02):** 0–5, 7 va 8 bosqichlar tayyor (pastda). Unit testlar: 54 ta (`gradlew testDebugUnitTest`), lint — 0 xato.
+> 2026-11-02: kuryer endi **email va parol** bilan kiradi (backend o'zgarishi, API.md 4.3), kuryer sarlavhasida
+> "Ism Familiya" — unit testlar, `assembleDebug` va lint o'tdi; emulyatorda tekshirilmagan (AVD `nyff_api36` topilmadi).
 > 8: kuryer ilovasi shu ilovaga birlashtirildi ("NY" belgisiga 10 marta → login / parol) — emulyatorda test bazasi bilan
 > tekshirilgan: noto'g'ri parol xatosi, kirish, ilova qayta ochilganda kuryer ekrani, "Chiqish" → mijoz qismi; bosh
 > sahifada "Dostavka / Olib ketish" o'rniga joy tanlash oynasi, tablar ixchamroq. Keyin: yorug' / tungi rejim tugmasi
@@ -9,8 +11,11 @@
 > GPS → Chilonzor hududi, dostavka buyurtmasi → 5 daqiqadan keyin Yunusobodga o'tkazildi (raqam socket orqali jonli
 > yangilandi) → kassir qabul qildi → "Tayyor"; olib ketish buyurtmasi → kassir bekor qildi; tarix, ruscha, tungi mavzu.
 > Kuryer bilan (7): #019 dostavka — "Tayyor · Kuryer olib ketadi" → "Kuryer yo'lda" → "Yetkazildi", socket orqali jonli.
-> **Keyingi qadam:** haqiqiy API manzili (foydalanuvchi beradi) → `local.properties` dagi `nyff.apiUrl`; keyin FCM push,
-> Click (backend PLAN 10 bilan birga).
+> 2026-11-03: haqiqiy server — `nyff.apiUrl=https://newyork24.uz` (2-bo'lim, "Server manzili"). Serverda hali filial
+> yo'q edi → bosh sahifada yuklanish belgisi to'xtamay aylanardi (menyu filialsiz so'ralmaydi): endi "Menyu hozircha
+> yo'q" + izoh + "Qayta urinish" (`HomeUiState.menuUnavailable`, `MessageBlock` — `ErrorBlock` ko'rinishida). Unit
+> testlar 55 ta; foydalanuvchi telefonida (ruxsati bilan) tekshirildi.
+> **Keyingi qadam:** FCM push, Click (backend PLAN 10 bilan birga).
 > Yangi ish faqat foydalanuvchi aniq **"boshla"** deganidan keyin boshlanadi. Har bosqich tugaganda shu fayldagi
 > katakchalarni va holat qatorini yangilang.
 
@@ -28,15 +33,16 @@ demosidan (`ReactJS_NYFF/src/pages/mobile/*`, `src/i18n/*` → `mobile`, `errors
 |---|---|
 | Uslub | KotlinERPSYSTEM ga o'xshatilmaydi ("bu boshqa loyiha"): MVVM + StateFlow, Hilt, Navigation Compose (type-safe), Room, DataStore |
 | Tarmoq | Retrofit 3 + OkHttp 4 + kotlinx.serialization (converter). Socket.IO — `io.socket:socket.io-client` 2.1 (`org.json` chiqarib tashlangan) |
-| Server manzili | Ilovada kiritilmaydi. `local.properties` → `nyff.apiUrl` → `BuildConfig.API_URL`. Hozir kompyuterning LAN IP si `http://192.168.1.12:3000` — haqiqiy telefon (TECNO LG6n, Android 12, shu Wi-Fi) ham, emulyator ham ulanadi (`10.0.2.2` faqat emulyatorda — telefonda ishlamagani topilgan). `http://` bo'lsa cleartext o'zi yoqiladi (manifest placeholder) |
+| Server manzili | Ilovada kiritilmaydi. `local.properties` → `nyff.apiUrl` → `BuildConfig.API_URL`. **2026-11-03 dan — haqiqiy server `https://newyork24.uz`** (Apache `/api`, `/socket.io`, `/images` ni backendga uzatadi; 3000-port tashqaridan yopiq; xodimlar web tizimi `/shorva` da — ilovaga tegishli emas). Lokal backend bilan sinash — `-Pnyff.apiUrl=http://<LAN IP>:3000` (`10.0.2.2` faqat emulyatorda — telefonda ishlamagani topilgan). `http://` bo'lsa cleartext o'zi yoqiladi (manifest placeholder) |
 | Joylashuv | Yaqinda (2 daqiqa ichida) ma'lum bo'lgan joy darhol olinadi, aks holda yangi aniqlash 20 s gacha kutiladi (telefonda birinchi GPS aniqlash 10 s dan oshib ketgan) |
 | Xarita | Google Maps (maps-compose). Xarita joriy joylashuvda ochiladi, mijoz xaritani surib markazdagi pinni aniq joyga keltiradi. Kalit — web `.env` dagi `VITE_GOOGLE_MAPS_API_KEY`, `local.properties` dagi `MAPS_API_KEY` (git'ga tushmaydi). Pullik Geocoding / Places ishlatilmaydi — manzil matni qo'lda (ROADMAP 3) |
 | Tillar | uz (standart, `values/`), ru, en. AppCompat per-app language (`AppCompatDelegate.setApplicationLocales`); birinchi ishga tushishda — o'zbekcha. Android 13+ da sozlamalardagi "Ilova tili" bilan bir xil |
 | Mavzu | Yorug' (standart) va tungi — ilovadagi tugma bilan (2026-10-27; avval telefon sozlamasiga qarab edi): bosh sahifa sarlavhasida oy / quyosh, kuryer qismida "⋮" menyusida. Tanlov SharedPreferences'da (`core/AppTheme`), AppCompat tungi rejimi orqali — Compose, oyna foni va `values-night` birga almashadi. Ranglar web tokenlaridan: taksi sarig'i `#FFC20E`, qora `#121212`, tanlangan `#FE9A00` |
 | Buyurtmalar tarixi | Telefonda (Room) saqlanadi, **o'chirilmaydi**. Serverdagi buyurtmalarga tegilmaydi. Har yozuvda `trackingToken` (faqat buyurtma javobida keladi) |
-| Kontakt | Ism (ixtiyoriy), telefon (`+998` + 9 raqam), manzil (dostavkada) — saqlanmaydi, forma har safar bo'sh ochiladi; DataStore'da faqat to'lov usuli. Standart to'lov — naqd (Click hali ulanmagan) |
+| Kontakt | Ism (ixtiyoriy), telefon (`+998` + 9 raqam) — majburiy, manzil matni — **faqat xaritadan joy tanlanmagan bo'lsa** majburiy (2026-11-03, foydalanuvchi: "mapdan select qilsa required bo'lmasin"; server ham shunday — API.md 5.4; kuryerga bo'sh manzil o'rniga "Manzil yozilmagan — joy xaritada"). Saqlanmaydi, forma har safar bo'sh ochiladi; DataStore'da faqat to'lov usuli. Standart to'lov — naqd (Click hali ulanmagan) |
 | Qoralama | Buyurtma turi, olib ketish filiali, dostavka nuqtasi — DataStore'da; savat — faqat xotirada |
 | Menyu filiali | Olib ketish — tanlangan filial (tanlanmagan bo'lsa birinchi ochiq); dostavka — `GET /delivery/route` dagi `branchId`; manzil hali yo'q yoki ochiq filial yo'q — ko'rib turish uchun birinchi ochiq filial (`domain/Shop.kt`) |
+| "Faqat zalda" taom | 2026-11-04: `MenuProduct.dineInOnly = true` (choynakdagi choy) — ilovada zal yo'q, menyu olinishi bilan olib tashlanadi (`Shop.forMobile`, `CatalogRepository.menu`), faqat shundaylardan iborat kategoriya ham. Server bunday taomli buyurtmani `400 dine_in_only` bilan rad etadi → matn + menyu yangilanadi (API.md 5.3) |
 | Buyurtma berish | Idempotent emas — tarmoq xatosida avtomatik qayta yuborilmaydi, alohida ogohlantirish matni. So'rov va saqlash ilova doirasida (`ApplicationScope`) — ekran yopilsa ham token yo'qolmaydi |
 | Yetkazish narxi | Faqat ko'rsatiladi ("kuryerga alohida"), summaga qo'shilmaydi (API.md 5.2). Buyurtma berilgandagi narx Room'da saqlanadi |
 | Jonli holat | Kuzatish ekrani ko'rinib turganda Socket.IO (`order:<id>`); har ulanishda va ekranga qaytishda REST; socket ulanmagan paytda har 12 s so'rov. Bosh sahifa / tarix — ochilganda REST |
@@ -47,6 +53,7 @@ demosidan (`ReactJS_NYFF/src/pages/mobile/*`, `src/i18n/*` → `mobile`, `errors
 | Kuryer holati (2026-10-27) | Mijozga faqat holat: dostavka 4 bosqich — qabul → tayyorlanmoqda → "Tayyor · Kuryer olib ketadi" → "Kuryer yo'lda" (`departedAt`) → "Yetkazildi" (`deliveredAt`); "Yetkazib bo'lmadi" (`returnedAt`) — alohida karta va filialga qo'ng'iroq. Kuryer kimligi, navbati va kelish vaqti ko'rsatilmaydi. Buyurtma `status` i `ready` da qoladi — bosqich `domain/OrderProgress.kt` da. Yetkazish narxi — serverdagi `deliveryFee`, bo'lmasa saqlangani. Yetkazilmagan dostavka 12 soat "joriy" sanaladi |
 | Server manzilini vaqtincha almashtirish | `./gradlew assembleDebug -Pnyff.apiUrl=http://...` — `local.properties` ga tegmasdan (masalan sinov uchun boshqa port) |
 | Kuryer qismi (2026-10-27) | Alohida `Kotlin_NYFF_Courier` ilovasi shu ilovaga ko'chirildi (eski loyiha hozircha papkada turadi, yangilanmaydi). Kirish: bosh sahifadagi "NY" belgisiga ketma-ket 10 marta (oraliq ≤ 1,5 s) — belgi, ripple, xabar yo'q → login va parol (admin "Xodimlar" da ochadi, ismlar ro'yxati yo'q). Sessiya alohida DataStore'da (`nyff_courier`) — kuryer kirgan bo'lsa ilova har safar kuryer ekranida ochiladi; "Chiqish" — mijoz qismiga. Kuryer so'rovlari alohida Retrofit (token qo'shiladi) — mijoz so'rovlariga token ketmaydi. Matnlar — `strings_courier.xml` (`courier_` prefiksi). Qolgan qarorlar (filial tanlash, tartib, pul, ixcham karta) — `Kotlin_NYFF_Courier/PLAN.md` 2-bo'lim |
+| Kuryer kirishi — email (2026-11-02) | Login o'rniga **email** va parol (`POST /auth/courier-login` `{ email, password }`, API.md 4.3): maydon — email klaviaturasi, bo'sh joysiz, ≤ 100 belgi; katta-kichik harf farqlanmaydi (server kichik harfga o'tkazadi); noto'g'ri email yoki parol — `wrong_login` → "Email yoki parol noto'g'ri". Xodimda `surname` (eski xodimlarda bo'sh) va `email` — kuryer sarlavhasida va sessiyada "Ism Familiya" (`StaffMember.fullName`; familiya bo'sh bo'lsa faqat ism). Eski kuryerlar emaili — `<eski login>@gmail.com`, paroli o'sha (backend migratsiyasi) |
 | Buyurtma turi (2026-10-27) | Bosh sahifada "Dostavka / Olib ketish" tanlovi yo'q: sarlavhadagi manzil / filial tugmasi → "Buyurtmani qanday olasiz?" oynasi (o'sha usulni qayta tanlash — joyni o'zgartirish, boshqasiga o'tish — joy yo'q bo'lsa tanlash oynasi). Tanlov rasmiylashtirishda ham bor. Foydalanuvchi: "hozircha tanlov holatida, keyin maslahatlashib o'zgartiramiz" |
 | Ixcham tablar | Kategoriyalar va "Dostavka / Olib ketish" — 34dp; kuryer sarlavhasidagi tablar — 32dp |
 | "Barchasi" kategoriyasi (2026-10-27) | Faqat mobil ilovada (web kiosk / kassada yo'q): kategoriyalar boshida, standart tanlov — hamma sotuvdagi taomlar kategoriyalar tartibida (`Shop.products`). Ikonka — kategoriya ikonkalari to'plamidagi 3D `/images/icons/bento-box.png` |

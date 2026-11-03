@@ -48,6 +48,17 @@ object Shop {
         return visible.firstOrNull { it.id == takeawayBranchId } ?: visible.firstOrNull { it.isOpen }
     }
 
+    /**
+     * Mobil ilova menyusi: "faqat zalda" taomlar (choynakdagi choy — olib ketish / dostavkaga yo'q) olib tashlanadi,
+     * faqat shundaylardan iborat kategoriya ham. Savatda qolgan bo'lsa — menyuda yo'q, ya'ni "sotilmaydi" bo'ladi.
+     */
+    fun forMobile(menu: Menu): Menu {
+        if (menu.products.none { it.dineInOnly }) return menu
+        val products = menu.products.filterNot { it.dineInOnly }
+        val withProducts = products.mapTo(HashSet()) { it.categoryId }
+        return menu.copy(products = products, categories = menu.categories.filter { it.id in withProducts })
+    }
+
     /** Bosh sahifadagi "Barchasi" — kategoriyalar ro'yxati boshida (haqiqiy kategoriya emas, faqat mobil ilovada). */
     const val ALL_CATEGORIES = "__all__"
 

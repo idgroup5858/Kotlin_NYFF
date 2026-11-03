@@ -16,7 +16,7 @@ class AuthInterceptor @Inject constructor(private val session: SessionStore) : I
             chain.request()
         }
         val response = chain.proceed(request)
-        // kirishdagi 401 — noto'g'ri login yoki parol (sessiya hali yo'q)
+        // kirishdagi 401 — noto'g'ri email yoki parol (sessiya hali yo'q)
         if (response.code == 401 && token != null) session.expire()
         return response
     }

@@ -85,6 +85,8 @@ data class MenuProduct(
     /** Shu filial narxi, so'm. */
     val price: Long? = null,
     val composition: List<LocalizedText> = emptyList(),
+    /** Faqat zalda beriladi (choynakdagi choy) — mobil ilovada zal yo'q, ko'rsatilmaydi (API.md 5.3). */
+    val dineInOnly: Boolean = false,
 )
 
 @Serializable

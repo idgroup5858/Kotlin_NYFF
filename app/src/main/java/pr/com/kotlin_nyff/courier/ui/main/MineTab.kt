@@ -109,13 +109,18 @@ private fun AtBranch(state: MainUiState, vm: MainViewModel) {
         ) {
             item(key = "branch") {
                 NyffCard(Modifier.fillMaxWidth()) {
-                    Column(Modifier.padding(horizontal = 14.dp, vertical = 10.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
+                    Column(Modifier.padding(horizontal = 14.dp, vertical = 8.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
                         Row(verticalAlignment = Alignment.CenterVertically) {
-                            Icon(Icons.Outlined.Storefront, contentDescription = null, tint = colors.select, modifier = Modifier.size(20.dp))
+                            Icon(Icons.Outlined.Storefront, contentDescription = null, tint = colors.select, modifier = Modifier.size(18.dp))
                             Spacer(Modifier.width(8.dp))
                             Column(Modifier.weight(1f)) {
                                 Text(stringResource(R.string.courier_at_branch), style = MaterialTheme.typography.bodySmall, color = colors.textMuted)
-                                Text(branch?.name.orEmpty(), style = MaterialTheme.typography.titleMedium, color = colors.text, maxLines = 1)
+                                Text(
+                                    branch?.name.orEmpty(),
+                                    style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.SemiBold),
+                                    color = colors.text,
+                                    maxLines = 1,
+                                )
                             }
                             branch.phoneOrNull()?.let { phone ->
                                 RoundIconButton(
@@ -130,11 +135,11 @@ private fun AtBranch(state: MainUiState, vm: MainViewModel) {
                         }
                         val kassa = CourierMoney.kassa(state.active)
                         Row(verticalAlignment = Alignment.CenterVertically) {
-                            Icon(Icons.Outlined.Payments, contentDescription = null, tint = colors.text, modifier = Modifier.size(18.dp))
+                            Icon(Icons.Outlined.Payments, contentDescription = null, tint = colors.text, modifier = Modifier.size(16.dp))
                             Spacer(Modifier.width(8.dp))
                             Text(
                                 if (kassa > 0) stringResource(R.string.courier_pay_kassa, money(kassa)) else stringResource(R.string.courier_pay_kassa_none),
-                                style = MaterialTheme.typography.titleSmall.copy(fontWeight = if (kassa > 0) FontWeight.ExtraBold else FontWeight.Medium),
+                                style = MaterialTheme.typography.labelMedium.copy(fontWeight = if (kassa > 0) FontWeight.ExtraBold else FontWeight.Normal),
                                 color = colors.text,
                             )
                         }
@@ -158,7 +163,7 @@ private fun AtBranch(state: MainUiState, vm: MainViewModel) {
                                     .clickable(enabled = canRelease, role = Role.Button) { vm.release(order.id) }
                                     .padding(horizontal = 8.dp, vertical = 4.dp),
                                 color = if (canRelease) colors.danger else colors.danger.copy(alpha = 0.4f),
-                                style = MaterialTheme.typography.labelMedium,
+                                style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.ExtraBold),
                             )
                         }
                         Column(Modifier.padding(end = 8.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {

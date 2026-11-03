@@ -10,6 +10,7 @@ import pr.com.kotlin_nyff.data.model.GeoPoint
 import pr.com.kotlin_nyff.data.model.Menu
 import pr.com.kotlin_nyff.data.remote.NyffApi
 import pr.com.kotlin_nyff.data.remote.apiCall
+import pr.com.kotlin_nyff.domain.Shop
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -33,10 +34,13 @@ class CatalogRepository @Inject constructor(private val api: NyffApi) {
     suspend fun route(point: GeoPoint): DeliveryRoute =
         apiCall { api.deliveryRoute(point.lat, point.lng) }
 
-    /** Keshdan; `force` — serverdan qayta (narx / "sotuvda bor" o'zgargan bo'lishi mumkin). */
+    /**
+     * Keshdan; `force` — serverdan qayta (narx / "sotuvda bor" o'zgargan bo'lishi mumkin). "Faqat zalda" taomlar
+     * shu yerda olib tashlanadi — ilovaning hech bir joyida ko'rinmaydi.
+     */
     suspend fun menu(branchId: String, force: Boolean = false): Menu {
         if (!force) _menus.value[branchId]?.let { return it }
-        val menu = apiCall { api.menu(branchId) }
+        val menu = Shop.forMobile(apiCall { api.menu(branchId) })
         _menus.update { it + (branchId to menu) }
         return menu
     }

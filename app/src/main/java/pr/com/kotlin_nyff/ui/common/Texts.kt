@@ -26,6 +26,7 @@ fun errorRes(error: Throwable?): Int = when (error) {
         "not_found" -> R.string.error_not_found
         "empty_order" -> R.string.error_empty_order
         "product_unavailable" -> R.string.error_product_unavailable
+        "dine_in_only" -> R.string.error_dine_in_only
         "invalid_qty" -> R.string.error_invalid_qty
         "invalid_status" -> R.string.error_invalid_status
         "branch_required" -> R.string.error_branch_required
