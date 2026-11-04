@@ -27,6 +27,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -103,6 +104,18 @@ fun OrdersScreen(onBack: () -> Unit, onOpenOrder: (String) -> Unit, vm: OrdersVi
                 ) {
                     items(orders, key = { it.order.id }) { saved ->
                         OrderRow(saved, state.branchName(saved.order.branchId), onClick = { onOpenOrder(saved.order.id) })
+                    }
+                    // ro'yxat oxiri ko'rindi — keyingi sahifa telefondagi bazadan (sahifa o'qilgach yana ko'rinsa — yana)
+                    if (state.hasMore) item(key = "more") {
+                        LaunchedEffect(state.loadedLimit) { vm.loadMore() }
+                        Box(
+                            Modifier
+                                .fillMaxWidth()
+                                .padding(vertical = 8.dp),
+                            contentAlignment = Alignment.Center,
+                        ) {
+                            CircularProgressIndicator(Modifier.size(24.dp), color = colors.select, strokeWidth = 2.dp)
+                        }
                     }
                 }
             }

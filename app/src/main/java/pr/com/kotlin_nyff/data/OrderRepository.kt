@@ -35,8 +35,11 @@ class OrderRepository @Inject constructor(
     @param:ApplicationScope private val appScope: CoroutineScope,
 ) {
 
-    /** Hamma buyurtmalar, yangisi birinchi (tarix o'chirilmaydi). */
-    val history: Flow<List<SavedOrder>> = dao.observeAll().map { list -> list.mapNotNull { it.toSavedOrder() } }
+    /** Eng yangi [limit] ta buyurtma, yangisi birinchi (tarix o'chirilmaydi — "Buyurtmalarim" sahifalab o'qiydi). */
+    fun recent(limit: Int): Flow<List<SavedOrder>> = dao.observeRecent(limit).map { list -> list.mapNotNull { it.toSavedOrder() } }
+
+    /** Telefondagi hamma buyurtmalar soni — yana sahifa bormi. */
+    val count: Flow<Int> = dao.observeCount()
 
     fun observe(id: String): Flow<SavedOrder?> = dao.observe(id).map { it?.toSavedOrder() }
 

@@ -43,8 +43,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
@@ -71,14 +74,25 @@ import pr.com.kotlin_nyff.ui.theme.NyffTheme
 @Composable
 fun MineTab(state: MainUiState, vm: MainViewModel) {
     var returning by rememberSaveable { mutableStateOf<String?>(null) }
+    var delivering by rememberSaveable { mutableStateOf<String?>(null) }
     PullToRefreshBox(isRefreshing = state.refreshing, onRefresh = vm::refresh, modifier = Modifier.fillMaxSize()) {
         when {
             state.active.isEmpty() -> LazyColumn(Modifier.fillMaxSize()) {
                 item { Empty(stringResource(R.string.courier_no_mine)) }
             }
-            state.departed -> OnTheWay(state, vm, onReturn = { returning = it })
+            state.departed -> OnTheWay(state, onDeliver = { delivering = it }, onReturn = { returning = it })
             else -> AtBranch(state, vm)
         }
+    }
+    state.active.firstOrNull { it.id == delivering }?.let { order ->
+        DeliverDialog(
+            order = order,
+            onDismiss = { delivering = null },
+            onConfirm = {
+                delivering = null
+                vm.deliver(order.id)
+            },
+        )
     }
     val order = state.active.firstOrNull { it.id == returning }
     if (order != null) {
@@ -196,7 +210,7 @@ private fun AtBranch(state: MainUiState, vm: MainViewModel) {
 
 /** Yo'lda: xarita, "Butun yo'l" havolalari va manzillar server taklif qilgan tartibda (kuryer o'zgartirmaydi). */
 @Composable
-private fun OnTheWay(state: MainUiState, vm: MainViewModel, onReturn: (String) -> Unit) {
+private fun OnTheWay(state: MainUiState, onDeliver: (String) -> Unit, onReturn: (String) -> Unit) {
     val colors = NyffTheme.colors
     val context = LocalContext.current
     val stops = state.active
@@ -233,16 +247,14 @@ private fun OnTheWay(state: MainUiState, vm: MainViewModel, onReturn: (String) -
                     .clip(MaterialTheme.shapes.medium),
             )
         }
-        item(key = "whole") {
-            Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
+        // bitta manzilda butun yo'l kartadagi tugma bilan bir xil — faqat 2+ manzilda; Yandex Go bir nechta to'xtashni olmaydi
+        if (points.size >= 2) item(key = "whole") {
+            Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
                 Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                     Icon(Icons.Outlined.Map, contentDescription = null, tint = colors.select, modifier = Modifier.size(20.dp))
                     Text(stringResource(R.string.courier_whole_route), style = MaterialTheme.typography.titleSmall, color = colors.text, modifier = Modifier.weight(1f))
                     MapLinks.googleRoute(points)?.let { url ->
                         PillButton(stringResource(R.string.courier_google), { context.openLink(url) }, icon = Icons.Outlined.Navigation)
-                    }
-                    MapLinks.yandexRoute(points)?.let { url ->
-                        PillButton(stringResource(R.string.courier_yandex), { context.openLink(url) }, background = colors.surfaceMuted, content = colors.text)
                     }
                 }
                 Text(stringResource(R.string.courier_route_hint), style = MaterialTheme.typography.bodySmall, color = colors.textMuted)
@@ -254,7 +266,7 @@ private fun OnTheWay(state: MainUiState, vm: MainViewModel, onReturn: (String) -
                 next = index == 0,
                 busy = state.busy == order.id,
                 enabled = state.busy == null,
-                onDelivered = { vm.deliver(order.id) },
+                onDelivered = { onDeliver(order.id) },
                 onReturn = { onReturn(order.id) },
             )
         }
@@ -303,28 +315,47 @@ private fun StopCard(
                         )
                     }
                 }
-                order.online?.phone?.takeIf { it.isNotBlank() }?.let { phone ->
-                    RoundIconButton(
-                        Icons.Outlined.Call,
-                        stringResource(R.string.courier_call),
-                        { context.dial(phone) },
-                        colors.surfaceMuted,
-                        colors.text,
-                        size = 34.dp,
-                    )
+                // yo'l (Google Maps), taksi (Yandex Go) — ilovalarning o'z belgisi; qo'ng'iroq — bir xil kichik doiralar
+                Row(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+                    order.location?.let { point ->
+                        RoundIconButton(
+                            ImageVector.vectorResource(R.drawable.ic_google_maps),
+                            stringResource(R.string.courier_google),
+                            { context.openLink(MapLinks.google(point)) },
+                            colors.surfaceMuted,
+                            Color.Unspecified,
+                            size = 34.dp,
+                            iconSize = 22.dp,
+                        )
+                        RoundIconButton(
+                            ImageVector.vectorResource(R.drawable.ic_yandex_go),
+                            stringResource(R.string.courier_yandex),
+                            { context.openLink(MapLinks.yandexGo(point), fallback = MapLinks.yandexGoWeb(point)) },
+                            Color.Transparent,
+                            Color.Unspecified,
+                            size = 34.dp,
+                            iconSize = 34.dp,
+                        )
+                    }
+                    order.online?.phone?.takeIf { it.isNotBlank() }?.let { phone ->
+                        RoundIconButton(
+                            Icons.Outlined.Call,
+                            stringResource(R.string.courier_call),
+                            { context.dial(phone) },
+                            colors.surfaceMuted,
+                            colors.text,
+                            size = 34.dp,
+                        )
+                    }
                 }
             }
             CustomerLines(order)
-            order.location?.let { point ->
-                Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                    PillButton(stringResource(R.string.courier_google), { context.openLink(MapLinks.google(point)) }, icon = Icons.Outlined.Navigation)
-                    PillButton(stringResource(R.string.courier_yandex), { context.openLink(MapLinks.yandex(point)) }, background = colors.surfaceMuted, content = colors.text)
-                }
-            }
+            // ikkalasi teng kenglikda; ikkalasi ham avval modal ochadi (tasdiqlash / sabab)
             Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                 PillButton(
                     stringResource(R.string.courier_not_delivered),
                     onReturn,
+                    modifier = Modifier.weight(1f),
                     background = colors.dangerSoft,
                     content = colors.danger,
                     enabled = enabled,
@@ -366,21 +397,27 @@ private fun CustomerLines(order: CourierOrder) {
             overflow = TextOverflow.Ellipsis,
         )
     }
-    val collect = money(CourierMoney.collect(order))
     ItemsToggle(
         key = order.id,
         items = order.items,
-        trailing = when {
-            order.payment == OnlinePayment.CLICK && order.deliveryFee == null -> stringResource(R.string.courier_pay_click)
-            order.deliveryFee == null -> stringResource(R.string.courier_collect_and_fee, collect)
-            else -> stringResource(R.string.courier_collect, collect)
-        },
+        trailing = collectText(order),
         details = listOf(
             if (order.payment == OnlinePayment.CLICK) stringResource(R.string.courier_pay_click)
             else stringResource(R.string.courier_pay_cash_amount, money(order.total)),
             courierFeeText(order.deliveryFee),
         ),
     )
+}
+
+/** Mijozdan olinadigan pul ("Olasiz: …") — kartada va "Yetkazildi" tasdig'ida bir xil. */
+@Composable
+internal fun collectText(order: CourierOrder): String {
+    val collect = money(CourierMoney.collect(order))
+    return when {
+        order.payment == OnlinePayment.CLICK && order.deliveryFee == null -> stringResource(R.string.courier_pay_click)
+        order.deliveryFee == null -> stringResource(R.string.courier_collect_and_fee, collect)
+        else -> stringResource(R.string.courier_collect, collect)
+    }
 }
 
 /** Filial (ro'yxatda bor bo'lsa) — kuryer qaytarish dialogida qo'ng'iroq qiladi. */

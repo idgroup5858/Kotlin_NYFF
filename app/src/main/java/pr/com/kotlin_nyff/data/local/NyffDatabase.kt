@@ -30,8 +30,12 @@ data class SavedOrderEntity(
 @Dao
 interface SavedOrderDao {
 
-    @Query("SELECT * FROM orders ORDER BY createdAt DESC")
-    fun observeAll(): Flow<List<SavedOrderEntity>>
+    /** Eng yangi [limit] ta — tarix sahifalab o'qiladi (hammasi birdan xotiraga olinmaydi). */
+    @Query("SELECT * FROM orders ORDER BY createdAt DESC LIMIT :limit")
+    fun observeRecent(limit: Int): Flow<List<SavedOrderEntity>>
+
+    @Query("SELECT COUNT(*) FROM orders")
+    fun observeCount(): Flow<Int>
 
     @Query("SELECT * FROM orders WHERE id = :id")
     fun observe(id: String): Flow<SavedOrderEntity?>

@@ -5,12 +5,16 @@ import android.content.Context
 import android.content.Intent
 import androidx.core.net.toUri
 
-/** Google Maps / Yandex havolasi — o'rnatilgan ilovada (bo'lmasa brauzerda) ochiladi. */
-fun Context.openLink(url: String) {
+/**
+ * Google Maps / Yandex Go havolasi — o'rnatilgan ilovada (bo'lmasa brauzerda) ochiladi; [fallback] — [url] ni ochadigan
+ * ilova bo'lmasa (masalan `yandextaxi://` sxemasi, Yandex Go o'rnatilmagan).
+ */
+fun Context.openLink(url: String, fallback: String? = null) {
     try {
         startActivity(Intent(Intent.ACTION_VIEW, url.toUri()).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
     } catch (_: ActivityNotFoundException) {
         // havolani ochadigan ilova yo'q
+        if (fallback != null) openLink(fallback)
     }
 }
 

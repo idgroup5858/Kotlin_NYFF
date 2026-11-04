@@ -17,9 +17,16 @@ class CourierDomainTest {
     private val c = GeoPoint(41.295, 69.175)
 
     @Test
-    fun `bitta manzil — Google va Yandex havolasi`() {
+    fun `bitta manzil — Google Maps va Yandex Go havolasi`() {
         assertEquals("https://www.google.com/maps/dir/?api=1&destination=41.285,69.205&travelmode=driving", MapLinks.google(a))
-        assertEquals("https://yandex.uz/maps/?rtext=~41.285,69.205&rtt=auto", MapLinks.yandex(a))
+        assertEquals(
+            "yandextaxi://route?end-lat=41.285&end-lon=69.205&appmetrica_tracking_id=1178268795219780156",
+            MapLinks.yandexGo(a),
+        )
+        assertEquals(
+            "https://3.redirect.appmetrica.yandex.com/route?end-lat=41.285&end-lon=69.205&appmetrica_tracking_id=1178268795219780156",
+            MapLinks.yandexGoWeb(a),
+        )
     }
 
     @Test
@@ -28,10 +35,8 @@ class CourierDomainTest {
             "https://www.google.com/maps/dir//41.285,69.205/41.26,69.22/41.295,69.175",
             MapLinks.googleRoute(listOf(a, b, c)),
         )
-        assertEquals("https://yandex.uz/maps/?rtext=~41.285,69.205~41.26,69.22~41.295,69.175&rtt=auto", MapLinks.yandexRoute(listOf(a, b, c)))
         assertEquals("https://www.google.com/maps/dir//41.285,69.205", MapLinks.googleRoute(listOf(a)))
         assertNull(MapLinks.googleRoute(emptyList()))
-        assertNull(MapLinks.yandexRoute(emptyList()))
     }
 
     private fun order(payment: OnlinePayment, total: Long, fee: Long?, delivered: Boolean = true, returned: Boolean = false) = CourierOrder(

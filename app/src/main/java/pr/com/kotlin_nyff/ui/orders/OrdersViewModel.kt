@@ -3,6 +3,7 @@ package pr.com.kotlin_nyff.ui.orders
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -10,6 +11,8 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import pr.com.kotlin_nyff.data.CatalogRepository
@@ -26,11 +29,16 @@ data class OrdersUiState(
     val orders: List<SavedOrder>? = null,
     val branches: List<Branch> = emptyList(),
     val refreshing: Boolean = false,
+    /** Telefonda yana eskiroq buyurtmalar bor — ro'yxat oxirida keyingi sahifa o'qiladi. */
+    val hasMore: Boolean = false,
+    /** [orders] qaysi chegara bilan o'qilgani (keyingi sahifa ikki marta so'ralmasin). */
+    val loadedLimit: Int = 0,
 ) {
     fun branchName(id: String): String? = branches.firstOrNull { it.id == id }?.name
 }
 
-/** "Buyurtmalarim": telefonda saqlangan hamma buyurtmalar (o'chirilmaydi), yangisi birinchi. */
+/** "Buyurtmalarim": telefonda saqlangan buyurtmalar (o'chirilmaydi), yangisi birinchi, [PAGE] tadan sahifalab. */
+@OptIn(ExperimentalCoroutinesApi::class)
 @HiltViewModel
 class OrdersViewModel @Inject constructor(
     private val orders: OrderRepository,
@@ -38,13 +46,26 @@ class OrdersViewModel @Inject constructor(
 ) : ViewModel() {
 
     private val refreshing = MutableStateFlow(false)
+    private val limit = MutableStateFlow(PAGE)
 
-    val state: StateFlow<OrdersUiState> = combine(orders.history, catalog.branches, refreshing) { history, branches, busy ->
-        OrdersUiState(history, branches.orEmpty(), busy)
+    val state: StateFlow<OrdersUiState> = combine(
+        limit.flatMapLatest { n -> orders.recent(n).map { n to it } },
+        orders.count,
+        catalog.branches,
+        refreshing,
+    ) { (n, list), total, branches, busy ->
+        OrdersUiState(list, branches.orEmpty(), busy, hasMore = total > n, loadedLimit = n)
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), OrdersUiState())
 
     init {
         refresh()
+    }
+
+    /** Ro'yxat oxiriga yetildi — keyingi [PAGE] ta (oldingi sahifa o'qilib bo'lgandan keyingina). */
+    fun loadMore() {
+        val current = state.value
+        if (!current.hasMore || current.loadedLimit != limit.value) return
+        limit.value += PAGE
     }
 
     /** Holati hali o'zgarishi mumkin bo'lgan (oxirgi 2 kundagi, bekor qilinmagan) buyurtmalar serverdan. */
@@ -60,7 +81,7 @@ class OrdersViewModel @Inject constructor(
                 }
             }
             val since = System.currentTimeMillis() - RECENT.toMillis()
-            orders.history.first()
+            orders.recent(RECENT_SCAN).first()
                 .filter { it.createdAt >= since && it.order.status != OrderStatus.CANCELLED }
                 .take(MAX_REFRESH)
                 .map { saved ->
@@ -78,7 +99,10 @@ class OrdersViewModel @Inject constructor(
     }
 
     private companion object {
+        const val PAGE = 20
         val RECENT: Duration = Duration.ofDays(2)
         const val MAX_REFRESH = 10
+        /** Yangilanadiganlar eng yangi shuncha buyurtma ichidan tanlanadi. */
+        const val RECENT_SCAN = 30
     }
 }

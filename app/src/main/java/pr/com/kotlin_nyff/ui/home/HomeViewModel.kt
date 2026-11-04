@@ -102,7 +102,7 @@ class HomeViewModel @Inject constructor(
         catalog.branches,
         combine(catalog.menus, menuBranchId) { menus, id -> id?.let { menus[it] } },
         combine(loading, selectedCategory, ::Pair),
-        orders.history,
+        orders.recent(CURRENT_SCAN),
     ) { d, allBranches, menu, (load, category), history ->
         val branches = allBranches?.let(Shop::visibleBranches)
         val categoryId = Shop.selectedCategory(menu, category)
@@ -213,7 +213,7 @@ class HomeViewModel @Inject constructor(
 
     /** Banner eskirmasin: ishdagi buyurtmalar holati serverdan (ilova yopiq turgan bo'lishi mumkin). */
     private suspend fun refreshCurrentOrders() {
-        orders.history.first()
+        orders.recent(CURRENT_SCAN).first()
             .filter { OrderProgress.isCurrent(it.order) }
             .take(3)
             .forEach { saved ->
@@ -223,5 +223,10 @@ class HomeViewModel @Inject constructor(
                     // keyingi ochilishda yana urinadi
                 }
             }
+    }
+
+    private companion object {
+        /** Banner uchun joriy buyurtma eng yangi shuncha buyurtma ichidan qidiriladi — butun tarix o'qilmaydi. */
+        const val CURRENT_SCAN = 20
     }
 }
