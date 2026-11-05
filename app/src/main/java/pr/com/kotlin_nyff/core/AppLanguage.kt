@@ -6,6 +6,9 @@ import androidx.core.os.LocaleListCompat
 /**
  * Ilova tili: o'zbekcha (standart, `values/`), ruscha, inglizcha. Tanlov telefon tilidan mustaqil; Android 13+ da
  * sozlamalardagi "Ilova tili" bilan bir xil, eskisida AppCompat o'zi saqlaydi (manifestdagi `autoStoreLocales`).
+ *
+ * Til almashganda activity qayta yaratilmaydi: u `locale` o'zgarishini o'zi qabul qiladi (manifest), matnlar joyida
+ * yangilanadi (`MainActivity.onLocalesChanged`). Ekrandagi joriy til — `currentLanguage()` (`ui/common/Texts.kt`).
  */
 enum class AppLanguage(val tag: String, val label: String) {
     UZ("uz", "O'zbekcha"),
@@ -18,9 +21,6 @@ enum class AppLanguage(val tag: String, val label: String) {
 
         fun fromTag(tag: String?): AppLanguage = entries.firstOrNull { it.tag == tag } ?: DEFAULT
 
-        fun current(): AppLanguage = fromTag(AppCompatDelegate.getApplicationLocales()[0]?.language)
-
-        /** Faol activity yangi tilda qayta yaratiladi. */
         fun apply(language: AppLanguage) {
             AppCompatDelegate.setApplicationLocales(LocaleListCompat.forLanguageTags(language.tag))
         }

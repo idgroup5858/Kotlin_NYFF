@@ -14,14 +14,23 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 /**
- * Rasmiylashtirish formasi. `phone` — `+998` dan keyingi 9 ta raqam. Ism / telefon / manzil saqlanmaydi — forma har
- * safar bo'sh ochiladi; faqat to'lov turi eslab qolinadi.
+ * Rasmiylashtirish formasi. `phone` — `+998` dan keyingi 9 ta raqam. Ism va telefon [Profile] dan qo'yiladi (shu
+ * buyurtma uchun o'zgartirilsa profil o'zgarmaydi); manzil saqlanmaydi; to'lov turi eslab qolinadi.
  */
 data class Contact(
     val name: String = "",
     val phone: String = "",
     val address: String = "",
     val payment: OnlinePayment = OnlinePayment.CASH,
+)
+
+/**
+ * Profil ("⋮" → "Profil"): ism va telefon (`+998` dan keyingi 9 raqam yoki bo'sh) — rasmiylashtirishda maydonlarga
+ * o'zi qo'yiladi. Faqat telefonda (DataStore), serverga alohida yuborilmaydi.
+ */
+data class Profile(
+    val name: String = "",
+    val phone: String = "",
 )
 
 /** Oxirgi tanlov: buyurtma turi, olib ketish filiali, dostavka nuqtasi. */
@@ -38,6 +47,10 @@ class UserPrefs @Inject constructor(private val store: DataStore<Preferences>) {
         OnlinePayment.entries.firstOrNull { it.name == prefs[PAYMENT] } ?: OnlinePayment.CASH
     }
 
+    val profile: Flow<Profile> = store.data.map { prefs ->
+        Profile(name = prefs[PROFILE_NAME].orEmpty(), phone = prefs[PROFILE_PHONE].orEmpty())
+    }
+
     val draft: Flow<SavedDraft> = store.data.map { prefs ->
         val lat = prefs[DELIVERY_LAT]
         val lng = prefs[DELIVERY_LNG]
@@ -51,10 +64,18 @@ class UserPrefs @Inject constructor(private val store: DataStore<Preferences>) {
     suspend fun savePayment(payment: OnlinePayment) {
         store.edit {
             it[PAYMENT] = payment.name
-            // oldingi versiyalar saqlagan ism / telefon / manzil — endi kerak emas
+            // oldingi versiyalar formadan saqlagan ism / telefon / manzil — endi kerak emas (profil — alohida kalitlarda)
             it.remove(OLD_NAME)
             it.remove(OLD_PHONE)
             it.remove(OLD_ADDRESS)
+        }
+    }
+
+    /** Bo'sh maydon — kalit o'chiriladi. */
+    suspend fun saveProfile(profile: Profile) {
+        store.edit {
+            if (profile.name.isNotBlank()) it[PROFILE_NAME] = profile.name else it.remove(PROFILE_NAME)
+            if (profile.phone.isNotEmpty()) it[PROFILE_PHONE] = profile.phone else it.remove(PROFILE_PHONE)
         }
     }
 
@@ -77,6 +98,8 @@ class UserPrefs @Inject constructor(private val store: DataStore<Preferences>) {
         val OLD_PHONE = stringPreferencesKey("contact_phone")
         val OLD_ADDRESS = stringPreferencesKey("contact_address")
         val PAYMENT = stringPreferencesKey("contact_payment")
+        val PROFILE_NAME = stringPreferencesKey("profile_name")
+        val PROFILE_PHONE = stringPreferencesKey("profile_phone")
         val MODE = stringPreferencesKey("draft_mode")
         val TAKEAWAY_BRANCH = stringPreferencesKey("draft_takeaway_branch")
         val DELIVERY_LAT = doublePreferencesKey("draft_delivery_lat")

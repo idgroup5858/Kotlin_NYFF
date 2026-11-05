@@ -12,6 +12,7 @@ import pr.com.kotlin_nyff.ui.checkout.CheckoutScreen
 import pr.com.kotlin_nyff.ui.home.HomeScreen
 import pr.com.kotlin_nyff.ui.location.LocationScreen
 import pr.com.kotlin_nyff.ui.orders.OrdersScreen
+import pr.com.kotlin_nyff.ui.profile.ProfileScreen
 import pr.com.kotlin_nyff.ui.tracking.TrackingScreen
 
 @Serializable
@@ -29,8 +30,12 @@ data object OrdersRoute
 @Serializable
 data class TrackingRoute(val orderId: String)
 
+@Serializable
+data object ProfileRoute
+
 /**
- * Mijoz qismi ekranlari: bosh sahifa → (xarita) → rasmiylashtirish → buyurtma holati; "Buyurtmalarim" — bosh sahifadan.
+ * Mijoz qismi ekranlari: bosh sahifa → (xarita) → rasmiylashtirish → buyurtma holati; "Buyurtmalarim" va "Profil" —
+ * bosh sahifadan.
  * [onCourierEntry] — "NY" belgisiga 10 marta bosilganda (kuryer qismi — [AppRoot] da).
  */
 @Composable
@@ -42,9 +47,13 @@ fun NyffNavHost(onCourierEntry: () -> Unit) {
                 onOpenLocation = { nav.go(entry, LocationRoute) },
                 onOpenCheckout = { nav.go(entry, CheckoutRoute) },
                 onOpenOrders = { nav.go(entry, OrdersRoute) },
+                onOpenProfile = { nav.go(entry, ProfileRoute) },
                 onOpenOrder = { nav.go(entry, TrackingRoute(it)) },
                 onCourierEntry = onCourierEntry,
             )
+        }
+        composable<ProfileRoute> { entry ->
+            ProfileScreen(onBack = { nav.back(entry) })
         }
         composable<LocationRoute> { entry ->
             LocationScreen(onBack = { nav.back(entry) })

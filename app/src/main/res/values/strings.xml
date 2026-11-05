@@ -21,6 +21,9 @@
     <string name="theme">Ko\'rinish</string>
     <string name="theme_dark">Tungi</string>
     <string name="theme_light">Yorug\'</string>
+    <string name="profile">Profil</string>
+    <string name="profile_hint">Buyurtma berishda ism va telefon raqami o\'zi yoziladi</string>
+    <string name="save">Saqlash</string>
     <string name="add">Qo\'shish</string>
     <string name="cart">Savat</string>
     <string name="items_count">%1$d ta taom</string>
@@ -65,12 +68,11 @@
     <string name="note">Izoh</string>
     <string name="note_placeholder">Masalan: eshik oldida qo\'ng\'iroq qiling</string>
     <string name="payment">To\'lov usuli</string>
-    <string name="pay_click">Click</string>
-    <string name="pay_click_hint">Hozir ilovada to\'lash</string>
     <string name="pay_cash">Naqd</string>
     <string name="pay_cash_delivery">Kuryerga naqd beraman</string>
     <string name="pay_cash_pickup">Filialda naqd to\'layman</string>
-    <string name="click_not_connected">Click hali ulanmagan — pul yechilmaydi</string>
+    <string name="pay_card">Karta</string>
+    <string name="coming_soon">Tez kunda</string>
     <string name="place_order">Buyurtma berish</string>
     <string name="items_total">Taomlar</string>
     <string name="total">Jami</string>
@@ -134,6 +136,7 @@
     <string name="error_invalid_status">Holat allaqachon o\'zgargan</string>
     <string name="error_branch_required">Filialni tanlang</string>
     <string name="error_phone_required">Telefon raqamini kiriting</string>
+    <string name="error_phone_incomplete">Telefon raqamini to\'liq kiriting</string>
     <string name="error_address_required">Yetkazib berish manzilini kiriting</string>
     <string name="error_invalid_location">Xaritadagi nuqta noto\'g\'ri</string>
     <string name="error_invalid_input">Ma\'lumot noto\'g\'ri to\'ldirilgan</string>

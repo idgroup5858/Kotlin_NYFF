@@ -1,6 +1,5 @@
 package pr.com.kotlin_nyff.ui.theme
 
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Shapes
@@ -10,6 +9,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.ui.unit.dp
+import pr.com.kotlin_nyff.core.AppTheme
 
 private fun materialColors(c: NyffColors) = if (c.isDark) {
     darkColorScheme(
@@ -39,11 +39,11 @@ object NyffShapes {
 }
 
 /**
- * Ilova mavzusi: yorug' yoki tungi — ilovadagi tanlov (`core/AppTheme`, AppCompat tungi rejimi), telefon sozlamasiga
- * qaramaydi; `isSystemInDarkTheme` shu tanlovni qaytaradi.
+ * Ilova mavzusi: yorug' yoki tungi — ilovadagi tanlov (`core/AppTheme`, Compose holati), telefon sozlamasiga qaramaydi.
+ * `isSystemInDarkTheme` ishlatilmaydi: activity `uiMode` ni o'zi qabul qilgani uchun u telefon rejimini ko'rsatishi mumkin.
  */
 @Composable
-fun NyffTheme(darkTheme: Boolean = isSystemInDarkTheme(), content: @Composable () -> Unit) {
+fun NyffTheme(darkTheme: Boolean = AppTheme.isDark, content: @Composable () -> Unit) {
     val colors = if (darkTheme) DarkNyffColors else LightNyffColors
     CompositionLocalProvider(LocalNyffColors provides colors) {
         MaterialTheme(

@@ -2,12 +2,16 @@ package pr.com.kotlin_nyff.core
 
 import android.content.Context
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.compose.runtime.mutableStateOf
 import androidx.core.content.edit
 
 /**
  * Ilova mavzusi: yorug' (standart) yoki tungi — telefon sozlamasidan mustaqil. Tanlov SharedPreferences'da (ilova
- * ochilishida sinxron o'qiladi — birinchi kadr ham to'g'ri rangda); AppCompat tungi rejimi orqali qo'llanadi — Compose
- * (`isSystemInDarkTheme`), oyna foni va `values-night` resurslari birga almashadi.
+ * ochilishida sinxron o'qiladi — birinchi kadr ham to'g'ri rangda).
+ *
+ * Ekran ranglari [current] (Compose holati) dan olinadi — almashtirilganda ekran joyida qayta chiziladi, activity qayta
+ * yaratilmaydi (2026-11-06: qayta yaratish telefonda ~2 s qotirardi, menyu ochiq qolib ketardi). AppCompat tungi
+ * rejimi ham birga almashadi (`values-night`, oyna foni) — activity `uiMode` o'zgarishini o'zi qabul qiladi (manifest).
  */
 enum class AppTheme(private val nightMode: Int) {
     LIGHT(AppCompatDelegate.MODE_NIGHT_NO),
@@ -19,14 +23,23 @@ enum class AppTheme(private val nightMode: Int) {
         private const val PREFS = "nyff_settings"
         private const val KEY = "theme"
 
+        private val state = mutableStateOf(DEFAULT)
+
+        /** Joriy mavzu (Compose holati — o'qigan ekranlar almashganda qayta chiziladi). */
+        val current: AppTheme get() = state.value
+
+        val isDark: Boolean get() = current == DARK
+
         /** `Application.onCreate` da — saqlangan (birinchi ochilishda yorug') mavzu. */
         fun init(context: Context) {
-            AppCompatDelegate.setDefaultNightMode(saved(context).nightMode)
+            val saved = saved(context)
+            state.value = saved
+            AppCompatDelegate.setDefaultNightMode(saved.nightMode)
         }
 
-        /** Faol activity yangi mavzuda qayta yaratiladi (ekran holati saqlanadi). */
         fun apply(context: Context, theme: AppTheme) {
             prefs(context).edit { putString(KEY, theme.name) }
+            state.value = theme
             AppCompatDelegate.setDefaultNightMode(theme.nightMode)
         }
 

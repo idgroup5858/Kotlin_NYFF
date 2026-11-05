@@ -21,6 +21,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.DarkMode
 import androidx.compose.material.icons.outlined.LightMode
 import androidx.compose.material.icons.outlined.MoreVert
+import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -47,9 +48,9 @@ import pr.com.kotlin_nyff.core.AppTheme
 import pr.com.kotlin_nyff.ui.theme.NyffShapes
 import pr.com.kotlin_nyff.ui.theme.NyffTheme
 
-/** Qora sarlavhadagi "⋮": yorug' / tungi rejim va til (mijoz bosh sahifasida). */
+/** Qora sarlavhadagi "⋮": profil, yorug' / tungi rejim va til (mijoz bosh sahifasida). */
 @Composable
-fun SettingsMenuButton(modifier: Modifier = Modifier) {
+fun SettingsMenuButton(onProfile: () -> Unit, modifier: Modifier = Modifier) {
     val colors = NyffTheme.colors
     var open by remember { mutableStateOf(false) }
     Box(modifier) {
@@ -63,6 +64,15 @@ fun SettingsMenuButton(modifier: Modifier = Modifier) {
             iconSize = 20.dp,
         )
         NyffMenu(expanded = open, onDismiss = { open = false }) {
+            MenuAction(
+                Icons.Outlined.Person,
+                stringResource(R.string.profile),
+                onClick = {
+                    open = false
+                    onProfile()
+                },
+            )
+            MenuDivider()
             SettingsMenuContent(onDone = { open = false })
         }
     }
@@ -92,8 +102,8 @@ fun NyffMenu(
 
 /**
  * Menyu ichi: "Ko'rinish" (Yorug' | Tungi) va "Til" (UZ | RU | EN) — rasmiylashtirishdagi "Yetkazib berish | Olib
- * ketish" kabi sariq pill tanlov. Kuryer qismining "⋮" menyusida ham — "Chiqish" dan oldin. Tanlansa ilova yangi
- * mavzu / tilda qayta chiziladi (holat saqlanadi).
+ * ketish" kabi sariq pill tanlov. Kuryer qismining "⋮" menyusida ham — "Chiqish" dan oldin. Tanlansa avval menyu
+ * yopiladi, keyin ekran yangi mavzu / tilda joyida qayta chiziladi (activity qayta yaratilmaydi, holat saqlanadi).
  */
 @Composable
 fun SettingsMenuContent(onDone: () -> Unit) {
@@ -122,7 +132,7 @@ fun SettingsMenuContent(onDone: () -> Unit) {
 /** "Til": UZ | RU | EN. */
 @Composable
 fun LanguageMenuContent(onDone: () -> Unit) {
-    val current = AppLanguage.current()
+    val current = AppLanguage.fromTag(currentLanguage())
     Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
         SectionLabel(stringResource(R.string.language))
         Segments(

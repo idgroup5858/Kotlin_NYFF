@@ -133,9 +133,19 @@ class CheckoutViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-            // maydonlar bo'sh ochiladi — faqat oxirgi to'lov turi
-            val payment = prefs.payment.first()
-            form.update { it.copy(contact = it.contact.copy(payment = payment)) }
+            // ism va telefon — profildan (bo'lsa), to'lov — oxirgi tanlov; manzil va izoh har safar bo'sh
+            val profile = prefs.profile.first()
+            val payment = prefs.payment.first().takeIf { it in SELECTABLE_PAYMENTS } ?: OnlinePayment.CASH
+            form.update {
+                // yuklanguncha yozila boshlangan maydon bosib ketilmasin
+                it.copy(
+                    contact = it.contact.copy(
+                        name = it.contact.name.ifEmpty { profile.name },
+                        phone = it.contact.phone.ifEmpty { profile.phone },
+                        payment = payment,
+                    ),
+                )
+            }
         }
         viewModelScope.launch { refreshPlace() }
     }
@@ -201,7 +211,9 @@ class CheckoutViewModel @Inject constructor(
         }
     }
 
-    fun setPayment(payment: OnlinePayment) = updateContact { it.copy(payment = payment) }
+    fun setPayment(payment: OnlinePayment) {
+        if (payment in SELECTABLE_PAYMENTS) updateContact { it.copy(payment = payment) }
+    }
 
     /** Filiallar holati va dostavka yo'nalishi — rasmiylashtirish ochilganda yangidan (eskirgan bo'lishi mumkin). */
     private suspend fun refreshPlace() {
@@ -227,4 +239,9 @@ class CheckoutViewModel @Inject constructor(
     @StringRes
     private fun placeErrorRes(error: AppError): Int =
         if (error is AppError.Network) R.string.network_place else errorRes(error)
+
+    companion object {
+        /** Tanlanadigan to'lov turlari. Karta (Click) hali ulanmagan — ekranda "Tez kunda", tanlanmaydi. */
+        val SELECTABLE_PAYMENTS = setOf(OnlinePayment.CASH)
+    }
 }

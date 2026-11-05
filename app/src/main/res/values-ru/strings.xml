@@ -19,6 +19,9 @@
     <string name="theme">Тема</string>
     <string name="theme_dark">Тёмная</string>
     <string name="theme_light">Светлая</string>
+    <string name="profile">Профиль</string>
+    <string name="profile_hint">При заказе имя и номер телефона подставятся сами</string>
+    <string name="save">Сохранить</string>
     <string name="add">Добавить</string>
     <string name="cart">Корзина</string>
     <string name="items_count">%1$d шт.</string>
@@ -63,12 +66,11 @@
     <string name="note">Комментарий</string>
     <string name="note_placeholder">Например: позвоните у двери</string>
     <string name="payment">Способ оплаты</string>
-    <string name="pay_click">Click</string>
-    <string name="pay_click_hint">Оплатить сейчас в приложении</string>
     <string name="pay_cash">Наличные</string>
     <string name="pay_cash_delivery">Наличными курьеру</string>
     <string name="pay_cash_pickup">Наличными в филиале</string>
-    <string name="click_not_connected">Click пока не подключён — деньги не списываются</string>
+    <string name="pay_card">Карта</string>
+    <string name="coming_soon">Скоро</string>
     <string name="place_order">Заказать</string>
     <string name="items_total">Блюда</string>
     <string name="total">Итого</string>
@@ -132,6 +134,7 @@
     <string name="error_invalid_status">Статус уже изменён</string>
     <string name="error_branch_required">Выберите филиал</string>
     <string name="error_phone_required">Введите номер телефона</string>
+    <string name="error_phone_incomplete">Введите номер телефона полностью</string>
     <string name="error_address_required">Введите адрес доставки</string>
     <string name="error_invalid_location">Неверная точка на карте</string>
     <string name="error_invalid_input">Данные заполнены неверно</string>

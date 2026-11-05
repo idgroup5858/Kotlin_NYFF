@@ -123,6 +123,7 @@ fun HomeScreen(
     onOpenLocation: () -> Unit,
     onOpenCheckout: () -> Unit,
     onOpenOrders: () -> Unit,
+    onOpenProfile: () -> Unit,
     onOpenOrder: (String) -> Unit,
     onCourierEntry: () -> Unit,
     vm: HomeViewModel = hiltViewModel(),
@@ -160,6 +161,7 @@ fun HomeScreen(
                         // dostavka / olib ketish rasmiylashtirishda tanlanadi; bu yerda — darhol xarita (yoki filial ro'yxati)
                         onPlace = { if (state.mode == OrderMode.DELIVERY) onOpenLocation() else branchSheet = true },
                         onOrders = onOpenOrders,
+                        onProfile = onOpenProfile,
                         onCourierEntry = onCourierEntry,
                     )
                 }
@@ -293,6 +295,7 @@ private fun HomeHeader(
     state: HomeUiState,
     onPlace: () -> Unit,
     onOrders: () -> Unit,
+    onProfile: () -> Unit,
     onCourierEntry: () -> Unit,
 ) {
     val colors = NyffTheme.colors
@@ -329,8 +332,8 @@ private fun HomeHeader(
             Spacer(Modifier.width(8.dp))
             HeaderIconButton(Icons.AutoMirrored.Outlined.ReceiptLong, stringResource(R.string.my_orders), onOrders)
             Spacer(Modifier.width(8.dp))
-            // til va yorug' / tungi rejim — bitta "⋮" menyusida
-            SettingsMenuButton()
+            // profil, til va yorug' / tungi rejim — bitta "⋮" menyusida
+            SettingsMenuButton(onProfile = onProfile)
         }
         Column {
             Text(stringResource(R.string.greeting), style = MaterialTheme.typography.bodyMedium, color = colors.onHeaderMuted)

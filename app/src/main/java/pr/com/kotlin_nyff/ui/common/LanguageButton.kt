@@ -30,12 +30,12 @@ import pr.com.kotlin_nyff.R
 import pr.com.kotlin_nyff.core.AppLanguage
 import pr.com.kotlin_nyff.ui.theme.NyffTheme
 
-/** Til: UZ / RU / EN (qora sarlavhada; mijoz va kuryer qismida) — tanlansa ilova shu tilda qayta ochiladi (holat saqlanadi). */
+/** Til: UZ / RU / EN (qora sarlavhada; kuryer kirish oynasida) — tanlansa ekran shu tilda joyida qayta chiziladi. */
 @Composable
 fun LanguageButton(modifier: Modifier = Modifier) {
     val colors = NyffTheme.colors
     var open by remember { mutableStateOf(false) }
-    val current = AppLanguage.current()
+    val current = AppLanguage.fromTag(currentLanguage())
     Box(modifier) {
         Row(
             Modifier

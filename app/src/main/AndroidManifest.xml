@@ -44,8 +44,13 @@
             android:name="org.apache.http.legacy"
             android:required="false" />
 
+        <!--
+            configChanges: til va yorug' / tungi rejim almashganda activity qayta yaratilmaydi — o'zgarish joyida
+            (MainActivity.onLocalesChanged / onNightModeChanged). Qayta yaratish telefonda ~2 s qotirardi.
+        -->
         <activity
             android:name=".MainActivity"
+            android:configChanges="locale|layoutDirection|uiMode"
             android:exported="true"
             android:launchMode="singleTask"
             android:theme="@style/Theme.Kotlin_NYFF"

@@ -27,9 +27,9 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.outlined.Close
+import androidx.compose.material.icons.outlined.CreditCard
 import androidx.compose.material.icons.outlined.ErrorOutline
 import androidx.compose.material.icons.outlined.Payments
-import androidx.compose.material.icons.outlined.Smartphone
 import androidx.compose.material.icons.outlined.Storefront
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -56,6 +56,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import pr.com.kotlin_nyff.R
@@ -352,23 +353,13 @@ private fun ContactSection(state: CheckoutUiState, vm: CheckoutViewModel) {
     }
 }
 
+/** Naqd | Karta. Karta (Click) hali ulanmagan — ko'rinadi, lekin tanlanmaydi, tagida mayda "Tez kunda". */
 @Composable
 private fun PaymentSection(mode: OrderMode, payment: OnlinePayment, onChange: (OnlinePayment) -> Unit) {
-    val colors = NyffTheme.colors
     Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
         SectionLabel(stringResource(R.string.payment))
         // ikkalasi bir xil balandlikda — izoh matni bir qatorga sig'masa ham
         Row(Modifier.height(IntrinsicSize.Min), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-            PaymentOption(
-                icon = Icons.Outlined.Smartphone,
-                title = stringResource(R.string.pay_click),
-                hint = stringResource(R.string.pay_click_hint),
-                selected = payment == OnlinePayment.CLICK,
-                onClick = { onChange(OnlinePayment.CLICK) },
-                modifier = Modifier
-                    .weight(1f)
-                    .fillMaxHeight(),
-            )
             PaymentOption(
                 icon = Icons.Outlined.Payments,
                 title = stringResource(R.string.pay_cash),
@@ -379,43 +370,52 @@ private fun PaymentSection(mode: OrderMode, payment: OnlinePayment, onChange: (O
                     .weight(1f)
                     .fillMaxHeight(),
             )
-        }
-        if (payment == OnlinePayment.CLICK) {
-            Text(
-                stringResource(R.string.click_not_connected),
-                modifier = Modifier.fillMaxWidth(),
-                style = MaterialTheme.typography.bodySmall,
-                color = colors.textFaint,
-                textAlign = TextAlign.Center,
+            PaymentOption(
+                icon = Icons.Outlined.CreditCard,
+                title = stringResource(R.string.pay_card),
+                hint = stringResource(R.string.coming_soon),
+                selected = false,
+                onClick = null,
+                modifier = Modifier
+                    .weight(1f)
+                    .fillMaxHeight(),
             )
         }
     }
 }
 
+/** [onClick] `null` — usul hali ulanmagan: xira, tanlanmaydi, izohi mayda matnda. */
 @Composable
 private fun PaymentOption(
     icon: ImageVector,
     title: String,
     hint: String,
     selected: Boolean,
-    onClick: () -> Unit,
+    onClick: (() -> Unit)?,
     modifier: Modifier = Modifier,
 ) {
     val colors = NyffTheme.colors
+    val enabled = onClick != null
     Row(
         modifier
             .clip(NyffShapes.card)
             .background(colors.surface)
             .border(if (selected) 2.dp else 1.dp, if (selected) colors.select else colors.line, NyffShapes.card)
-            .selectable(selected = selected, role = Role.RadioButton, onClick = onClick)
+            .selectable(selected = selected, enabled = enabled, role = Role.RadioButton, onClick = onClick ?: {})
             .padding(horizontal = 10.dp, vertical = 8.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Icon(icon, contentDescription = null, tint = if (selected) colors.select else colors.textFaint, modifier = Modifier.size(20.dp))
         Spacer(Modifier.width(8.dp))
         Column(Modifier.weight(1f)) {
-            Text(title, style = MaterialTheme.typography.titleSmall, color = colors.text, maxLines = 1)
-            Text(hint, style = MaterialTheme.typography.bodySmall, color = colors.textMuted, maxLines = 2, overflow = TextOverflow.Ellipsis)
+            Text(title, style = MaterialTheme.typography.titleSmall, color = if (enabled) colors.text else colors.textFaint, maxLines = 1)
+            Text(
+                hint,
+                style = if (enabled) MaterialTheme.typography.bodySmall else MaterialTheme.typography.bodySmall.copy(fontSize = 9.sp, lineHeight = 12.sp),
+                color = if (enabled) colors.textMuted else colors.textFaint,
+                maxLines = 2,
+                overflow = TextOverflow.Ellipsis,
+            )
         }
     }
 }
